@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 
 
+/**
+ * 
+ * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ */
 public class TestCustomLinkedList extends TestCase
 {
 
@@ -22,7 +26,7 @@ public class TestCustomLinkedList extends TestCase
 	public void testAdditionAtHead()
 	{
 
-		CustomLinkedList<Integer> list = new CustomLinkedList<Integer>();
+		XLinkedList<Integer> list = new XLinkedList<Integer>();
 
 		for( int elementToAdd = 0; elementToAdd <= 100; elementToAdd++ )
 		{
@@ -35,10 +39,10 @@ public class TestCustomLinkedList extends TestCase
 	}
 
 	// add items at tail
-	private CustomLinkedList<Integer> testAddition( boolean single )
+	private XLinkedList<Integer> testAddition( boolean single )
 	{
 
-		CustomLinkedList<Integer> list = new CustomLinkedList<Integer>( single );
+		XLinkedList<Integer> list = new XLinkedList<Integer>( single );
 
 		for( int elementToAdd = 0; elementToAdd <= 100; elementToAdd++ )
 		{
@@ -55,7 +59,7 @@ public class TestCustomLinkedList extends TestCase
 	public void testAdditionAtIndex()
 	{
 
-		CustomLinkedList<Integer> list = new CustomLinkedList<>( false );
+		XLinkedList<Integer> list = new XLinkedList<>( false );
 		list.addElement( 1 ).addElement( 2 ).addElement( 3 ).addElement( 4 ).addElement( 5 );
 
 		list.insertElement( 3, 10 );
@@ -74,7 +78,7 @@ public class TestCustomLinkedList extends TestCase
 	public void testSingleAdditionAtIndex()
 	{
 
-		CustomLinkedList<Integer> list = new CustomLinkedList<>( true );
+		XLinkedList<Integer> list = new XLinkedList<>( true );
 		list.addElement( 1 ).addElement( 2 ).addElement( 3 ).addElement( 4 ).addElement( 5 );
 
 		list.insertElement( 3, 10 );
@@ -92,7 +96,7 @@ public class TestCustomLinkedList extends TestCase
 	// get items by index
 	public void testSingleGetElementByIndex()
 	{
-		CustomLinkedList<Integer> list = new CustomLinkedList<>( true );
+		XLinkedList<Integer> list = new XLinkedList<>( true );
 		list.addElement( 1 ).addElement( 2 ).addElement( 3 ).addElement( 4 ).addElement( 5 );
 
 		assertTrue( list.getElement( 2 ) == 3 );
@@ -103,7 +107,7 @@ public class TestCustomLinkedList extends TestCase
 	// remove given elements from the list
 	public void testRemoveGivenElement()
 	{
-		CustomLinkedList<Integer> list = testAddition( false );
+		XLinkedList<Integer> list = testAddition( false );
 
 		for( int elementToRemove = 100; elementToRemove >= 0; elementToRemove-- )
 		{
@@ -122,7 +126,7 @@ public class TestCustomLinkedList extends TestCase
 	// remove given items from singly linkedlist
 	public void testSingleRemoveGivenElement()
 	{
-		CustomLinkedList<Integer> list = testAddition( true );
+		XLinkedList<Integer> list = testAddition( true );
 
 		for( int elementToRemove = 100; elementToRemove >= 0; elementToRemove = elementToRemove - 2 )
 		{
@@ -137,7 +141,7 @@ public class TestCustomLinkedList extends TestCase
 	// remove given items from singly linkedlist
 	public void testSingleListRemoveFromHead()
 	{
-		CustomLinkedList<Integer> list = testAddition( true );
+		XLinkedList<Integer> list = testAddition( true );
 
 		for( int elementToRemove = 0; elementToRemove <= 100; elementToRemove++ )
 		{
@@ -153,7 +157,7 @@ public class TestCustomLinkedList extends TestCase
 	// Singly - remove last item
 	public void testSingleListRemoveLastNode()
 	{
-		CustomLinkedList<Integer> list = new CustomLinkedList<>( true );
+		XLinkedList<Integer> list = new XLinkedList<>( true );
 		list.addElement( 1 ).addElement( 2 ).addElement( 3 ).addElement( 4 ).addElement( 5 ).addElement( 6 );
 
 		assertTrue( list.removeElement( 6 ) );
@@ -173,7 +177,7 @@ public class TestCustomLinkedList extends TestCase
 	// singly - get lagger node for a given element, lagging by given steps
 	public void testSingleListGetLaggerNode()
 	{
-		CustomLinkedList<Integer> list = new CustomLinkedList<>( true );
+		XLinkedList<Integer> list = new XLinkedList<>( true );
 		list.addElement( 1 ).addElement( 2 ).addElement( 3 ).addElement( 4 ).addElement( 5 );
 
 		assertTrue( list.getLaggerNodeData( 4, 1 ) == 3 );
@@ -181,13 +185,26 @@ public class TestCustomLinkedList extends TestCase
 		assertTrue( list.getLaggerNodeData( 5, 3 ) == 2 );
 		assertTrue( list.getLaggerNodeData( 4, 4 ) == null );
 		assertTrue( list.getLaggerNodeData( 8, 1 ) == null );
+		assertTrue( list.getLaggerNodeData( 2, 2 ) == null );
 
+	}
+
+	public void testSingleListGetLaggerNodeFromLast()
+	{
+		XLinkedList<Integer> list = new XLinkedList<>( true );
+		list.addElement( 1 ).addElement( 2 ).addElement( 3 ).addElement( 4 ).addElement( 5 ).addElement( 6 )
+				.addElement( 7 );
+
+		assertEquals( Integer.valueOf( 4 ), list.getLaggerNodeDataFromEnd( 3 ) );
+		assertEquals( Integer.valueOf( 2 ), list.getLaggerNodeDataFromEnd( 5 ) );
+		assertEquals( null, list.getLaggerNodeDataFromEnd( 7 ) );
+		assertEquals( Integer.valueOf( 7 ), list.getLaggerNodeDataFromEnd( 0 ) );
 	}
 
 	// singly - get center node
 	public void testSingleListGetCenterNode()
 	{
-		CustomLinkedList<Integer> list = new CustomLinkedList<>( true );
+		XLinkedList<Integer> list = new XLinkedList<>( true );
 		list.addElement( 1 ).addElement( 2 ).addElement( 3 ).addElement( 4 ).addElement( 5 ).addElement( 6 );
 
 		assertTrue( list.getLaggerNodeData( 6, list.getSize() / 2 ) == 3 );
@@ -197,7 +214,7 @@ public class TestCustomLinkedList extends TestCase
 	// test adding element at head
 	public void testAddAll()
 	{
-		CustomLinkedList<Integer> list = testAddition( false );
+		XLinkedList<Integer> list = testAddition( false );
 
 		ArrayList<Integer> listToAdd = new ArrayList<>();
 		for( int element = 100; element >= 0; element-- )
@@ -217,14 +234,95 @@ public class TestCustomLinkedList extends TestCase
 
 	public void testCircularCountNode()
 	{
-		CustomLinkedList<Integer> list = new CustomLinkedList<>( true );
+		XLinkedList<Integer> list = new XLinkedList<>( true );
 		list.addElement( 1 ).addElement( 2 ).addElement( 3 ).addElement( 4 ).addElement( 5 );
 
 		list.makeCircularAt( 0 );
 		list.printAllElements();
 
 		assertTrue( "size of circular list is not matching", list.calculateSizeOfCircularList() == 5 );
+	}
 
+	// ------------------- More LinkedList algorithms
+
+	public void testDedup()
+	{
+		XLinkedList<Integer> list = new XLinkedList<Integer>();
+		list.addElement( 5 ).addElement( 1 ).addElement( 2 ).addElement( 5 ).addElement( 3 ).addElement( 1 )
+				.addElement( 4 ).addElement( 2 );
+
+		list.dedup();
+		list.printAllElements();
+
+		assertEquals( "Size of list is not matching after dedup", 5, list.getSize() );
+	}
+
+	// add proper assertion
+	public void testPartition()
+	{
+		XLinkedList<Integer> list = new XLinkedList<Integer>();
+		list.addElement( 2 ).addElement( 5 ).addElement( 16 ).addElement( 1 ).addElement( 2 ).addElement( 5 )
+				.addElement( 8 ).addElement( 7 );
+
+		list.printAllElements();
+		XLinkedListNode<Integer> newNode = list.partition( 5 );
+		list.printAllElements( newNode, false );
+
+		list = new XLinkedList<Integer>();
+		list.addElement( 5 ).addElement( 5 ).addElement( 10 ).addElement( 1 ).addElement( 2 ).addElement( 1 )
+				.addElement( 10 ).addElement( 5 );
+
+		list.printAllElements();
+		newNode = list.partition( 5 );
+		list.printAllElements( newNode, false );
+
+		list = new XLinkedList<Integer>();
+		list.addElement( 5 ).addElement( 1 ).addElement( 10 );
+
+		list.printAllElements();
+		newNode = list.partition( 5 );
+		list.printAllElements( newNode, false );
+	}
+
+	// TODO: Add proper assertion
+	public void testAddAnotherList()
+	{
+		XLinkedList<Integer> list = new XLinkedList<Integer>();
+		list.addElement( 5 ).addElement( 1 ).addElement( 2 );
+
+		XLinkedList<Integer> anotherList = new XLinkedList<Integer>();
+		anotherList.addElement( 9 ).addElement( 9 ).addElement( 5 );
+
+		XLinkedListNode<Integer> resultNode = list.addAnotherList( anotherList );
+
+		System.out.print( "Result: " );
+		list.printAllElements( resultNode, false );
+
+	}
+
+	public void testIsPalindrome()
+	{
+		XLinkedList<Integer> list = new XLinkedList<Integer>();
+		list.addElement( 5 ).addElement( 1 ).addElement( 2 ).addElement( 2 ).addElement( 1 ).addElement( 5 );
+
+		assertTrue( "List is palindrom, but method returns false", list.isPalindrome() );
+
+		list = new XLinkedList<Integer>();
+		list.addElement( 5 ).addElement( 1 ).addElement( 2 ).addElement( 10 ).addElement( 2 ).addElement( 1 )
+				.addElement( 5 );
+
+		assertTrue( "List is palindrom, but method returns false", list.isPalindrome() );
+
+		list = new XLinkedList<Integer>();
+		list.addElement( 1 ).addElement( 1 ).addElement( 2 ).addElement( 10 ).addElement( 2 ).addElement( 1 )
+				.addElement( 5 );
+
+		assertTrue( "List is not palindrom, but method returns true", !list.isPalindrome() );
+	}
+
+	public void testFindIntersectionNodeData()
+	{
+		// TODO: For later, as it needs some tweak in data access or redesign
 	}
 
 }

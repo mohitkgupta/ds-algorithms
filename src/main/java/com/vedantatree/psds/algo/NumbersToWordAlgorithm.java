@@ -1,9 +1,13 @@
-package com.vedantatree.psds.ps;
+package com.vedantatree.psds.algo;
 
 import java.util.HashMap;
 import java.util.Stack;
 
 
+/**
+ * 
+ * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ */
 public class NumbersToWordAlgorithm
 {
 
@@ -90,6 +94,7 @@ public class NumbersToWordAlgorithm
 		return numberInWord;
 	}
 
+	// using Indian numbering system for test
 	private String denominationToWords( long number, int decimal )
 	{
 		String numberString;

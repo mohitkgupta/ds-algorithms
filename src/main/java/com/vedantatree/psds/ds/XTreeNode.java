@@ -2,26 +2,29 @@ package com.vedantatree.psds.ds;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 
-public class TreeNode<E>
+/**
+ * 
+ * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ */
+public class XTreeNode<E>
 {
 
-	private E			data;
-	private TreeNode<E>	parent;
-	private TreeNode<E>	leftChild;
-	private TreeNode<E>	rightChild;
+	private E				data;
+	private XTreeNode<E>	parent;
+	private XTreeNode<E>	leftChild;
+	private XTreeNode<E>	rightChild;
 
-	public TreeNode( TreeNode<E> parent, E data )
+	public XTreeNode( XTreeNode<E> parent, E data )
 	{
 		this( parent, data, null, null );
 	}
 
-	public TreeNode( TreeNode<E> parent, E data, TreeNode<E> leftChild, TreeNode<E> rightChild )
+	public XTreeNode( XTreeNode<E> parent, E data, XTreeNode<E> leftChild, XTreeNode<E> rightChild )
 	{
 		setData( data );
 		setParent( parent );
@@ -34,23 +37,23 @@ public class TreeNode<E>
 		this.data = data;
 	}
 
-	TreeNode<E> getParent()
+	XTreeNode<E> getParent()
 	{
 		return parent;
 	}
 
-	void setParent( TreeNode<E> parent )
+	void setParent( XTreeNode<E> parent )
 	{
 		this.parent = parent;
 	}
 
-	TreeNode<E> setLeftChild( TreeNode<E> leftChild )
+	XTreeNode<E> setLeftChild( XTreeNode<E> leftChild )
 	{
 		this.leftChild = leftChild;
 		return leftChild;
 	}
 
-	TreeNode<E> setRightChild( TreeNode<E> rightChild )
+	XTreeNode<E> setRightChild( XTreeNode<E> rightChild )
 	{
 		this.rightChild = rightChild;
 		return rightChild;
@@ -61,27 +64,27 @@ public class TreeNode<E>
 		return data;
 	}
 
-	TreeNode<E> getLeftChild()
+	XTreeNode<E> getLeftChild()
 	{
 		return leftChild;
 	}
 
-	TreeNode<E> getRightChild()
+	XTreeNode<E> getRightChild()
 	{
 		return rightChild;
 	}
 
 	// TODO fix it later
-	public List<List<TreeNode>> traverseLevels( boolean zigzag )
+	public List<List<XTreeNode>> traverseLevels( boolean zigzag )
 	{
 		// list of all traversed nodes
-		List<List<TreeNode>> traversedLevels = new LinkedList();
+		List<List<XTreeNode>> traversedLevels = new LinkedList();
 
 		// list for each level
-		List<TreeNode> individualLevel = null;
+		List<XTreeNode> individualLevel = null;
 
 		// list of nodes collected as children from previous level, to traverse in next iteration
-		LinkedList<TreeNode> childrenCollected = new LinkedList<>();
+		LinkedList<XTreeNode> childrenCollected = new LinkedList<>();
 		childrenCollected.add( this );
 
 		boolean leftToRight = true;
@@ -101,13 +104,13 @@ public class TreeNode<E>
 			}
 
 			// list for each level
-			individualLevel = new ArrayList<TreeNode>( childrenCollected.size() );
+			individualLevel = new ArrayList<>( childrenCollected.size() );
 			individualLevel.addAll( childrenCollected );
 			childrenCollected.clear();
 
-			for( Iterator iterator = individualLevel.iterator(); iterator.hasNext(); )
+			for( Object element : individualLevel )
 			{
-				TreeNode currentNode = (TreeNode) iterator.next();
+				XTreeNode currentNode = (XTreeNode) element;
 
 				// collect children for next level traversal
 				if( currentNode.getLeftChild() != null )
@@ -133,7 +136,7 @@ public class TreeNode<E>
 		return findMaxValue( this );
 	}
 
-	private int findMaxValue( TreeNode<E> rootNode )
+	private int findMaxValue( XTreeNode<E> rootNode )
 	{
 		if( rootNode == null )
 		{
@@ -159,13 +162,13 @@ public class TreeNode<E>
 
 	public int findMaxValueWithoutRecursion()
 	{
-		Queue<TreeNode<Integer>> collectedNodes = new LinkedList<>();
-		collectedNodes.add( (TreeNode<Integer>) this );
+		Queue<XTreeNode<Integer>> collectedNodes = new LinkedList<>();
+		collectedNodes.add( (XTreeNode<Integer>) this );
 
 		int maxValue = Integer.MIN_VALUE;
 		while( !collectedNodes.isEmpty() )
 		{
-			TreeNode<Integer> node = collectedNodes.poll();
+			XTreeNode<Integer> node = collectedNodes.poll();
 			maxValue = node.getData() > maxValue ? node.getData() : maxValue;
 
 			if( node.getLeftChild() != null )
@@ -180,9 +183,10 @@ public class TreeNode<E>
 		return maxValue;
 	}
 
+	@Override
 	public String toString()
 	{
-		return data + "";
+		return "this[" + data + "] left[" + leftChild + "] right[" + rightChild + "]";
 		// return "TreeNode[" + data + "] hashcode[" + hashCode() + "]";
 	}
 

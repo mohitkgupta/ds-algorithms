@@ -1,8 +1,12 @@
-package com.vedantatree.psds.ps;
+package com.vedantatree.psds.algo;
 
 import junit.framework.TestCase;
 
 
+/**
+ * 
+ * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ */
 public class NumberAlgorithms extends TestCase
 {
 
@@ -42,14 +46,15 @@ public class NumberAlgorithms extends TestCase
 
 	public int squareRootByBinaryGuessing( int number )
 	{
-		if (number == 1) {
+		if( number == 1 )
+		{
 			return 1;
 		}
-		
+
 		int trial = number / 2;
 		while( true )
 		{
-			if (trial < 1)
+			if( trial < 1 )
 			{
 				return -1;
 			}
