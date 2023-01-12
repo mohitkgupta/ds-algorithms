@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import com.vedantatree.psds.Utils;
 
 
-public class MegeSort
+public class MergeSort
 {
 
 	public static void mergeSort( int[] array )
