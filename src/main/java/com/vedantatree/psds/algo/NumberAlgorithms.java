@@ -2,6 +2,7 @@ package com.vedantatree.psds.algo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -11,6 +12,117 @@ import junit.framework.TestCase;
  * @author Mohit Gupta <mohit.gupta@vedantatree.com>
  */
 public class NumberAlgorithms extends TestCase {
+
+	/**
+	 * Function which takes in non-empty array of distinct integers and an integer
+	 * representing the target sum.
+	 * 
+	 * If any two number in the array sum up to the target sum, it will return those
+	 * in an array If no element sum up to the target sum, it will return an empty
+	 * array.
+	 * 
+	 * @param array     list of elements
+	 * @param targetSum
+	 * @return
+	 */
+	public static int[] twoNumberSum(int[] array, int targetSum) {
+
+		for (int i = 0; i < array.length; i++) {
+			for (int j = i + 1; j < array.length; j++) {
+				if (array[i] + array[j] == targetSum) {
+					return new int[] { array[i], array[j] };
+				}
+			}
+		}
+
+		return new int[] {};
+	}
+
+	public void testTwoNumberSum() {
+		int[] input = new int[] { 3, 5, -4, 8, 11, 1, -1, 6 };
+		int targetSum = 10;
+
+		int[] result = twoNumberSum(input, targetSum);
+
+		assertNotNull(result);
+		assertTrue("Result size should be 2, as two numbers are summing up to 10", result.length == 2);
+		assertTrue(result[0] == 11);
+		assertTrue(result[1] == -1);
+
+		input = new int[] { -3, -5, -4, -8, -11, -1, -1, -6 };
+		targetSum = -10;
+
+		result = twoNumberSum(input, targetSum);
+
+		assertNotNull(result);
+		assertTrue("Result size should be 2, as two numbers are summing up to -10", result.length == 2);
+		assertTrue(result[0] == -4);
+		assertTrue(result[1] == -6);
+
+		input = new int[] { -3, -5, -4, -8, -11, -1, -1, -6 };
+		targetSum = -1;
+
+		result = twoNumberSum(input, targetSum);
+
+		assertNotNull(result);
+		assertEquals("Result size should be 0, as no number is summing upto -13", 0, result.length);
+
+		input = new int[] {};
+		targetSum = -13;
+
+		result = twoNumberSum(input, targetSum);
+
+		assertNotNull(result);
+		assertEquals("Result size should be 0, as no number is summing upto -13", 0, result.length);
+	}
+
+	public static boolean isValidSubsequence(List<Integer> array, List<Integer> sequence) {
+
+		Iterator<Integer> sequenceIterator = sequence.iterator();
+		Iterator<Integer> arrayIterator = array.iterator();
+		
+		int sequenceNumber;
+		
+		// iterate over sequence. For each element, check if it present in array
+		while (sequenceIterator.hasNext())
+		{
+			sequenceNumber = sequenceIterator.next();
+			
+			while(arrayIterator.hasNext())
+			{
+				if (arrayIterator.next() == sequenceNumber)
+				{
+					if (!sequenceIterator.hasNext())
+					{
+						// return true if no more element left in sequence array to check
+						return true;
+					}
+					
+					// break and pick next element to check
+					break;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public void testIsValidSubsequence()
+	{
+		List<Integer> array = Arrays.asList(5, 1, 22, 25, 6, -1, 8, 10);
+		List<Integer> sequence = Arrays.asList(1, 6, -1, 10);
+		
+		boolean result = isValidSubsequence(array, sequence);
+		
+		assertTrue("Expected result > true", result);
+		
+		array = Arrays.asList(5, 22, 25, 6, -1, 8, 10);
+		sequence = Arrays.asList(1, 6, -1, 10);
+		
+		result = isValidSubsequence(array, sequence);
+		
+		assertTrue("Expected result > false", !result);
+	}
 
 	/**
 	 * Given two arrays of integers, find the pair (one from each array) whose
