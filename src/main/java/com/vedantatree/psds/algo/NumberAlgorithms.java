@@ -2,12 +2,18 @@ package com.vedantatree.psds.algo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+
+import com.vedantatree.psds.Utils;
 
 import junit.framework.TestCase;
 
 /**
+ * This class contains various algorithms related to numbers.
+ * Test Class: TestNumberAlgorithms
  * 
  * @author Mohit Gupta <mohit.gupta@vedantatree.com>
  */
@@ -38,90 +44,154 @@ public class NumberAlgorithms extends TestCase {
 		return new int[] {};
 	}
 
-	public void testTwoNumberSum() {
-		int[] input = new int[] { 3, 5, -4, 8, 11, 1, -1, 6 };
-		int targetSum = 10;
-
-		int[] result = twoNumberSum(input, targetSum);
-
-		assertNotNull(result);
-		assertTrue("Result size should be 2, as two numbers are summing up to 10", result.length == 2);
-		assertTrue(result[0] == 11);
-		assertTrue(result[1] == -1);
-
-		input = new int[] { -3, -5, -4, -8, -11, -1, -1, -6 };
-		targetSum = -10;
-
-		result = twoNumberSum(input, targetSum);
-
-		assertNotNull(result);
-		assertTrue("Result size should be 2, as two numbers are summing up to -10", result.length == 2);
-		assertTrue(result[0] == -4);
-		assertTrue(result[1] == -6);
-
-		input = new int[] { -3, -5, -4, -8, -11, -1, -1, -6 };
-		targetSum = -1;
-
-		result = twoNumberSum(input, targetSum);
-
-		assertNotNull(result);
-		assertEquals("Result size should be 0, as no number is summing upto -13", 0, result.length);
-
-		input = new int[] {};
-		targetSum = -13;
-
-		result = twoNumberSum(input, targetSum);
-
-		assertNotNull(result);
-		assertEquals("Result size should be 0, as no number is summing upto -13", 0, result.length);
-	}
-
+	/**
+	 * This function checks if given sequence array elements are found in first
+	 * parameter array in same sequence
+	 * 
+	 * @param array    Source array to check for the elements
+	 * @param sequence contains elements sequence to check
+	 * @return true if given sequence array elements are found in source array in
+	 *         same sequence
+	 */
 	public static boolean isValidSubsequence(List<Integer> array, List<Integer> sequence) {
 
 		Iterator<Integer> sequenceIterator = sequence.iterator();
 		Iterator<Integer> arrayIterator = array.iterator();
-		
+
 		int sequenceNumber;
-		
+
 		// iterate over sequence. For each element, check if it present in array
-		while (sequenceIterator.hasNext())
-		{
+		while (sequenceIterator.hasNext()) {
 			sequenceNumber = sequenceIterator.next();
-			
-			while(arrayIterator.hasNext())
-			{
-				if (arrayIterator.next() == sequenceNumber)
-				{
-					if (!sequenceIterator.hasNext())
-					{
+
+			while (arrayIterator.hasNext()) {
+				if (arrayIterator.next() == sequenceNumber) {
+					if (!sequenceIterator.hasNext()) {
 						// return true if no more element left in sequence array to check
 						return true;
 					}
-					
+
 					// break and pick next element to check
 					break;
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
-	public void testIsValidSubsequence()
-	{
-		List<Integer> array = Arrays.asList(5, 1, 22, 25, 6, -1, 8, 10);
-		List<Integer> sequence = Arrays.asList(1, 6, -1, 10);
-		
-		boolean result = isValidSubsequence(array, sequence);
-		
-		assertTrue("Expected result > true", result);
-		
-		array = Arrays.asList(5, 22, 25, 6, -1, 8, 10);
-		sequence = Arrays.asList(1, 6, -1, 10);
-		
-		result = isValidSubsequence(array, sequence);
-		
-		assertTrue("Expected result > false", !result);
+
+	/**
+	 * Function to return the array of square values for given array
+	 * 
+	 * @param array input array, sorted
+	 * @return array with square value for each element in input array, sorted
+	 */
+	public static int[] sortedSquaredArray(int[] array) {
+
+		assertNotNull(array);
+		assertTrue(array.length > 0);
+
+		// array to collect the squared value
+		int[] squaredArray = new int[array.length];
+
+		// pointer from front of the array
+		int smallestPointer = 0;
+
+		// pointer from rear end of the array
+		int largestPointer = array.length - 1;
+
+		// pointer to fill in the square in new array
+		int squaredArrayPointer = array.length - 1;
+
+		int largestNumberToSquare;
+		int smallestNumber;
+		int largestNumber;
+
+		/*
+		 * compare the absolute values of first and last item in the array Motive is to
+		 * find the largest item in the array, do the square and fill in the new array
+		 * 
+		 * Why the first item can be larger when array is sorted This is because there
+		 * could be negative values
+		 */
+		while (smallestPointer <= largestPointer) {
+			smallestNumber = Math.abs(array[smallestPointer]);
+			largestNumber = Math.abs(array[largestPointer]);
+
+			if (smallestNumber > largestNumber) {
+				largestNumberToSquare = smallestNumber;
+				smallestPointer++;
+			} else {
+				largestNumberToSquare = largestNumber;
+				largestPointer--;
+			}
+
+			squaredArray[squaredArrayPointer] = largestNumberToSquare * largestNumberToSquare;
+			squaredArrayPointer--;
+		}
+
+		return squaredArray;
+	}
+
+	/**
+	 * @param competitions pair of teams. In pair, first team is termed as Home team
+	 *                     and other as Away team. Name is of max 30 char
+	 * @param results      array of winners. Values will be 1 for home team, and 0
+	 *                     for away team.
+	 * @return The winner team
+	 */
+	public static String tournamentWinner(ArrayList<ArrayList<String>> competitions, ArrayList<Integer> results) {
+
+		assertNotNull(competitions);
+		assertNotNull(results);
+
+		assertTrue("Compeitions and results size must be same", competitions.size() == results.size());
+
+		HashMap<String, Integer> teamResults = new HashMap<String, Integer>();
+
+		// collect the score of each team in a map.
+		// later iterate over the map and find the team with highest score
+
+		for (int resultIndex = 0; resultIndex < results.size(); resultIndex++) {
+			
+			String winningTeam = results.get(resultIndex) == 1 ? competitions.get(resultIndex).get(0)
+					: competitions.get(resultIndex).get(1);
+
+			Integer winningTeamScore = teamResults.get(winningTeam);
+			winningTeamScore = winningTeamScore == null ? Integer.valueOf(1) : Integer.valueOf(winningTeamScore + 1);
+
+			teamResults.put(winningTeam, winningTeamScore);
+		}
+
+		return findTopScorerTeam(teamResults);
+	}
+
+	/**
+	 * Return the top scorer team
+	 * 
+	 * @param teamsScore scores of teams, where key is the team name and value is
+	 *                   the total score
+	 * @return team with highest score
+	 */
+	private static String findTopScorerTeam(HashMap<String, Integer> teamsScore) {
+		System.out.println(teamsScore);
+
+		Iterator<Entry<String, Integer>> iterator = teamsScore.entrySet().iterator();
+
+		String highestScorer = null;
+		Integer highestScore = 0;
+
+		while (iterator.hasNext()) {
+			Entry<String, Integer> teamScore = iterator.next();
+
+			Integer score = teamScore.getValue();
+
+			if (score > highestScore) {
+				highestScore = score;
+				highestScorer = teamScore.getKey();
+			}
+		}
+		return highestScorer;
 	}
 
 	/**
@@ -175,11 +245,6 @@ public class NumberAlgorithms extends TestCase {
 		return smallestPair;
 	}
 
-	public void testSmallestDifference() {
-		int[] pair = smallestDifference(new int[] { -1, 5, 10, 20, 28, 3 }, new int[] { 26, 134, 135, 15, 17 });
-		System.out.println(pair == null || pair.length == 0 ? "Null or Empty" : pair[0] + ", " + pair[1]);
-	}
-
 	/**
 	 * Given array contains the list of numbers, which could be negative or positive
 	 * integers. Find the sets of three numbers, whose sum is equal to targetSum.
@@ -227,7 +292,7 @@ public class NumberAlgorithms extends TestCase {
 		return sum * level;
 	}
 
-	public int[] findThreeLargestNumbers(int[] array) {
+	public static int[] findThreeLargestNumbers(int[] array) {
 
 		int largestNumber = Integer.MIN_VALUE;
 		int secondLargest = Integer.MIN_VALUE;
@@ -253,21 +318,7 @@ public class NumberAlgorithms extends TestCase {
 		return new int[] { thirdLargest, secondLargest, largestNumber };
 	}
 
-	public void testThreeLargestNumbers() {
-		assertNotNull(findThreeLargestNumbers(new int[] { 5, 8, 9, 23, 34, 34, 56 })[2] == 56);
-	}
-
-	public void testSquareRoot() {
-		assertTrue(squareRoot(64) == 8);
-		assertTrue(squareRoot(25) == 5);
-		assertTrue(squareRoot(1522756) == 1234);
-		assertTrue(squareRoot(32959081) == 5741);
-		assertTrue(squareRoot(9) == 3);
-		assertTrue(squareRoot(1) == 1);
-		assertTrue(squareRoot(0) == -1);
-	}
-
-	public int squareRoot(int number) {
+	public static int squareRoot(int number) {
 		for (int trial = 1; trial * trial <= number; trial++) {
 			if (trial * trial == number) {
 				return trial;
@@ -276,17 +327,7 @@ public class NumberAlgorithms extends TestCase {
 		return -1;
 	}
 
-	public void testSquareRootByBinaryTrial() {
-		assertTrue(squareRootByBinaryGuessing(64) == 8);
-		assertTrue(squareRootByBinaryGuessing(25) == 5);
-		assertTrue(squareRootByBinaryGuessing(1522756) == 1234);
-		assertTrue(squareRootByBinaryGuessing(32959081) == 5741);
-		assertTrue(squareRootByBinaryGuessing(9) == 3);
-		assertTrue(squareRootByBinaryGuessing(1) == 1);
-		assertTrue(squareRootByBinaryGuessing(0) == -1);
-	}
-
-	public int squareRootByBinaryGuessing(int number) {
+	public static int squareRootByBinaryGuessing(int number) {
 		if (number == 1) {
 			return 1;
 		}
@@ -307,15 +348,7 @@ public class NumberAlgorithms extends TestCase {
 		}
 	}
 
-	public void testSumOfDigits() {
-		assertTrue(sumOfDigits(15432) == 15);
-		assertTrue(sumOfDigits(6894365) == 41);
-		assertTrue(sumOfDigits(9425752) == 34);
-		assertTrue(sumOfDigits(Long.valueOf("55459875621789")) == 81);
-		assertTrue(sumOfDigits(524) == 11);
-	}
-
-	public long sumOfDigits(long number) {
+	public static long sumOfDigits(long number) {
 		long sum = 0;
 		while (number > 0) {
 			sum += number % 10;
@@ -324,14 +357,7 @@ public class NumberAlgorithms extends TestCase {
 		return sum;
 	}
 
-	public void testPrimeNumber() {
-		assertTrue("Number 11 is prime", isPrimeNumber(11));
-		assertFalse("Number 12 is not prime", isPrimeNumber(12));
-		assertFalse("Number 96 is not prime", isPrimeNumber(96));
-		assertTrue("Number 113 is prime", isPrimeNumber(113));
-	}
-
-	public void printPrimeNumber(int start, int end) {
+	public static void printPrimeNumber(int start, int end) {
 		int i = 1;
 		for (; start <= end; start++) {
 			if (isPrimeNumber(start)) {
@@ -341,7 +367,7 @@ public class NumberAlgorithms extends TestCase {
 		}
 	}
 
-	public boolean isPrimeNumber(int number) {
+	public static boolean isPrimeNumber(int number) {
 		for (int i = 2; i * i <= number; i++) {
 			if (number % i == 0) {
 				return false;
@@ -350,30 +376,20 @@ public class NumberAlgorithms extends TestCase {
 		return true;
 	}
 
-	public void testFactorial() {
-		int number = 872;
-		int loopFactorial = 1;
-		for (int i = 1; i < number; i++) {
-			loopFactorial = loopFactorial * i;
-		}
-
-		assertTrue(loopFactorial == calculateFactorial(number));
-	}
-
-	public int calculateFactorial(int number) {
+	public static int calculateFactorial(int number) {
 		if (number == 0) {
 			return 1;
 		}
 		return number * calculateFactorial(number - 1);
 	}
 
-	public void printAllFibnocci(int startIndex, int endIndex) {
+	public static void printAllFibnocci(int startIndex, int endIndex) {
 		for (; startIndex <= endIndex; startIndex++) {
 			System.out.println("number[" + startIndex + "] fibnocci[" + fibnocciNumberAtIndex(startIndex) + "]");
 		}
 	}
 
-	public int fibnocciNumberAtIndex(int number) {
+	public static int fibnocciNumberAtIndex(int number) {
 		if (number <= 0) {
 			return 0;
 		} else if (number == 1) {
@@ -382,7 +398,7 @@ public class NumberAlgorithms extends TestCase {
 		return fibnocciNumberAtIndex(number - 1) + fibnocciNumberAtIndex(number - 2);
 	}
 
-	public void printAllFibnocciMemoization(int startIndex, int endIndex) {
+	public static void printAllFibnocciMemoization(int startIndex, int endIndex) {
 		int[] memo = new int[(endIndex - startIndex) + 1];
 
 		for (; startIndex <= endIndex; startIndex++) {
@@ -391,7 +407,7 @@ public class NumberAlgorithms extends TestCase {
 		}
 	}
 
-	public int printAllFibnocciMemoization(int number, int[] memo) {
+	public static int printAllFibnocciMemoization(int number, int[] memo) {
 		if (number <= 0) {
 			return 0;
 		} else if (number == 1) {
