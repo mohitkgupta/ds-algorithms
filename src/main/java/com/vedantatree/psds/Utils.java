@@ -9,6 +9,21 @@ import junit.framework.TestCase;
 public class Utils
 {
 
+	public static void printArray( Object[] array )
+	{
+		if( array == null || array.length == 0 )
+		{
+			System.out.println( "\n Specified array is either null or of zero length." );
+			return;
+		}
+
+		for( Object element : array )
+		{
+			System.out.print( element + " | " );
+		}
+		System.out.println( "" );
+	}
+
 	public static void printArray( int[] array )
 	{
 		if( array == null || array.length == 0 )
@@ -20,6 +35,26 @@ public class Utils
 		for( int element : array )
 		{
 			System.out.print( element + " | " );
+		}
+		System.out.println( "" );
+	}
+
+	public static void print2DimensionalArray( int[][] array )
+	{
+		if( array == null || array.length == 0 )
+		{
+			System.out.println( "\n Specified array is either null or of zero length." );
+			return;
+		}
+
+		for( int i = 0; i < array.length; i++)
+		{
+			System.out.print( i + " >\t" );
+			for( int element : array[i] )
+			{
+				System.out.print( element + "\t" );
+			}
+			System.out.println( "\n" );
 		}
 		System.out.println( "" );
 	}
@@ -52,8 +87,6 @@ public class Utils
 		{ 58, 98, 25, 63, 47, 4, 5, 8, 9, 2 };
 
 		printArray( array );
-
-		printArray( null );
 
 		printArray( new int[] {} );
 

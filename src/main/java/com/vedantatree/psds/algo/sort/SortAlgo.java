@@ -1,30 +1,39 @@
 package com.vedantatree.psds.algo.sort;
 
-public class SortAlgo {
+public class SortAlgo
+{
 
 	/**
 	 * This approach is > keep comparing elements and swapping as long these are not
-	 * in right order "keep creating bubbles of iteration and swap"
-	 *
-	 * keep iterating over array if current element is larger than next element,
-	 * swap these keep going in loops until none of the element is swapping
+	 * in right order
 	 * 
-	 * O(n square)
+	 * "keep creating bubbles of iteration and swap"
+	 *
+	 * Keep iterating over array if current element is larger than next element,
+	 * Swap these keep going in loops until none of the element is swapping
+	 * 
+	 * Time - O(n square) Space - O(1)
 	 * 
 	 * @param array
-	 * @return
+	 * @return the sorted array
 	 */
-	public int[] bubbleSort(int[] array) {
+	public static int[] bubbleSort( int[] array )
+	{
 		boolean swap = true;
 
 		// keep going until any of element has been swapped in previous iteration
-		while (swap) {
+		while( swap )
+		{
 			swap = false;
 
 			// iterate over the array
 			// if current element is larger than next, swap these
-			for (int i = 0; i < array.length - 1; i++) {
-				if (array[i] > array[i + 1]) {
+
+			for( int i = 0; i < array.length - 1; i++ )
+			{
+
+				if( array[i] > array[i + 1] )
+				{
 					int temp = array[i];
 					array[i] = array[i + 1];
 					array[i + 1] = temp;
@@ -32,8 +41,37 @@ public class SortAlgo {
 				}
 			}
 		}
-		return array;
 
+		return array;
+	}
+
+	// for practice, stored array elements in local variables to avoid repeated
+	// access. CPU over memory
+	public static int[] bubbleSort2( int[] array )
+	{
+
+		boolean swapped = true;
+
+		while( swapped )
+		{
+			swapped = false;
+
+			for( int i = 0; i < array.length - 1; i++ )
+			{
+
+				int first = array[i];
+				int second = array[i + 1];
+
+				if( first > second )
+				{
+					array[i] = second;
+					array[i + 1] = first;
+					swapped = true;
+				}
+			}
+		}
+
+		return array;
 	}
 
 	/**
@@ -43,20 +81,26 @@ public class SortAlgo {
 	 * Pick current element in array Compare it with rest of the elements and bring
 	 * the smallest at its place
 	 * 
+	 * Time: O(n^2) Space: O(1)
+	 * 
 	 * @param array
 	 * @return
 	 */
-	public int[] selectionSort(int[] array) {
+	public int[] selectionSort( int[] array )
+	{
 
 		// iterate over array
-		for (int i = 0; i < array.length; i++) {
+		for( int i = 0; i < array.length; i++ )
+		{
 
 			// pick current element
 			// keep comparing it with rest of the array element
 			// swap it if it is greater than any of the element
 
-			for (int j = i; j < array.length; j++) {
-				if (array[i] > array[j]) {
+			for( int j = i; j < array.length; j++ )
+			{
+				if( array[i] > array[j] )
+				{
 					int temp = array[j];
 					array[j] = array[i];
 					array[i] = temp;
@@ -84,15 +128,18 @@ public class SortAlgo {
 	 * @param array
 	 * @return
 	 */
-	public static int[] insertionSort(int[] array) {
+	public static int[] insertionSort( int[] array )
+	{
 		// iterate over main array
-		for (int i = 0; i < array.length; i++) {
+		for( int i = 0; i < array.length; i++ )
+		{
 
 			// start from current main array index, pick that element
 			// go backward, compare the picked element with every element to insert at right
 			// place
 			// list before current picked element is already sorted with previous iterations
-			for (int j = i; j > 0 && array[j] < array[j - 1]; j--) {
+			for( int j = i; j > 0 && array[j] < array[j - 1]; j-- )
+			{
 				int temp = array[j];
 				array[j] = array[j - 1];
 				array[j - 1] = temp;
