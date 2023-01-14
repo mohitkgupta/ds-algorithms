@@ -131,6 +131,11 @@ public class XTreeNode<E>
 		return traversedLevels;
 	}
 
+	/**
+	 * Find maximum value from whole children hierarchy of give tree node
+	 * with recursion
+	 * @return Maximum value
+	 */
 	public int findMaxValue()
 	{
 		return findMaxValue( this );
@@ -149,6 +154,7 @@ public class XTreeNode<E>
 		int leftValue = findMaxValue( rootNode.getLeftChild() );
 		int rightValue = findMaxValue( rootNode.getRightChild() );
 
+		// not using if else if, as need to compare three values - root, left, right
 		if( leftValue > rootValue )
 		{
 			maxValue = leftValue;
@@ -160,6 +166,12 @@ public class XTreeNode<E>
 		return maxValue;
 	}
 
+	/**
+	 * Find maximum value from whole children hierarchy of give tree node
+	 * without using recursion
+	 * 
+	 * @return Maximum value
+	 */
 	public int findMaxValueWithoutRecursion()
 	{
 		Queue<XTreeNode<Integer>> collectedNodes = new LinkedList<>();

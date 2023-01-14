@@ -4,30 +4,27 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.vedantatree.psds.Utils;
-
 
 /**
- * Class represeting Graph and associated algorithms
+ * Class representing Graph and associated algorithms
  * 
- * @author PM
+ * @author Mohit Gupta
  *
  */
 public class XGraph
 {
 
-	public static boolean bfsGraph( ArrayList<ArrayList<Integer>> adjacentList, int source, int dest, int vortexes,
+	public static boolean bfsGraph( ArrayList<ArrayList<Integer>> adjacentList, int source, int dest, int vertices,
 			int predecessors[], int distances[] )
 	{
 
 		LinkedList<Integer> traversalQueue = new LinkedList<Integer>();
-		boolean visited[] = new boolean[vortexes];
+		boolean visited[] = new boolean[vertices];
 
-		for( int i = 0; i < vortexes; i++ )
+		for( int i = 0; i < vertices; i++ )
 		{
 			visited[i] = false;
 			predecessors[i] = -1;
