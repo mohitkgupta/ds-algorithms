@@ -153,6 +153,28 @@ public class TestBinaryTree extends TestCase
 		Utils.assertListEquals( preOrderValidation, preOrderCollected );
 	}
 
+	public void testPreOrderTraversal()
+	{
+		Integer[] sortedArray = new Integer[]
+		{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
+
+		XBinaryTree<Integer> bst = new XBinaryTree<>();
+		bst.populateBinaryTreeFromArray( sortedArray );
+
+		bst.printLevelWise();
+		bst.printTree();
+		bst.printTreeInMatrix();
+
+		List<Integer> preOrderValidation = Arrays.asList( 15, 8, 2, 5, 12, 13, 45, 19, 33, 50, 46, 51 );
+		List<Integer> preOrderCollected = bst.preorderTraversalWithoutRecursioin();
+		
+		System.out.println( "\npre-order collected >> " + preOrderCollected );
+
+		assertEquals( "node size is different", preOrderValidation.size(), preOrderCollected.size() );
+
+		Utils.assertListEquals( preOrderValidation, preOrderCollected );
+	}
+
 	public void testCheckHeight()
 	{
 		int numberOfNodes = 21;

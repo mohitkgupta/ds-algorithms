@@ -56,43 +56,39 @@ public class XLinkedList<E>
 	 */
 	public void assertSanityOfSize()
 	{
-		int forwardCount = 0;
 		XLinkedListNode<E> node = headNode;
+
+		int forwardCount = 0;
 		while( node != null )
 		{
 			forwardCount++;
 			node = node.getNext();
-		}
+		} // forward count calculated
+
 		if( forwardCount != size )
 		{
 			printAllElements();
 			throw new IllegalStateException(
 					"Forward count is not matching. ForwardCount[" + forwardCount + "] size[" + size + "]" );
 		}
-		else
-		{
-			System.out.println( "Forward count matches" );
-		}
 
 		if( !single )
 		{
-			int backwardCount = 0;
 			node = lastNode;
+
+			int backwardCount = 0;
 			while( node != null )
 			{
 				backwardCount++;
 				node = node.getPrevioius();
-			}
+			} // backward count calculated
+
 			if( backwardCount != size )
 			{
 				printAllElements();
 				printAllElementsBackwards();
 				throw new IllegalStateException(
 						"Backward count is not matching. Backward Count[" + backwardCount + "] size[" + size + "]" );
-			}
-			else
-			{
-				System.out.println( "Backward count matches" );
 			}
 		}
 
@@ -101,6 +97,7 @@ public class XLinkedList<E>
 	public void assertSanityForCircular()
 	{
 		HashSet<XLinkedListNode<E>> traversedNodes = new HashSet<>();
+		
 		XLinkedListNode<E> node = headNode;
 
 		while( node != null )
@@ -112,7 +109,7 @@ public class XLinkedList<E>
 			{
 				if( !circular )
 				{
-					throw new IllegalStateException( "Node can not be found again if list is not circular" );
+					throw new IllegalStateException( "Nodes can not connect in circle, if list is not circular" );
 				}
 				break;
 			}
@@ -373,7 +370,7 @@ public class XLinkedList<E>
 	 * 
 	 * if index == 0 > connect last node with head node
 	 * if index == size - 1 | means last node > nothing to do
-	 * if index = 0 > connect last node with node at given index
+	 * if index != 0 > connect last node with node at given index
 	 * 
 	 * @param index - index of the node to connect last node with
 	 */
@@ -420,7 +417,7 @@ public class XLinkedList<E>
 	// --------------------------------------------------------------
 
 	/**
-	 * Concept is to keep another pointer for lagging node, which will start updating the laggig node
+	 * Concept is to keep another pointer for lagging node, which will start updating the lagging node
 	 * after iterating over number of nodes equal to lagging place.
 	 * 
 	 * @param elementToSearch Reference Node

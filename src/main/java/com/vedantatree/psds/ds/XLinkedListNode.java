@@ -22,7 +22,7 @@ class XLinkedListNode<E>
 		{
 			setPrevious( previous );
 		}
-		else
+		else // if single
 		{
 			if( previous != null )
 			{
@@ -31,15 +31,20 @@ class XLinkedListNode<E>
 
 		}
 	}
+	
+	boolean isDouble()
+	{
+		return !single;
+	}
+
+	boolean isSingle()
+	{
+		return single;
+	}
 
 	void setSingle( boolean single )
 	{
 		this.single = single;
-	}
-
-	boolean getSingle()
-	{
-		return single;
 	}
 
 	E getData()
@@ -52,35 +57,39 @@ class XLinkedListNode<E>
 		this.data = data;
 	}
 
-	XLinkedListNode getNext()
+	XLinkedListNode<E> getNext()
 	{
 		return next;
 	}
 
-	XLinkedListNode setNext( XLinkedListNode newNextNode )
+	XLinkedListNode<E> setNext( XLinkedListNode<E> newNextNode )
 	{
-		XLinkedListNode currentNextNode = getNext();
+		XLinkedListNode<E> currentNextNode = getNext();
+		
 		this.next = newNextNode;
-		if( newNextNode != null && !single )
+		
+		// if doubly linked list, set this node as previous to next node
+		if( newNextNode != null && isDouble())
 		{
 			newNextNode.setPrevious( this );
 		}
+		
 		return currentNextNode;
 	}
 
-	XLinkedListNode getPrevioius()
+	XLinkedListNode<E> getPrevioius()
 	{
 		return previous;
 	}
 
-	XLinkedListNode setPrevious( XLinkedListNode newPreviousNode )
+	XLinkedListNode<E> setPrevious( XLinkedListNode<E> newPreviousNode )
 	{
-		if( single )
+		if( isSingle() )
 		{
 			throw new IllegalStateException( "Previous can be not set on Single linked list" );
 		}
 
-		XLinkedListNode currentPreviousNode = getPrevioius();
+		XLinkedListNode<E> currentPreviousNode = getPrevioius();
 		this.previous = newPreviousNode;
 
 		// to avoid loop

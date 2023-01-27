@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
+import com.vedantatree.psds.ds.XBinaryTree.XTreeTraversalResult;
+
 
 /**
  * 
@@ -116,24 +118,6 @@ public class XBinaryTree<E extends Comparable<E>>
 		}
 		return root;
 	}
-
-	// private int compareData( E data1, E data2 )
-	// {
-	// Integer intData1 = (Integer) data1;
-	// Integer intData2 = (Integer) data2;
-	// if( intData1 == intData2 )
-	// {
-	// return 0;
-	// }
-	// else if( intData1 < intData2 )
-	// {
-	// return -1;
-	// }
-	// else
-	// {
-	// return 1;
-	// }
-	// }
 
 	private int compareData( E data1, E data2 )
 	{
@@ -392,7 +376,7 @@ public class XBinaryTree<E extends Comparable<E>>
 
 	public XTreeTraversalResult<E> inorderTraversalAndValidate( boolean recursion, boolean checkBST )
 	{
-		XTreeTraversalResult<E> traversalResult = new XTreeTraversalResult<>();
+		XTreeTraversalResult<E> traversalResult = new XTreeTraversalResult<>( XTreeTraversalResult.IN_ORDER, checkBST );
 		inorderTraversal( getRootNode(), traversalResult, true, checkBST );
 		return traversalResult;
 	}
@@ -405,7 +389,7 @@ public class XBinaryTree<E extends Comparable<E>>
 			if( recursion )
 			{
 				inorderTraversal( rootNode.getLeftChild(), traversalResult, recursion, validateBST );
-				traversalResult.addTraversedNodeData( rootNode.getData(), validateBST, XTreeTraversalResult.IN_ORDER );
+				traversalResult.addTraversedNodeData( rootNode.getData() );
 				inorderTraversal( rootNode.getRightChild(), traversalResult, recursion, validateBST );
 
 			}
@@ -427,10 +411,9 @@ public class XBinaryTree<E extends Comparable<E>>
 					// get top node, add its data, try checking right node. If present, will add its
 					// data or will get next left node from stack in next loop
 					currentNode = nodeStack.pop();
-					
-					traversalResult.addTraversedNodeData( currentNode.getData(), validateBST,
-							XTreeTraversalResult.IN_ORDER );
-					
+
+					traversalResult.addTraversedNodeData( currentNode.getData() );
+
 					currentNode = currentNode.getRightChild();
 				}
 			}
@@ -488,6 +471,85 @@ public class XBinaryTree<E extends Comparable<E>>
 	}
 
 	/**
+	 * Pre-order nodes traversal implementation without using recursion
+	 * 
+	 * @return list of this tree nodes in pre-order
+	 */
+	public List<E> preorderTraversalWithoutRecursioin()
+	{
+		XTreeTraversalResult traversalResult = new XTreeTraversalResult( XTreeTraversalResult.PRE_ORDER, false );
+
+		XTreeNode<E> currentNode = getRootNode();
+
+		// stack to collect the nodes to traverse
+		Stack<XTreeNode<E>> nodeStack = new Stack<>();
+		nodeStack.push( currentNode );
+
+		while( !nodeStack.isEmpty() )
+		{
+			currentNode = nodeStack.pop();
+
+			traversalResult.addTraversedNodeData( currentNode.getData() );
+
+			if( currentNode.getRightChild() != null )
+			{
+				nodeStack.push( currentNode.getRightChild() );
+			}
+			if( currentNode.getLeftChild() != null )
+			{
+				nodeStack.push( currentNode.getLeftChild() );
+			}
+		}
+
+		return traversalResult.getTraversedNodesData();
+	}
+
+	/**
+	 * Post order nodes traversal implementation without using recursion
+	 * 
+	 * @return list of this tree nodes in post order
+	 */
+	public List<E> postorderTraversalWithoutRecursioin()
+	{
+		// store of traversed nodes
+		XTreeTraversalResult traversalResult = new XTreeTraversalResult( XTreeTraversalResult.POST_ORDER, false );
+
+		XTreeNode<E> currentNode = getRootNode();
+
+		// stack to collect nodes in traversal order
+		Stack<XTreeNode<E>> nodesToTraverseStack = new Stack<>();
+		nodesToTraverseStack.push( currentNode );
+
+		// traversed nodes but in reverse order, i.e. collecting last order first
+		Stack<XTreeNode<E>> trarversedNodeStack = new Stack<>();
+
+		while( !nodesToTraverseStack.isEmpty() )
+		{
+			currentNode = nodesToTraverseStack.pop();
+
+			// push to traversed node stack
+			trarversedNodeStack.push( currentNode );
+
+			if( currentNode.getLeftChild() != null )
+			{
+				nodesToTraverseStack.push( currentNode.getLeftChild() );
+			}
+			if( currentNode.getRightChild() != null )
+			{
+				nodesToTraverseStack.push( currentNode.getRightChild() );
+			}
+		}
+
+		//
+		while( !trarversedNodeStack.isEmpty() )
+		{
+			traversalResult.addTraversedNodeData( trarversedNodeStack.pop().getData() );
+		}
+
+		return traversalResult.getTraversedNodesData();
+	}
+
+	/**
 	 * @return list of tree nodes collected in postorder traversal
 	 */
 	public List<E> postorderTraversal( boolean recursion )
@@ -531,7 +593,7 @@ public class XBinaryTree<E extends Comparable<E>>
 					currentNode = nodeStack.pop();
 
 					// if current node has right child, make that current node
-					// push it to stack and continue loop with this 
+					// push it to stack and continue loop with this
 					if( currentNode.getRightChild() != null )
 					{
 						nodeStack.push( currentNode );
@@ -676,9 +738,13 @@ public class XBinaryTree<E extends Comparable<E>>
 	}
 
 	/**
-	 * Check and return the height Also check if tree is balanced or not When is a
-	 * BST balanced - when both left and right node should not have height
-	 * difference of more than one Check this recursively If difference is more,
+	 * Check and return the height
+	 * Also check if tree is balanced or not
+	 * 
+	 * When is a BST balanced
+	 * when both left and right node should not have height difference of more than one
+	 * Check this recursively
+	 * If difference is more,
 	 * return error code
 	 * 
 	 * @return Integer.MIN_VALUE as error code if tree is not balance, tree height
@@ -703,6 +769,7 @@ public class XBinaryTree<E extends Comparable<E>>
 		}
 
 		int rightHeight = checkHeightAndBalanced( root.getRightChild() );
+		// TODO why is this MAX_VALUE. It is not set anywhere Should be min_value
 		if( rightHeight == Integer.MAX_VALUE )
 		{
 			return rightHeight;
@@ -719,7 +786,7 @@ public class XBinaryTree<E extends Comparable<E>>
 		}
 	}
 
-	// TODO:
+	// TODO: pending
 	public int getWidth()
 	{
 		int leftWidth = 0;
@@ -772,14 +839,17 @@ public class XBinaryTree<E extends Comparable<E>>
 	/**
 	 * Print tree in Matrix form Most readable form
 	 * 
-	 * However, alignment gets disturbed as numbers get bigger We can fix it by
-	 * filling max space in empty place, and equal width for number, but that will
-	 * make the logic bit complex. 00Hence leaving for now
+	 * However, alignment gets disturbed as numbers get bigger
+	 * We can fix it by filling max space in empty place, and equal width for number, but that will
+	 * make the logic bit complex. Hence leaving for now
 	 */
 	public void printTreeInMatrix()
 	{
 		XTreeNode<E> root = getRootNode();
+		if (root == null) return;
+		
 		int height = getHeight( root );
+		if (height == 0) return;
 
 		String[][] resultMatrix = new String[height][( 1 << height ) - 1];
 		System.out.println( "width of matrix[" + ( 1 << height ) + "]" );
@@ -901,21 +971,29 @@ public class XBinaryTree<E extends Comparable<E>>
 	 * 
 	 * @param <E>
 	 */
-	static class XTreeTraversalResult<E extends Comparable>
+	public static class XTreeTraversalResult<E extends Comparable>
 	{
 
-		static final int	PRE_ORDER			= -1;
-		static final int	IN_ORDER			= 0;
-		static final int	POST_ORDER			= 1;
+		public static final int	PRE_ORDER			= -1;
+		public static final int	IN_ORDER			= 0;
+		public static final int	POST_ORDER			= 1;
 
-		private List<E>		traversedNodesData	= new ArrayList<>();
+		private List<E>			traversedNodesData	= new ArrayList<>();
 
-		private boolean		isBST				= true;
+		private boolean			isBST				= true;
+		private boolean			validateBST;
+		private int				traversalOrder;
 
 		// temp variable to store previous traversed data
-		private E			previousData;
+		private E				previousData;
 
-		void addTraversedNodeData( E nodeData, boolean validateBST, int traversalOrder )
+		public XTreeTraversalResult( int traversalOrder, boolean validateBST )
+		{
+			this.traversalOrder = traversalOrder;
+			this.validateBST = validateBST;
+		}
+
+		public void addTraversedNodeData( E nodeData )
 		{
 			traversedNodesData.add( nodeData );
 			if( validateBST )

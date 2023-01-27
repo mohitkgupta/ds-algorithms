@@ -9,7 +9,7 @@ import junit.framework.TestCase;
  * Class implemented a sorted stack
  * 
  * Algorithm:
- * Have two stack, S1 for Pop and S2 for Pop
+ * Have two stack, S1 for push and S2 for Pop
  * Keep pushing elements to S1
  * On pop, prepare S2 in sort order
  * Return from S2

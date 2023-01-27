@@ -32,44 +32,54 @@ public class XTreeNode<E>
 		setRightChild( rightChild );
 	}
 
-	void setData( E data )
+	// making methods public so these can be accessed from TreeAlgo and TestCase etc.
+	// earlier these were package private.
+	public void setData( E data )
 	{
 		this.data = data;
 	}
 
-	XTreeNode<E> getParent()
+	public XTreeNode<E> getParent()
 	{
 		return parent;
 	}
 
-	void setParent( XTreeNode<E> parent )
+	public void setParent( XTreeNode<E> parent )
 	{
 		this.parent = parent;
 	}
 
-	XTreeNode<E> setLeftChild( XTreeNode<E> leftChild )
+	public XTreeNode<E> setLeftChild( XTreeNode<E> leftChild )
 	{
 		this.leftChild = leftChild;
+		if( this.leftChild != null )
+		{
+			this.leftChild.setParent( this );
+		}
 		return leftChild;
 	}
 
-	XTreeNode<E> setRightChild( XTreeNode<E> rightChild )
+	public XTreeNode<E> setRightChild( XTreeNode<E> rightChild )
 	{
 		this.rightChild = rightChild;
+		if( this.rightChild != null )
+		{
+			this.rightChild.setParent( this );
+		}
 		return rightChild;
 	}
 
-	E getData()
+	public E getData()
 	{
 		return data;
 	}
 
-	XTreeNode<E> getLeftChild()
+	public XTreeNode<E> getLeftChild()
 	{
 		return leftChild;
 	}
 
-	XTreeNode<E> getRightChild()
+	public XTreeNode<E> getRightChild()
 	{
 		return rightChild;
 	}
@@ -134,6 +144,7 @@ public class XTreeNode<E>
 	/**
 	 * Find maximum value from whole children hierarchy of give tree node
 	 * with recursion
+	 * 
 	 * @return Maximum value
 	 */
 	public int findMaxValue()

@@ -17,7 +17,7 @@ import java.util.List;
 public class XGraph
 {
 
-	public static boolean bfsGraph( ArrayList<ArrayList<Integer>> adjacentList, int source, int dest, int vertices,
+	public static boolean bfsGraph( ArrayList<ArrayList<Integer>> adjacencyList, int source, int dest, int vertices,
 			int predecessors[], int distances[] )
 	{
 
@@ -38,7 +38,7 @@ public class XGraph
 		while( !traversalQueue.isEmpty() )
 		{
 			int currentNode = traversalQueue.remove();
-			ArrayList<Integer> currentNodeEdges = adjacentList.get( currentNode );
+			ArrayList<Integer> currentNodeEdges = adjacencyList.get( currentNode );
 
 			for( int i = 0; i < currentNodeEdges.size(); i++ )
 			{
