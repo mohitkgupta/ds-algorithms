@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 
 
 public class GreedyAlgorithms
@@ -41,10 +42,10 @@ public class GreedyAlgorithms
 	}
 
 	/**
-	 * 
-	 * @param k
-	 * @param tasks
-	 * @return
+	 * @param k number of workers
+	 * @param tasks list of tasks duration, it is double of number of workers i.e. k * 2
+	 * @return list of pairs of tasks indices from tasks list, which if each worker does, then all the tasks can be
+	 *         finished earliest.
 	 */
 	public ArrayList<ArrayList<Integer>> taskAssignment( int k, ArrayList<Integer> tasks )
 	{
@@ -57,18 +58,23 @@ public class GreedyAlgorithms
 		assertThat( tasks ).isNotNull();
 		assertThat( tasks.size() ).isEqualTo( k * 2 );
 
-		Collections.sort( tasks );
+		ArrayList<Integer> originalIndices = new ArrayList<>( k * 2 );
+		for( int i = 0; i < k * 2; i++ )
+		{
+			originalIndices.add( i );
+		}
+
+		Collections.sort( originalIndices, Comparator.comparingInt( tasks::get ) );
 
 		ArrayList<ArrayList<Integer>> assignedTasks = new ArrayList<>();
-
 		int frontCounter = 0;
 		int rearCounter = tasks.size() - 1;
 
 		while( frontCounter < rearCounter )
 		{
 			ArrayList<Integer> workerTasks = new ArrayList<>();
-			workerTasks.add( tasks.get( frontCounter ) );
-			workerTasks.add( tasks.get( rearCounter ) );
+			workerTasks.add( originalIndices.get( frontCounter ) );
+			workerTasks.add( originalIndices.get( rearCounter ) );
 
 			assignedTasks.add( workerTasks );
 			frontCounter++;

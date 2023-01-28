@@ -35,7 +35,12 @@ public class TestGreedyAlgorithms extends TestCase
 
 		assertThat( GreedyAlgorithms.findMaxTotalSpeedOfTandemBicycles( new int[] {}, new int[] {}, true ) )
 				.isEqualTo( 0 );
+	}
 
+	// GreedyAlgorithms.taskAssignment
+	public void testTaskAssignment()
+	{
+		// TODO
 	}
 
 }
