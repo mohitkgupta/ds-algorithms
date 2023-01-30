@@ -13,14 +13,12 @@ import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
 
-public class TestNumberAlgorithms extends TestCase
-{
+public class TestNumberAlgorithms extends TestCase {
 
 	// NumberAlgorithms.twoNumberSum
-	public void testTwoNumberSum()
-	{
+	public void testTwoNumberSum() {
 		int[] input = new int[]
-		{ 3, 5, -4, 8, 11, 1, -1, 6 };
+			{ 3, 5, -4, 8, 11, 1, -1, 6 };
 		int targetSum = 10;
 
 		int[] result = NumberAlgorithms.twoNumberSum( input, targetSum );
@@ -31,7 +29,7 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( result[1] == -1 );
 
 		input = new int[]
-		{ -3, -5, -4, -8, -11, -1, -1, -6 };
+			{ -3, -5, -4, -8, -11, -1, -1, -6 };
 		targetSum = -10;
 
 		result = NumberAlgorithms.twoNumberSum( input, targetSum );
@@ -42,7 +40,7 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( result[1] == -6 );
 
 		input = new int[]
-		{ -3, -5, -4, -8, -11, -1, -1, -6 };
+			{ -3, -5, -4, -8, -11, -1, -1, -6 };
 		targetSum = -1;
 
 		result = NumberAlgorithms.twoNumberSum( input, targetSum );
@@ -62,21 +60,36 @@ public class TestNumberAlgorithms extends TestCase
 		targetSum = Integer.MIN_VALUE;
 
 		boolean assertionTriggered = false;
-		try
-		{
+		try {
 			result = NumberAlgorithms.twoNumberSum( input, targetSum );
 		}
-		catch( AssertionFailedError afe )
-		{
+		catch( AssertionFailedError afe ) {
 			assertionTriggered = true;
 		}
 
 		assertTrue( "Assertion failure is expected due to Illegal arguments", assertionTriggered );
 	}
 
+	public void testFourNumberSum() {
+		int[] input = new int[]
+			{ 7, 6, 4, -1, 1, 2 };
+		int targetSum = 16;
+
+		List<int[]> quadruplets = NumberAlgorithms.fourNumberSum( input, targetSum );
+
+		assertThat( quadruplets ).isNotNull();
+		assertThat( quadruplets.size() ).isEqualTo( 2 );
+		assertThat( quadruplets.get( 0 ).length ).isEqualTo( 4 );
+		assertThat( quadruplets.get( 1 ).length ).isEqualTo( 4 );
+
+		assertThat( Arrays.compare( quadruplets.get( 0 ), new int[]
+			{ 7, 6, 4, -1 } ) ).isZero();
+		assertThat( Arrays.compare( quadruplets.get( 1 ), new int[]
+			{ 7, 6, 1, 2 } ) ).isZero();
+	}
+
 	// NumberAlgorithms.isValidSubsequence
-	public void testIsValidSubsequence()
-	{
+	public void testIsValidSubsequence() {
 		List<Integer> array = Arrays.asList( 5, 1, 22, 25, 6, -1, 8, 10 );
 		List<Integer> sequence = Arrays.asList( 1, 6, -1, 10 );
 
@@ -92,12 +105,10 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( "Expected result > false", !result );
 
 		boolean assertionTriggered = false;
-		try
-		{
+		try {
 			result = NumberAlgorithms.isValidSubsequence( null, null );
 		}
-		catch( AssertionFailedError ex )
-		{
+		catch( AssertionFailedError ex ) {
 			assertionTriggered = true;
 		}
 
@@ -105,10 +116,9 @@ public class TestNumberAlgorithms extends TestCase
 	}
 
 	// NumberAlgorithms.sortedSquaredArray
-	public void testSortedSquaredArray()
-	{
+	public void testSortedSquaredArray() {
 		int[] arrayToSquare = new int[]
-		{ -5, 3, 6, 8, 10 };
+			{ -5, 3, 6, 8, 10 };
 
 		int[] squaredArray = NumberAlgorithms.sortedSquaredArray( arrayToSquare );
 
@@ -124,12 +134,10 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( squaredArray[4] == 100 );
 
 		boolean assertionTriggered = false;
-		try
-		{
+		try {
 			NumberAlgorithms.sortedSquaredArray( null );
 		}
-		catch( AssertionFailedError ex )
-		{
+		catch( AssertionFailedError ex ) {
 			assertionTriggered = true;
 		}
 
@@ -138,8 +146,7 @@ public class TestNumberAlgorithms extends TestCase
 	}
 
 	// NumberAlgorithms.tournamentWinner
-	public void testTournamentWinner()
-	{
+	public void testTournamentWinner() {
 		ArrayList<ArrayList<String>> competitions = new ArrayList<>();
 
 		ArrayList<String> competingTeams = new ArrayList<>();
@@ -187,12 +194,10 @@ public class TestNumberAlgorithms extends TestCase
 
 		// test with null parameter
 		boolean assertionTriggered = false;
-		try
-		{
+		try {
 			winningTeam = NumberAlgorithms.tournamentWinner( null, results );
 		}
-		catch( AssertionFailedError ex )
-		{
+		catch( AssertionFailedError ex ) {
 			assertionTriggered = true;
 		}
 
@@ -200,13 +205,11 @@ public class TestNumberAlgorithms extends TestCase
 
 		// test with unequal input arrays
 		assertionTriggered = false;
-		try
-		{
+		try {
 			results.remove( 0 );
 			winningTeam = NumberAlgorithms.tournamentWinner( competitions, results );
 		}
-		catch( AssertionFailedError ex )
-		{
+		catch( AssertionFailedError ex ) {
 			assertionTriggered = true;
 		}
 
@@ -215,23 +218,21 @@ public class TestNumberAlgorithms extends TestCase
 	}
 
 	// NumberAlgorithms.smallestDifference
-	public void testSmallestDifference()
-	{
+	public void testSmallestDifference() {
 		int[] pair = NumberAlgorithms.smallestDifference( new int[]
-		{ -1, 5, 10, 20, 28, 3 }, new int[]
-		{ 26, 134, 135, 15, 17 } );
+			{ -1, 5, 10, 20, 28, 3 }, new int[]
+			{ 26, 134, 135, 15, 17 } );
 
 		assertTrue( pair[0] == 28 && pair[1] == 26 );
 
 		pair = NumberAlgorithms.smallestDifference( new int[]
-		{ -1, 5, 10, 20, 28, 3 }, new int[] {} );
+			{ -1, 5, 10, 20, 28, 3 }, new int[] {} );
 		assertTrue( pair.length == 0 );
 	}
 
-	public void testThreeNumberSum()
-	{
+	public void testThreeNumberSum() {
 		List<Integer[]> results = NumberAlgorithms.threeNumberSum( new int[]
-		{ 12, 3, 1, 2, -6, 5, -8, 6 }, 0 );
+			{ 12, 3, 1, 2, -6, 5, -8, 6 }, 0 );
 
 		assertNotNull( results );
 		assertTrue( results.size() == 3 );
@@ -246,7 +247,7 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( results.get( 2 )[0] == -6 && results.get( 2 )[1] == 1 && results.get( 2 )[2] == 5 );
 
 		results = NumberAlgorithms.threeNumberSum( new int[]
-		{ 12, -8, -4 }, 0 );
+			{ 12, -8, -4 }, 0 );
 
 		assertNotNull( results );
 		assertTrue( results.size() == 1 );
@@ -256,10 +257,9 @@ public class TestNumberAlgorithms extends TestCase
 	}
 
 	// NumberAlgorithms.arrayOfProducts
-	public void testArrayOfProducts()
-	{
+	public void testArrayOfProducts() {
 		int[] results = NumberAlgorithms.arrayOfProducts( new int[]
-		{ 5, 1, 4, 2 } );
+			{ 5, 1, 4, 2 } );
 
 		assertNotNull( results );
 		assertTrue( results.length == 4 );
@@ -275,10 +275,9 @@ public class TestNumberAlgorithms extends TestCase
 	}
 
 	// NumberAlgorithms.arrayOfProducts2
-	public void testArrayOfProducts2()
-	{
+	public void testArrayOfProducts2() {
 		int[] results = NumberAlgorithms.arrayOfProducts2( new int[]
-		{ 5, 1, 4, 2 } );
+			{ 5, 1, 4, 2 } );
 
 		assertNotNull( results );
 		assertTrue( results.length == 4 );
@@ -293,14 +292,12 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( results.length == 0 );
 	}
 
-	public void testThreeLargestNumbers()
-	{
+	public void testThreeLargestNumbers() {
 		assertNotNull( NumberAlgorithms.findThreeLargestNumbers( new int[]
-		{ 5, 8, 9, 23, 34, 34, 56 } )[2] == 56 );
+			{ 5, 8, 9, 23, 34, 34, 56 } )[2] == 56 );
 	}
 
-	public void testSquareRoot()
-	{
+	public void testSquareRoot() {
 		assertTrue( NumberAlgorithms.squareRoot( 64 ) == 8 );
 		assertTrue( NumberAlgorithms.squareRoot( 25 ) == 5 );
 		assertTrue( NumberAlgorithms.squareRoot( 1522756 ) == 1234 );
@@ -310,8 +307,7 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( NumberAlgorithms.squareRoot( 0 ) == -1 );
 	}
 
-	public void testSquareRootByBinaryTrial()
-	{
+	public void testSquareRootByBinaryTrial() {
 		assertTrue( NumberAlgorithms.squareRootByBinaryGuessing( 64 ) == 8 );
 		assertTrue( NumberAlgorithms.squareRootByBinaryGuessing( 25 ) == 5 );
 		assertTrue( NumberAlgorithms.squareRootByBinaryGuessing( 1522756 ) == 1234 );
@@ -321,8 +317,7 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( NumberAlgorithms.squareRootByBinaryGuessing( 0 ) == -1 );
 	}
 
-	public void testSumOfDigits()
-	{
+	public void testSumOfDigits() {
 		assertTrue( NumberAlgorithms.sumOfDigits( 15432 ) == 15 );
 		assertTrue( NumberAlgorithms.sumOfDigits( 6894365 ) == 41 );
 		assertTrue( NumberAlgorithms.sumOfDigits( 9425752 ) == 34 );
@@ -330,20 +325,17 @@ public class TestNumberAlgorithms extends TestCase
 		assertTrue( NumberAlgorithms.sumOfDigits( 524 ) == 11 );
 	}
 
-	public void testPrimeNumber()
-	{
+	public void testPrimeNumber() {
 		assertTrue( "Number 11 is prime", NumberAlgorithms.isPrimeNumber( 11 ) );
 		assertFalse( "Number 12 is not prime", NumberAlgorithms.isPrimeNumber( 12 ) );
 		assertFalse( "Number 96 is not prime", NumberAlgorithms.isPrimeNumber( 96 ) );
 		assertTrue( "Number 113 is prime", NumberAlgorithms.isPrimeNumber( 113 ) );
 	}
 
-	public void testFactorial()
-	{
+	public void testFactorial() {
 		int number = 872;
 		int loopFactorial = 1;
-		for( int i = 1; i < number; i++ )
-		{
+		for( int i = 1; i < number; i++ ) {
 			loopFactorial = loopFactorial * i;
 		}
 
@@ -351,25 +343,24 @@ public class TestNumberAlgorithms extends TestCase
 	}
 
 	// NumberAlgorithms.firstDuplicateValue
-	public void testFirstDuplicateValue()
-	{
+	public void testFirstDuplicateValue() {
 		int[] array = new int[]
-		{ 2, 1, 5, 2, 3, 3, 4 };
+			{ 2, 1, 5, 2, 3, 3, 4 };
 		int firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( 2 );
 
 		array = new int[]
-		{ 2, 1, 5, 3, 3, 2, 4 };
+			{ 2, 1, 5, 3, 3, 2, 4 };
 		firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( 3 );
 
 		array = new int[]
-		{ 1, 1, 2, 3, 3, 2, 2 };
+			{ 1, 1, 2, 3, 3, 2, 2 };
 		firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( 1 );
 
 		array = new int[]
-		{ 3, 1, 3, 1, 1, 4, 4 };
+			{ 3, 1, 3, 1, 1, 4, 4 };
 		firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( 3 );
 
@@ -378,27 +369,27 @@ public class TestNumberAlgorithms extends TestCase
 		assertThat( firstDupicate ).isEqualTo( -1 );
 
 		array = new int[]
-		{ 1 };
+			{ 1 };
 		firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( -1 );
 
 		array = new int[]
-		{ 1, 1 };
+			{ 1, 1 };
 		firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( 1 );
 
 		array = new int[]
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10 };
+			{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10 };
 		firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( 10 );
 
 		array = new int[]
-		{ 2, 1, 1 };
+			{ 2, 1, 1 };
 		firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( 1 );
 
 		array = new int[]
-		{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
+			{ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
 		firstDupicate = NumberAlgorithms.firstDuplicateValue( array );
 		assertThat( firstDupicate ).isEqualTo( 2 );
 

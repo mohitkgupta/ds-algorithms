@@ -1,22 +1,28 @@
 package com.vedantatree.psds.algo.sort;
 
-public class QuickSort
-{
+public class QuickSort {
 
-	public void quickSort( int[] arrayToSort )
-	{
+	/**
+	 * Time Complexity - n(log(n)), worst - n^2
+	 * Space Complexity - O(1) - In-place sorting
+	 * Better space efficient than merge sort
+	 * 
+	 * @param arrayToSort
+	 * @return
+	 */
+	public static int[] quickSort( int[] arrayToSort ) {
 		quickSort( arrayToSort, 0, arrayToSort.length - 1 );
+		return arrayToSort;
 	}
 
-	public void quickSort( int[] arrayToSort, int startIndex, int endIndex )
-	{
-		if( startIndex >= endIndex )
-		{
+	private static void quickSort( int[] arrayToSort, int startIndex, int endIndex ) {
+		if( startIndex >= endIndex ) {
 			return;
 		}
 
 		int pivotIndex = partition( arrayToSort, startIndex, endIndex );
 
+		// pivot index element is already at right index, sort rest of the list on left and right
 		quickSort( arrayToSort, startIndex, pivotIndex - 1 );
 		quickSort( arrayToSort, pivotIndex + 1, endIndex );
 	}
@@ -29,33 +35,36 @@ public class QuickSort
 	 * @Parameters: arrayToSort, starting index and ending index
 	 * @Returns: index of pivot element after placing it correctly in sorted array
 	 */
-	private int partition( int[] arrayToSort, int startIndex, int endIndex )
-	{
+	private static int partition( int[] arrayToSort, int startIndex, int endIndex ) {
+
 		int pivotElement = arrayToSort[endIndex];
 
+		// TODO confusing to set this index as startIndex-1. Initially, it will be -1. Improve it
+		// tracking the index to put the elements smaller than pivot at the beginning of array, towards left of pivot
 		int smallerElementIndex = startIndex - 1;
 
-		for( int iteratorIndex = startIndex; iteratorIndex < endIndex; iteratorIndex++ )
-		{
-			// if current element is smaller than pivot, put it in the beginning of array
-			if( arrayToSort[iteratorIndex] <= pivotElement )
-			{
-				smallerElementIndex++;
+		for( int currentIndex = startIndex; currentIndex < endIndex; currentIndex++ ) {
 
-				swapElementInArray( arrayToSort, smallerElementIndex, iteratorIndex );
+			if( arrayToSort[currentIndex] <= pivotElement ) {
+
+				// if current element is smaller than pivot, put it in the beginning of array
+				smallerElementIndex++;
+				swapArrayElements( arrayToSort, smallerElementIndex, currentIndex );
 			}
 
 		}
-		// put pivot element at the the current smaller element index
-		swapElementInArray( arrayToSort, smallerElementIndex + 1, endIndex );
+		// move pivot element at the the current smaller element index
+		// after this move, all elements on left side of pivot will be smaller than pivot
+		// all elements on right side will be larger
+		// elements will be only smaller and larger than pivot element > not entirely sorted
+		swapArrayElements( arrayToSort, smallerElementIndex + 1, endIndex );
 
 		return smallerElementIndex + 1;
 	}
 
-	private void swapElementInArray( int[] array, int firstIndex, int secondIndex )
-	{
-		int temp = array[firstIndex];
+	private static void swapArrayElements( int[] array, int firstIndex, int secondIndex ) {
 
+		int temp = array[firstIndex];
 		array[firstIndex] = array[secondIndex];
 		array[secondIndex] = temp;
 	}

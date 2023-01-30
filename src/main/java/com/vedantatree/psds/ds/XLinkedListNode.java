@@ -1,100 +1,83 @@
 package com.vedantatree.psds.ds;
 
-class XLinkedListNode<E>
-{
+class XLinkedListNode<E> {
 
 	private boolean				single	= false;
 	private E					data;
 	private XLinkedListNode<E>	next;
 	private XLinkedListNode<E>	previous;
 
-	XLinkedListNode()
-	{
+	XLinkedListNode() {
 	}
 
-	XLinkedListNode( XLinkedListNode<E> previous, E data, XLinkedListNode<E> next, boolean single )
-	{
+	XLinkedListNode( XLinkedListNode<E> previous, E data, XLinkedListNode<E> next, boolean single ) {
 		setSingle( single );
 		setData( data );
 		setNext( next );
 
-		if( !single )
-		{
+		if( isDouble() ) {
 			setPrevious( previous );
 		}
 		else // if single
 		{
-			if( previous != null )
-			{
+			if( previous != null ) {
 				previous.setNext( this );
 			}
 
 		}
 	}
-	
-	boolean isDouble()
-	{
+
+	boolean isDouble() {
 		return !single;
 	}
 
-	boolean isSingle()
-	{
+	boolean isSingle() {
 		return single;
 	}
 
-	void setSingle( boolean single )
-	{
+	void setSingle( boolean single ) {
 		this.single = single;
 	}
 
-	E getData()
-	{
+	E getData() {
 		return data;
 	}
 
-	void setData( E data )
-	{
+	void setData( E data ) {
 		this.data = data;
 	}
 
-	XLinkedListNode<E> getNext()
-	{
+	XLinkedListNode<E> getNext() {
 		return next;
 	}
 
-	XLinkedListNode<E> setNext( XLinkedListNode<E> newNextNode )
-	{
+	XLinkedListNode<E> setNext( XLinkedListNode<E> newNextNode ) {
 		XLinkedListNode<E> currentNextNode = getNext();
-		
+
 		this.next = newNextNode;
-		
+
 		// if doubly linked list, set this node as previous to next node
-		if( newNextNode != null && isDouble())
-		{
+		if( newNextNode != null && isDouble() ) {
 			newNextNode.setPrevious( this );
 		}
-		
+
 		return currentNextNode;
 	}
 
-	XLinkedListNode<E> getPrevioius()
-	{
+	XLinkedListNode<E> getPrevioius() {
 		return previous;
 	}
 
-	XLinkedListNode<E> setPrevious( XLinkedListNode<E> newPreviousNode )
-	{
-		if( isSingle() )
-		{
+	XLinkedListNode<E> setPrevious( XLinkedListNode<E> newPreviousNode ) {
+		if( isSingle() ) {
 			throw new IllegalStateException( "Previous can be not set on Single linked list" );
 		}
 
 		XLinkedListNode<E> currentPreviousNode = getPrevioius();
 		this.previous = newPreviousNode;
 
-		// to avoid loop
-		if( newPreviousNode != null && newPreviousNode.getNext() != this )
-		{
+		// extra check to avoid loop
+		if( newPreviousNode != null && newPreviousNode.getNext() != this ) {
 			newPreviousNode.setNext( this );
 		}
 		return currentPreviousNode;

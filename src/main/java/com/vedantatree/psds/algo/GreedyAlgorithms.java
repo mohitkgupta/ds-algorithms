@@ -8,20 +8,19 @@ import java.util.Collections;
 import java.util.Comparator;
 
 
-public class GreedyAlgorithms
-{
+public class GreedyAlgorithms {
 
 	/**
 	 * Function to calculate the max or min possible speed of tandem cycle players
 	 * 
 	 * @param redShirtPlayersSpeed Array of Speeds of red shirt player
 	 * @param blueShirtPlayersSpeed Array of Speeds of blue shirt player
-	 * @param fastest > true if function should calculate maximum possible speed, false if minimum possible speed
+	 * @param maxPossibleSpeed > true if function should calculate maximum possible speed, false if minimum possible
+	 *        speed
 	 * @return Maximum or minimum possible speed, based on the fastest input parameter
 	 */
 	public static int findMaxTotalSpeedOfTandemBicycles( int[] redShirtPlayersSpeed, int[] blueShirtPlayersSpeed,
-			boolean fastest )
-	{
+			boolean maxPossibleSpeed ) {
 		assertThat( redShirtPlayersSpeed ).isNotNull();
 		assertThat( blueShirtPlayersSpeed ).isNotNull();
 		assertThat( redShirtPlayersSpeed.length ).isEqualTo( blueShirtPlayersSpeed.length );
@@ -32,10 +31,13 @@ public class GreedyAlgorithms
 		int totalSpeed = 0;
 		int numberOfPlayers = redShirtPlayersSpeed.length;
 
-		for( int i = 0; i < numberOfPlayers; i++ )
-		{
-			totalSpeed += Math.max( redShirtPlayersSpeed[i],
-					( fastest ? blueShirtPlayersSpeed[numberOfPlayers - ( i + 1 )] : blueShirtPlayersSpeed[i] ) );
+		for( int i = 0; i < numberOfPlayers; i++ ) {
+
+			int redShirtPlayerSpeed = redShirtPlayersSpeed[i];
+			int blueShirtPlayerSpeed = maxPossibleSpeed ? blueShirtPlayersSpeed[numberOfPlayers - ( i + 1 )]
+					: blueShirtPlayersSpeed[i];
+
+			totalSpeed += Math.max( redShirtPlayerSpeed, blueShirtPlayerSpeed );
 		}
 
 		return totalSpeed;
@@ -47,10 +49,8 @@ public class GreedyAlgorithms
 	 * @return list of pairs of tasks indices from tasks list, which if each worker does, then all the tasks can be
 	 *         finished earliest.
 	 */
-	public ArrayList<ArrayList<Integer>> taskAssignment( int k, ArrayList<Integer> tasks )
-	{
-		if( k == 0 )
-		{
+	public ArrayList<ArrayList<Integer>> taskAssignment( int k, ArrayList<Integer> tasks ) {
+		if( k == 0 ) {
 			return null;
 		}
 
@@ -59,8 +59,7 @@ public class GreedyAlgorithms
 		assertThat( tasks.size() ).isEqualTo( k * 2 );
 
 		ArrayList<Integer> originalIndices = new ArrayList<>( k * 2 );
-		for( int i = 0; i < k * 2; i++ )
-		{
+		for( int i = 0; i < k * 2; i++ ) {
 			originalIndices.add( i );
 		}
 
@@ -70,8 +69,7 @@ public class GreedyAlgorithms
 		int frontCounter = 0;
 		int rearCounter = tasks.size() - 1;
 
-		while( frontCounter < rearCounter )
-		{
+		while( frontCounter < rearCounter ) {
 			ArrayList<Integer> workerTasks = new ArrayList<>();
 			workerTasks.add( originalIndices.get( frontCounter ) );
 			workerTasks.add( originalIndices.get( rearCounter ) );

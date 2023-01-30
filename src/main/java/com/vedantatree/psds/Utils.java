@@ -54,7 +54,7 @@ public class Utils
 			{
 				System.out.print( element + "\t" );
 			}
-			System.out.println( "\n" );
+			System.out.println( "" );
 		}
 		System.out.println( "" );
 	}

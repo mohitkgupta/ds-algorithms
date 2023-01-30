@@ -1,7 +1,6 @@
 package com.vedantatree.psds.algo.sort;
 
-public class SortAlgo
-{
+public class SortAlgo {
 
 	/**
 	 * This approach is > keep comparing elements and swapping as long these are not
@@ -12,137 +11,149 @@ public class SortAlgo
 	 * Keep iterating over array if current element is larger than next element,
 	 * Swap these keep going in loops until none of the element is swapping
 	 * 
-	 * Time - O(n square) Space - O(1)
+	 * Time - O(n square), Best - O(n)
+	 * Space - O(1)
 	 * 
 	 * @param array
 	 * @return the sorted array
 	 */
-	public static int[] bubbleSort( int[] array )
-	{
-		boolean swap = true;
+	public static int[] bubbleSort( int[] array ) {
+		boolean swapped = true;
+		int sortedElements = 0;
 
-		// keep going until any of element has been swapped in previous iteration
-		while( swap )
-		{
-			swap = false;
+		// exit loop, if no element has been swapped in last iteration
+		while( swapped ) {
+			swapped = false;
 
-			// iterate over the array
-			// if current element is larger than next, swap these
+			// each loop will move the largest element to the end, hence next iteration can leave the last element
 
-			for( int i = 0; i < array.length - 1; i++ )
-			{
+			for( int currentIndex = 0; currentIndex < array.length - 1 - sortedElements; currentIndex++ ) {
 
-				if( array[i] > array[i + 1] )
-				{
-					int temp = array[i];
-					array[i] = array[i + 1];
-					array[i + 1] = temp;
-					swap = true;
+				if( array[currentIndex] > array[currentIndex + 1] ) {
+					int temp = array[currentIndex];
+					array[currentIndex] = array[currentIndex + 1];
+					array[currentIndex + 1] = temp;
+
+					swapped = true;
 				}
 			}
+			sortedElements++;
 		}
-
 		return array;
 	}
 
 	// for practice, stored array elements in local variables to avoid repeated
-	// access. CPU over memory
-	public static int[] bubbleSort2( int[] array )
-	{
+	// access. CPU over memory. Would JRE be doing this optimization automatically??
+	public static int[] bubbleSort2( int[] array ) {
 
 		boolean swapped = true;
 
-		while( swapped )
-		{
+		while( swapped ) {
 			swapped = false;
 
-			for( int i = 0; i < array.length - 1; i++ )
-			{
+			for( int i = 0; i < array.length - 1; i++ ) {
 
 				int first = array[i];
 				int second = array[i + 1];
 
-				if( first > second )
-				{
+				if( first > second ) {
 					array[i] = second;
 					array[i + 1] = first;
 					swapped = true;
 				}
 			}
 		}
-
 		return array;
 	}
 
 	/**
-	 * "Select the smallest and move to front, i.e. to current index" This approach
-	 * is > to bring smallest number from rest of the array to current index
+	 * "Select the smallest and move to front, i.e. to current index"
+	 * This approach is > to bring smallest number from rest of the array to current index
 	 * 
-	 * Pick current element in array Compare it with rest of the elements and bring
-	 * the smallest at its place
+	 * Pick current element in array
+	 * Compare it with rest of the elements and
+	 * bring the smallest at current element's place
 	 * 
 	 * Time: O(n^2) Space: O(1)
 	 * 
 	 * @param array
-	 * @return
+	 * @return sorted array < Not required. Sorting is in-place, in input array
 	 */
-	public int[] selectionSort( int[] array )
-	{
+	public static int[] selectionSort( int[] array ) {
 
-		// iterate over array
-		for( int i = 0; i < array.length; i++ )
-		{
+		for( int leftCounter = 0; leftCounter < array.length; leftCounter++ ) {
 
 			// pick current element
 			// keep comparing it with rest of the array element
 			// swap it if it is greater than any of the element
+			// This will bring smallest element from right list to the current element's place
 
-			for( int j = i; j < array.length; j++ )
-			{
-				if( array[i] > array[j] )
-				{
+			for( int j = leftCounter; j < array.length; j++ ) {
+
+				if( array[leftCounter] > array[j] ) {
 					int temp = array[j];
-					array[j] = array[i];
-					array[i] = temp;
+					array[j] = array[leftCounter];
+					array[leftCounter] = temp;
 				}
 			}
 		}
 		return array;
 	}
 
+	public static int[] selectionSortImproved( int[] array ) {
+
+		for( int leftCounter = 0; leftCounter < array.length; leftCounter++ ) {
+
+			int smallestElement = Integer.MAX_VALUE;
+			int smallestElementIndex = -1;
+
+			// find smallest element from right side list of current left counter
+			for( int subArrayIndex = leftCounter; subArrayIndex < array.length; subArrayIndex++ ) {
+
+				if( array[subArrayIndex] < smallestElement ) {
+					smallestElement = array[subArrayIndex];
+					smallestElementIndex = subArrayIndex;
+				}
+			}
+
+			// swap smallest element, if any element is found smaller than left counter element
+			if( smallestElementIndex != -1 && smallestElement != array[leftCounter] ) {
+
+				int temp = array[leftCounter];
+				array[leftCounter] = array[smallestElementIndex];
+				array[smallestElementIndex] = temp;
+			}
+
+		}
+		return array;
+	}
+
 	/**
-	 * This approach is > pick next element, insert it in list so far at right
-	 * place, keep going to next element As elements are inserted for sorted, hence
-	 * insertion sort
+	 * sort first element - consider this as sorted list
+	 * pick second element - insert it in earlier sorted list at right place
+	 * pick third element - insert it in earlier sorted list at right place
+	 * pick fourth element - insert it in earlier sorted list at right place
+	 * and so on..
 	 * 
-	 * Start picking elements from beginning Assume n and earlier elements as one
-	 * list, sort this list sorting means - inserting n+1 element in the list at
-	 * right place thats why it is called insertion sort and keep moving next doing
-	 * same as above
-	 * 
-	 * sort first element - consider this as sorted list pick second element -
-	 * insert it in earlier sorted list at right place pick third element - insert
-	 * it in earlier sorted list at right place pick fourth element - insert it in
-	 * earlier sorted list at right place and so on..
+	 * Time Complexity - O(n^2), Best - O(n)
+	 * Space Complexity - O(1)
 	 * 
 	 * @param array
 	 * @return
 	 */
-	public static int[] insertionSort( int[] array )
-	{
-		// iterate over main array
-		for( int i = 0; i < array.length; i++ )
-		{
+	public static int[] insertionSort( int[] array ) {
 
-			// start from current main array index, pick that element
-			// go backward, compare the picked element with every element to insert at right
-			// place
-			// list before current picked element is already sorted with previous iterations
-			for( int j = i; j > 0 && array[j] < array[j - 1]; j-- )
-			{
-				int temp = array[j];
-				array[j] = array[j - 1];
-				array[j - 1] = temp;
+		for( int leftCounter = 0; leftCounter < array.length; leftCounter++ ) {
+
+			// pick ith element, compare it with left side sorted list
+			// insert in left list at right place, if it is smaller than any element
+
+			for( int sortCounter = leftCounter; sortCounter > 0
+					&& array[sortCounter] < array[sortCounter - 1]; sortCounter-- ) {
+
+				int temp = array[sortCounter];
+				array[sortCounter] = array[sortCounter - 1];
+				array[sortCounter - 1] = temp;
 			}
 		}
 		return array;

@@ -11,13 +11,11 @@ import com.vedantatree.psds.algo.TreeAlgo;
 import junit.framework.TestCase;
 
 
-public class TestTreeAlgo extends TestCase
-{
+public class TestTreeAlgo extends TestCase {
 
-	public void testBreadthFirstSearch()
-	{
+	public void testBreadthFirstSearch() {
 		Integer[] sortedArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
+			{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 		bst.populateBinaryTreeFromArray( sortedArray );
@@ -28,10 +26,9 @@ public class TestTreeAlgo extends TestCase
 		Utils.printArray( traversedNodes.toArray() );
 	}
 
-	public void testGetDiameterOfBinaryTree()
-	{
+	public void testGetDiameterOfBinaryTree() {
 		Integer[] array = new Integer[]
-		{ 8, 1, 5, 2, 9, 7, 12, 6, 0, 14, 3, 14, 6, 6, 6, 6, 6, 6, 6, 6 };
+			{ 8, 1, 5, 2, 9, 7, 12, 6, 0, 14, 3, 14, 6, 6, 6, 6, 6, 6, 6, 6 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 		bst.populateBSTFromArray( array );
@@ -42,7 +39,7 @@ public class TestTreeAlgo extends TestCase
 
 		// 2
 		Integer[] sortedArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51, 55, 65, 71, 74, 81, 89, 100 };
+			{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51, 55, 65, 71, 74, 81, 89, 100 };
 
 		bst = new XBinaryTree<>();
 		bst.populateBinaryTreeFromArray( sortedArray );
@@ -51,10 +48,9 @@ public class TestTreeAlgo extends TestCase
 		assertEquals( 8, diameter );
 	}
 
-	public void testFindSuccessorInOrder()
-	{
+	public void testFindSuccessorInOrder() {
 		Integer[] sortedArray = new Integer[]
-		{ 2, 5, 8, 9, 10, 11, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
+			{ 2, 5, 8, 9, 10, 11, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 		bst.populateBinaryTreeFromArray( sortedArray );
@@ -96,10 +92,9 @@ public class TestTreeAlgo extends TestCase
 	// TreeAlgo.mergeBinaryTrees
 	// TODO: not complete test - for that need to pick specific node from tree and assert on its value
 	// bit of hard coding
-	public void testmergeBinaryTrees()
-	{
+	public void testmergeBinaryTrees() {
 		Integer[] sortedArray = new Integer[]
-		{ 2, 5, 8, 9, 10, 11, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
+			{ 2, 5, 8, 9, 10, 11, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		// first tree
 		XBinaryTree<Integer> bst1 = new XBinaryTree<>();
@@ -108,7 +103,7 @@ public class TestTreeAlgo extends TestCase
 		bst1.printTreeInMatrix();
 
 		sortedArray = new Integer[]
-		{ 5, 8, 98, 57, 2, 21 };
+			{ 5, 8, 98, 57, 2, 21 };
 
 		// second tree
 		XBinaryTree<Integer> bst2 = new XBinaryTree<>();
@@ -127,10 +122,9 @@ public class TestTreeAlgo extends TestCase
 	}
 
 	// TreeAlgo.symmetricalTree
-	public void testSymmetricalTree()
-	{
+	public void testSymmetricalTree() {
 		Integer[] sortedArray = new Integer[]
-		{ 2, 5, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 5, 2 };
+			{ 2, 5, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 5, 2 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 		bst.populateBinaryTreeFromArray( sortedArray );
@@ -140,7 +134,7 @@ public class TestTreeAlgo extends TestCase
 		assertTrue( TreeAlgo.isSymmetricalTree( bst ) );
 
 		sortedArray = new Integer[]
-		{ 2, 5, 8, 9, 10, 11, 12, 13, 2, 5, 8, 9, 10, 11, 12 };
+			{ 2, 5, 8, 9, 10, 11, 12, 13, 2, 5, 8, 9, 10, 11, 12 };
 
 		bst = new XBinaryTree<>();
 		bst.populateBinaryTreeFromArray( sortedArray );
@@ -150,19 +144,18 @@ public class TestTreeAlgo extends TestCase
 		assertFalse( TreeAlgo.isSymmetricalTree( bst ) );
 	}
 
-	public void testSameBST()
-	{
+	public void testSameBST() {
 		List<Integer> arrayOne = Arrays.asList( 10, 15, 8, 12, 94, 81, 5, 2, 11 );
 		List<Integer> arrayTwo = Arrays.asList( 10, 8, 5, 15, 2, 12, 11, 94, 81 );
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 		bst.populateBSTFromArray( new Integer[]
-		{ 10, 15, 8, 12, 94, 81, 5, 2, 11 } );
+			{ 10, 15, 8, 12, 94, 81, 5, 2, 11 } );
 		bst.printTreeInMatrix();
 
 		bst = new XBinaryTree<>();
 		bst.populateBSTFromArray( new Integer[]
-		{ 10, 8, 5, 15, 2, 12, 11, 94, 81 } );
+			{ 10, 8, 5, 15, 2, 12, 11, 94, 81 } );
 		bst.printTreeInMatrix();
 
 		assertTrue( TreeAlgo.isSameBSTs( arrayOne, arrayTwo ) );
@@ -172,12 +165,12 @@ public class TestTreeAlgo extends TestCase
 
 		bst = new XBinaryTree<>();
 		bst.populateBSTFromArray( new Integer[]
-		{ 10, 15, 8, 12, 94, 81, 5, 2, -1, 101, 45, 12, 8, -1, 8, 2, -34 } );
+			{ 10, 15, 8, 12, 94, 81, 5, 2, -1, 101, 45, 12, 8, -1, 8, 2, -34 } );
 		bst.printTreeInMatrix();
 
 		bst = new XBinaryTree<>();
 		bst.populateBSTFromArray( new Integer[]
-		{ 10, 8, 5, 15, 2, 12, 94, 81, -1, -1, -34, 8, 2, 8, 12, 45, 100 } );
+			{ 10, 8, 5, 15, 2, 12, 94, 81, -1, -1, -34, 8, 2, 8, 12, 45, 100 } );
 		bst.printTreeInMatrix();
 
 		assertTrue( !TreeAlgo.isSameBSTs( arrayOne, arrayTwo ) );
@@ -187,20 +180,19 @@ public class TestTreeAlgo extends TestCase
 
 		bst = new XBinaryTree<>();
 		bst.populateBSTFromArray( new Integer[]
-		{ 5, 2, -1, 100, 45, 12, 8, -1, 8, 10, 15, 8, 12, 94, 81, 2, -34 } );
+			{ 5, 2, -1, 100, 45, 12, 8, -1, 8, 10, 15, 8, 12, 94, 81, 2, -34 } );
 		bst.printTreeInMatrix();
 
 		bst = new XBinaryTree<>();
 		bst.populateBSTFromArray( new Integer[]
-		{ 5, 8, 10, 15, 2, 8, 12, 45, 100, 2, 12, 94, 81, -1, -1, -34, 8 } );
+			{ 5, 8, 10, 15, 2, 8, 12, 45, 100, 2, 12, 94, 81, -1, -1, -34, 8 } );
 		bst.printTreeInMatrix();
 
 		assertTrue( !TreeAlgo.isSameBSTs( arrayOne, arrayTwo ) );
 	}
 
 	// TreeAlgo.findNodesDistanceK
-	public void testFindNodesDistanceKOnlyLeftStraightBranch()
-	{
+	public void testFindNodesDistanceKOnlyLeftStraightBranch() {
 		// case of only left branch
 		XTreeNode<Integer> node = new XTreeNode<Integer>( null, 1 );
 		node.setLeftChild( new XTreeNode<>( node, 2 ) ).setLeftChild( new XTreeNode<>( node, 3 ) )
@@ -219,12 +211,11 @@ public class TestTreeAlgo extends TestCase
 	}
 
 	// TreeAlgo.findNodesDistanceK
-	public void testFindNodesDistanceKFullTree()
-	{
+	public void testFindNodesDistanceKFullTree() {
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 
 		bst.populateBSTFromArray( new Integer[]
-		{ 5, 2, -1, 100, 45, 12, 94, -34, 3, 102, 101 } );
+			{ 5, 2, -1, 100, 45, 12, 94, -34, 3, 102, 101 } );
 		bst.printTreeInMatrix();
 
 		List<Integer> nodes = TreeAlgo.findNodesDistanceK( bst.getRootNode(), 94, 3 );
@@ -257,12 +248,11 @@ public class TestTreeAlgo extends TestCase
 		assertThat( nodes.get( 2 ) ).isEqualTo( 94 );
 	}
 
-	public static void testGetMaxSumPath()
-	{
+	public static void testGetMaxSumPath() {
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 
 		bst.populateBSTFromArray( new Integer[]
-		{ 5, 2, -1, 100, 45, 12, 94, -34, 3, 102, 101 } );
+			{ 5, 2, -1, 100, 45, 12, 94, -34, 3, 102, 101 } );
 		bst.printTreeInMatrix();
 
 		int maxSumPath = TreeAlgo.getMaxSumPath( bst );
@@ -281,7 +271,7 @@ public class TestTreeAlgo extends TestCase
 		assertThat( maxSumPath ).isEqualTo( 0 );
 
 		bst.populateBSTFromArray( new Integer[]
-		{ -5 - 343, -2, -54, -58, -90, -6 } );
+			{ -5 - 343, -2, -54, -58, -90, -6 } );
 		bst.printTreeInMatrix();
 
 		maxSumPath = TreeAlgo.getMaxSumPath( bst );
@@ -291,21 +281,40 @@ public class TestTreeAlgo extends TestCase
 	}
 
 	// TreeAlgo.compareLeafTraversal
-	public static void testCompareLeafTraversal()
-	{
+	public static void testCompareLeafTraversal() {
+
 		XBinaryTree<Integer> bst1 = new XBinaryTree<>();
 		bst1.populateBSTFromArray( new Integer[]
-		{ 10, 15, 8, 12, 94, 81, 5, 2, 11 } );
+			{ 10, 15, 8, 12, 94, 81, 5, 2, 11 } );
 		bst1.printTreeInMatrix();
 
 		XBinaryTree<Integer> bst2 = new XBinaryTree<>();
 		bst2.populateBSTFromArray( new Integer[]
-		{ 10, 8, 5, 15, 2, 12, 11, 94, 81 } );
+			{ 10, 8, 5, 15, 2, 12, 11, 94, 81 } );
 		bst2.printTreeInMatrix();
 
 		boolean equal = TreeAlgo.compareLeafTraversalX( bst1, bst2 );
 
 		assertThat( equal ).isTrue();
+	}
+
+	public static void testIsHeightBalancedBinaryTree() {
+
+		XBinaryTree<Integer> bst1 = new XBinaryTree<>();
+		bst1.populateBSTFromArray( new Integer[]
+			{ 10, 8, 9, 15, 2, 12, 11, 94, 81 } );
+		bst1.printTreeInMatrix();
+
+		boolean isTreeHeightBalanced = TreeAlgo.isHeightBalancedBinaryTree( bst1.getRootNode() );
+		assertThat( isTreeHeightBalanced ).isTrue();
+
+		bst1 = new XBinaryTree<>();
+		bst1.populateBSTFromArray( new Integer[]
+			{ 10, 15, 8, 12, 94, 81, 5, 2, 11 } );
+		bst1.printTreeInMatrix();
+
+		isTreeHeightBalanced = TreeAlgo.isHeightBalancedBinaryTree( bst1.getRootNode() );
+		assertThat( isTreeHeightBalanced ).isFalse();
 
 	}
 }

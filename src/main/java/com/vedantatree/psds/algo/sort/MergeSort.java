@@ -5,82 +5,97 @@ import static org.junit.Assert.assertNotNull;
 import com.vedantatree.psds.Utils;
 
 
-public class MergeSort
-{
+public class MergeSort {
 
-	public static void mergeSort( int[] array )
-	{
+	/**
+	 * Time Complexity - n(log(n))
+	 * - log n > for dividing the smaller subset,
+	 * - n for conquering i.e. merging the sorted array. Most work happens here
+	 * 
+	 * Space Complexity - o(n) > as we are dividing the main array in sub-arrays
+	 * - Hence not memory efficient
+	 * 
+	 * @param array to sort
+	 */
+	public static int[] mergeSort( int[] array ) {
 		assertNotNull( array );
+		Utils.printArray( array );
 
-		int[] helper = new int[array.length];
-		mergeSort( array, helper, 0, array.length - 1 );
+		// other approach is that each merge function creates its own array,
+		// and later all sub-sorted-arrays are merged to create main array
+		// Current approach looks better. It is not creating many arrays, but updating same array.
+		int[] helperArray = new int[array.length];
+
+		mergeSort( array, helperArray, 0, array.length - 1 );
+
+		return array;
 	}
 
-	private static void mergeSort( int[] array, int[] helper, int low, int high )
-	{
-		if( low < high )
-		{
-			int middle = low + ( high - low ) / 2;
-			System.out.println( "mergeSort. low: " + low + " middle: " + middle + "  high:" + high );
-			mergeSort( array, helper, low, middle ); // sort left half
-			mergeSort( array, helper, middle + 1, high ); // sort right half
-			merge( array, helper, low, middle, high );
+	private static void mergeSort( int[] array, int[] helperArray, int low, int high ) {
+		if( low >= high ) {
+			return;
 		}
+
+		int middle = low + ( high - low ) / 2;
+
+		mergeSort( array, helperArray, low, middle ); // divide left half
+		mergeSort( array, helperArray, middle + 1, high ); // divide right half
+
+		mergeSortedHalves( array, helperArray, low, middle, high ); // merge both halves in sorted order
 	}
 
-	private static void merge( int[] array, int[] helper, int low, int middle, int high )
-	{
-		System.out.println( "merge. low[" + low + "] middle[" + middle + "] high[" + high + "]" );
+	private static void mergeSortedHalves( int[] array, int[] helperArray, int low, int middle, int high ) {
 
 		// copy array data in helper array
 		// System.arraycopy( array, low, helper, low, high );
-		for( int i = low; i <= high; i++ )
-		{
-			helper[i] = array[i];
+		for( int i = low; i <= high; i++ ) {
+			helperArray[i] = array[i];
 		}
 
 		int helperLeft = low;
 		int helperRight = middle + 1;
-		int current = low;
+		int mainArrayIndex = low;
 
-		System.out.println( "merge-start. left: " + helperLeft + " right: " + helperRight + "  current:" + current );
-		while( helperLeft <= middle && helperRight <= high )
-		{
-			if( helper[helperLeft] <= helper[helperRight] )
-			{
-				System.out.println( "replacing. current: " + array[current] + " helper-left: " + helper[helperLeft] );
-				array[current] = helper[helperLeft];
+		while( helperLeft <= middle && helperRight <= high ) {
+
+			if( helperArray[helperLeft] <= helperArray[helperRight] ) {
+				array[mainArrayIndex] = helperArray[helperLeft];
 				helperLeft++;
 			}
-			else
-			{
-				System.out.println( "replacing. current: " + array[current] + " helper-right: " + helper[helperLeft] );
-				array[current] = helper[helperRight];
+			else {
+				array[mainArrayIndex] = helperArray[helperRight];
 				helperRight++;
 			}
-			current++;
+			mainArrayIndex++;
 		}
 
-		int remaining = middle - helperLeft;
-		System.out.println( "remaining: " + remaining );
-		Utils.printArray( array );
-		Utils.printArray( helper );
-		for( int i = 0; i < remaining; i++ )
-		{
-			array[current + i] = helper[helperLeft + i];
+		// copy pending items from left or right array.
+		// This can happen as one of the array might have been copied already
+		// Consider that these left and right are already sorted in itself from previous passes
+
+		// following both logics are working. Can use either one.
+		// difference is just in readability. 1st one looks simpler for eyes
+
+		while( helperLeft <= middle ) {
+			array[mainArrayIndex] = helperArray[helperLeft];
+			helperLeft++;
+			mainArrayIndex++;
 		}
 
+		while( helperRight < high ) {
+			array[mainArrayIndex] = helperArray[helperRight];
+			helperRight++;
+			mainArrayIndex++;
+		}
+
+		// boolean remainingInLeft = helperLeft <= middle;
+		// int remaining = remainingInLeft ? middle - helperLeft : high - helperRight;
+		// int helperIndex = remainingInLeft ? helperLeft : helperRight;
+		//
+		// for( int i = 0; i <= remaining; i++ )
+		// {
+		// array[mainArrayCurrent + i] = helper[helperIndex + i];
+		// }
+
 	}
-
-	public static void main( String[] args )
-	{
-		int[] array = new int[]
-		{ 5, 34, 42, 35 };
-		// { 5, 34, 76, 35, 12, 87, 8, 36, 86, 57, 2, 12, 0, 98 };
-		mergeSort( array );
-		System.out.println( "\n \n Sorted Array >> " );
-		Utils.printArray( array );
-
-	}
-
 }

@@ -22,12 +22,13 @@ import junit.framework.TestCase;
  * 
  * @author Mohit Gupta <mohit.gupta@vedantatree.com>
  */
-public class NumberAlgorithms extends TestCase
-{
+public class NumberAlgorithms extends TestCase {
 
 	/**
 	 * Function which takes in non-empty array of distinct integers and an integer
 	 * representing the target sum.
+	 * 
+	 * Time Complexity - O(n^2)
 	 * 
 	 * @param array list of elements
 	 * @param targetSum
@@ -35,20 +36,18 @@ public class NumberAlgorithms extends TestCase
 	 *         in an array. If no element sum up to the target sum, it will return an empty
 	 *         array.
 	 */
-	public static int[] twoNumberSum( int[] array, int targetSum )
-	{
+	public static int[] twoNumberSum( int[] array, int targetSum ) {
 		assertNotNull( array );
 
 		// iterate over array, on each element
-		for( int i = 0; i < array.length; i++ )
-		{
+		for( int i = 0; i < array.length; i++ ) {
+
 			// iterate over rest of the elements to check if it adds up to the above current for target sum
-			for( int j = i + 1; j < array.length; j++ )
-			{
-				if( array[i] + array[j] == targetSum )
-				{
+			for( int j = i + 1; j < array.length; j++ ) {
+
+				if( array[i] + array[j] == targetSum ) {
 					return new int[]
-					{ array[i], array[j] };
+						{ array[i], array[j] };
 				}
 			}
 		}
@@ -57,41 +56,141 @@ public class NumberAlgorithms extends TestCase
 	}
 
 	/**
+	 * Given array contains the list of numbers, which could be negative or positive
+	 * integers. Find the sets of three numbers, whose sum is equal to targetSum.
+	 * Return all such sets, triplets in an array or array
+	 * 
+	 * Time Complexity: O(n^2)
+	 * Space Complexity: O(n)..? because we are collecting results, which in worst case could be all the elements
+	 * 
+	 */
+	public static List<Integer[]> threeNumberSum( int[] array, int targetSum ) {
+
+		Arrays.sort( array );
+
+		List<Integer[]> triplets = new ArrayList<Integer[]>();
+
+		for( int i = 0; i < array.length; i++ ) {
+
+			int currentNumber = array[i];
+			int left = i + 1;
+			int right = array.length - 1;
+
+			while( left < right ) {
+
+				int currentSum = currentNumber + array[left] + array[right];
+
+				if( currentSum == targetSum ) {
+
+					triplets.add( new Integer[]
+						{ currentNumber, array[left], array[right] } );
+					left++;
+					right--;
+				}
+				else if( currentSum < targetSum ) {
+					left++;
+				}
+				else {
+					right--;
+				}
+			}
+
+		}
+		return triplets;
+	}
+
+	/**
+	 * TODO: Not a correct solution. Should find better and easy reading solution
+	 * 
+	 * Function to find all quadruplets from given array, which can sum up to give target sum
+	 * 
+	 * @param array Non-empty array of distinct integers
+	 * @param targetSum
+	 * @return All quadruplets summing up to target sum, an empty array otherwise
+	 */
+	public static List<int[]> fourNumberSum( int[] array, int targetSum ) {
+
+		HashMap<Integer, int[]> sumToPairsMap = new HashMap<>();
+
+		for( int i = 0; i < array.length; i++ ) {
+
+			for( int j = i + 1; j < array.length; j++ ) {
+
+				int pairSum = array[i] + array[j];
+
+				sumToPairsMap.put( pairSum, new int[]
+					{ array[i], array[j] } );
+			}
+		}
+
+		ArrayList<int[]> fourNumbers = new ArrayList<>();
+		HashSet<Integer> addedPairSum = new HashSet<>();
+
+		sumToPairsMap.forEach( ( pairSum, pair ) -> {
+			int[] otherPair = sumToPairsMap.get( targetSum - pairSum );
+
+			if( otherPair != null && !doesArrayContainAnySameElement( pair, otherPair )
+					&& !addedPairSum.contains( pairSum ) && !addedPairSum.contains( targetSum - pairSum ) ) {
+
+				System.out.println( "targetSum[" + targetSum + "] pairSum[" + pairSum + "]" );
+				Utils.printArray( pair );
+				Utils.printArray( otherPair );
+
+				if( otherPair != null ) {
+					fourNumbers.add( new int[]
+						{ pair[0], pair[1], otherPair[0], otherPair[1] } );
+
+					addedPairSum.add( pairSum );
+					addedPairSum.add( targetSum - pairSum );
+				}
+			}
+		} );
+
+		// Write your code here.
+		return fourNumbers;
+	}
+
+	private static boolean doesArrayContainAnySameElement( int[] array1, int[] array2 ) {
+
+		for( int array1Ele : array1 ) {
+			for( int array2Ele : array2 ) {
+				if( array1Ele == array2Ele ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * This function checks if given sequence array elements are found in same sequence
-	 * in given array as first parameter
+	 * in given array
+	 * 
+	 * Time Complexity: O(n*m), n = length of main array, m = length of sequence array
 	 * 
 	 * @param array Source list of elements to check for the presence of numbers in sequence
 	 * @param sequence contains elements sequence to check
 	 * @return true if given sequence array elements are found in source array in
 	 *         same sequence
 	 */
-	public static boolean isValidSubsequence( List<Integer> array, List<Integer> sequence )
-	{
+	public static boolean isValidSubsequence( List<Integer> array, List<Integer> sequence ) {
 		assertNotNull( array );
 		assertNotNull( sequence );
 
 		Iterator<Integer> sequenceIterator = sequence.iterator();
 		Iterator<Integer> arrayIterator = array.iterator();
 
-		int sequenceNumber;
+		while( sequenceIterator.hasNext() ) {
+			int sequenceNumber = sequenceIterator.next();
 
-		// iterate over sequence. For each element, check if it present in array
-		while( sequenceIterator.hasNext() )
-		{
-			sequenceNumber = sequenceIterator.next();
+			while( arrayIterator.hasNext() ) {
 
-			while( arrayIterator.hasNext() )
-			{
-				if( arrayIterator.next() == sequenceNumber )
-				{
-					if( !sequenceIterator.hasNext() )
-					{
-						// return true if no more element left in sequence array to check
+				if( arrayIterator.next() == sequenceNumber ) {
+					if( !sequenceIterator.hasNext() ) { // return true if no more element left in sequence array
 						return true;
 					}
 
-					// break and pick next element to check
-					break;
+					break; // break from main array loop and pick next element from sequence to check
 				}
 			}
 		}
@@ -114,47 +213,28 @@ public class NumberAlgorithms extends TestCase
 	 * @param array The input array. Sorted. Can contain negative values also.
 	 * @return array with square value for each element in input array, sorted
 	 */
-	public static int[] sortedSquaredArray( int[] array )
-	{
+	public static int[] sortedSquaredArray( int[] array ) {
 
 		assertNotNull( array );
 		assertTrue( array.length > 0 );
 
-		// array to collect the squared value
 		int[] squaredArray = new int[array.length];
+		int squaredArrayPointer = array.length - 1; // will be filled from back, from largest square
 
-		// pointer from front of the array, iterating from smallest number side
 		int smallestPointer = 0;
-
-		// pointer from rear end of the array, iterating from largest number side
 		int largestPointer = array.length - 1;
-
-		// pointer to fill in the square in new array
-		int squaredArrayPointer = array.length - 1;
-
 		int largestNumberToSquare;
-		int smallestNumber;
-		int largestNumber;
 
-		/*
-		 * compare the absolute values of first and last item in the array Motive is to
-		 * find the largest item in the array, do the square and fill in the new array
-		 * 
-		 * Why the first item can be larger when array is sorted This is because there
-		 * could be negative values
-		 */
-		while( smallestPointer <= largestPointer )
-		{
-			smallestNumber = Math.abs( array[smallestPointer] );
-			largestNumber = Math.abs( array[largestPointer] );
+		while( smallestPointer <= largestPointer ) {
 
-			if( smallestNumber > largestNumber )
-			{
+			int smallestNumber = Math.abs( array[smallestPointer] );
+			int largestNumber = Math.abs( array[largestPointer] );
+
+			if( smallestNumber > largestNumber ) {
 				largestNumberToSquare = smallestNumber;
 				smallestPointer++;
 			}
-			else
-			{
+			else {
 				largestNumberToSquare = largestNumber;
 				largestPointer--;
 			}
@@ -169,19 +249,19 @@ public class NumberAlgorithms extends TestCase
 	/**
 	 * Find the winner team
 	 * 
+	 * Time Complexity: O(n)
+	 * Space Complexity: O(n)
+	 * 
 	 * @param competitions The pair of teams. In pair, first team is termed as Home team
 	 *        and other as Away team. Name is of max 30 char.
 	 * @param results The array of winners. Values will be 1 for home team, and 0
 	 *        for away team. Winning team gets 3 score. Loosing team gets zero.
 	 * @return The winner team
 	 */
-	public static String tournamentWinner( ArrayList<ArrayList<String>> competitions, ArrayList<Integer> results )
-	{
+	public static String tournamentWinner( ArrayList<ArrayList<String>> competitions, ArrayList<Integer> results ) {
 
 		assertNotNull( competitions );
 		assertNotNull( results );
-		assertTrue( "Competitions and Results should be of equal size", competitions.size() == results.size() );
-
 		assertTrue( "Compeitions and results size must be same", competitions.size() == results.size() );
 
 		HashMap<String, Integer> teamResults = new HashMap<String, Integer>();
@@ -189,24 +269,19 @@ public class NumberAlgorithms extends TestCase
 		Integer highestScore = Integer.MIN_VALUE;
 		String highestScorer = null;
 
-		// collect the score of each team in a map.
-		// later iterate over the map and find the team with highest score
-
-		for( int resultIndex = 0; resultIndex < results.size(); resultIndex++ )
-		{
+		for( int resultIndex = 0; resultIndex < results.size(); resultIndex++ ) {
 
 			String winningTeam = results.get( resultIndex ) == 1 ? competitions.get( resultIndex ).get( 0 )
 					: competitions.get( resultIndex ).get( 1 );
 
 			Integer winningTeamScore = teamResults.get( winningTeam );
 
-			winningTeamScore = winningTeamScore == null ? Integer.valueOf( 1 )
+			winningTeamScore = winningTeamScore == null ? Integer.valueOf( 3 )
 					: Integer.valueOf( winningTeamScore + 3 );
 
 			teamResults.put( winningTeam, winningTeamScore );
 
-			if( winningTeamScore > highestScore )
-			{
+			if( winningTeamScore > highestScore ) {
 				highestScore = winningTeamScore;
 				highestScorer = winningTeam;
 			}
@@ -238,14 +313,10 @@ public class NumberAlgorithms extends TestCase
 	 * 28, 26 = 2
 	 * Return 2
 	 */
-	public static int[] smallestDifference( int[] arrayOne, int[] arrayTwo )
-	{
+	public static int[] smallestDifference( int[] arrayOne, int[] arrayTwo ) {
 
 		assertNotNull( arrayOne );
 		assertNotNull( arrayTwo );
-
-		// sort the array, as it will optimized the logic to look for pair forward or
-		// backward
 
 		Arrays.sort( arrayOne );
 		Arrays.sort( arrayTwo );
@@ -256,89 +327,35 @@ public class NumberAlgorithms extends TestCase
 		int[] smallestPair = new int[] {};
 		int smallestDiff = Integer.MAX_VALUE;
 
-		// iterate over both the arrays
-		while( indexOne < arrayOne.length && indexTwo < arrayTwo.length )
-		{
+		while( indexOne < arrayOne.length && indexTwo < arrayTwo.length ) {
 
 			int valueOne = arrayOne[indexOne];
 			int valueTwo = arrayTwo[indexTwo];
 			int difference = Math.abs( valueOne - valueTwo );
 
 			// if values are same - this is definitely the smallest difference pair
-			if( difference == 0 )
-			{
+			if( difference == 0 ) {
 				return new int[]
-				{ valueOne, valueTwo };
+					{ valueOne, valueTwo };
 			}
 
-			// if first array value is lesser than second, we should be able to get smaller
-			// difference by moving towards next element in first array
-			if( valueOne < valueTwo )
-			{
+			// if first array value is lesser than second, smaller difference can be on right
+			if( valueOne < valueTwo ) {
 				indexOne++;
 			}
-			// if second array value is smaller, the way to reduce the difference would be
-			// to pick next item ie larger value from second array
-			else
-			{
+			// if second array value is smaller, can reduce difference by picking next item from second array
+			else {
 				indexTwo++;
 			}
 
-			// keep storing the smallest diff and pair so far
-			if( difference < smallestDiff )
-			{
+			if( difference < smallestDiff ) {
 				smallestPair = new int[]
-				{ valueOne, valueTwo };
+					{ valueOne, valueTwo };
 				smallestDiff = difference;
 			}
 
 		}
 		return smallestPair;
-	}
-
-	/**
-	 * Given array contains the list of numbers, which could be negative or positive
-	 * integers. Find the sets of three numbers, whose sum is equal to targetSum.
-	 * Return all such sets, triplets in an array or array
-	 * 
-	 */
-	public static List<Integer[]> threeNumberSum( int[] array, int targetSum )
-	{
-
-		Arrays.sort( array );
-
-		List<Integer[]> triplets = new ArrayList<Integer[]>();
-
-		for( int i = 0; i < array.length; i++ )
-		{
-
-			int currentNumber = array[i];
-			int left = i + 1;
-			int right = array.length - 1;
-
-			while( left < right )
-			{
-				int currentSum = currentNumber + array[left] + array[right];
-				if( currentSum == targetSum )
-				{
-					triplets.add( new Integer[]
-					{ currentNumber, array[left], array[right] } );
-					left++;
-					right--;
-				}
-				else if( currentSum < targetSum )
-				{
-					left++;
-				}
-				else
-				{
-					right--;
-				}
-			}
-
-		}
-
-		return triplets;
 	}
 
 	/**
@@ -350,8 +367,7 @@ public class NumberAlgorithms extends TestCase
 	 * @return an array where each element is = to the product of all the elements in input array, other than element at
 	 *         current location
 	 */
-	public static int[] arrayOfProducts( int[] array )
-	{
+	public static int[] arrayOfProducts( int[] array ) {
 
 		assertNotNull( array );
 
@@ -359,17 +375,19 @@ public class NumberAlgorithms extends TestCase
 
 		int product = 1;
 
-		for( int i = 0; i < array.length; i++ )
-		{
-			for( int j = 0; j < array.length; j++ )
-			{
-				if( j == i )
-				{
+		for( int index1 = 0; index1 < array.length; index1++ ) {
+
+			for( int index2 = 0; index2 < array.length; index2++ ) {
+				if( index2 == index1 ) {
 					continue;
 				}
-				product = product * array[j];
+				product = product * array[index2];
+				if( product == 0 ) { // total product will always be zero
+					break;
+				}
 			}
-			results[i] = product;
+
+			results[index1] = product;
 			product = 1;
 		}
 
@@ -385,12 +403,10 @@ public class NumberAlgorithms extends TestCase
 	 * @return an array where each element is = to the product of all the elements in input array, other than element at
 	 *         current location
 	 */
-	public static int[] arrayOfProducts2( int[] array )
-	{
+	public static int[] arrayOfProducts2( int[] array ) {
 		assertNotNull( array );
 
-		if( array.length == 0 )
-		{
+		if( array.length == 0 ) {
 			return new int[] {};
 		}
 
@@ -401,203 +417,158 @@ public class NumberAlgorithms extends TestCase
 		leftProducts[0] = 1;
 		rightProducts[array.length - 1] = 1;
 
-		for( int i = 1; i < array.length; i++ )
-		{
+		for( int i = 1; i < array.length; i++ ) {
 			leftProducts[i] = leftProducts[i - 1] * array[i - 1];
 		}
 
-		for( int i = array.length - 2; i >= 0; i-- )
-		{
+		for( int i = array.length - 2; i >= 0; i-- ) {
 			rightProducts[i] = rightProducts[i + 1] * array[i + 1];
 		}
 
-		for( int i = 0; i < array.length; i++ )
-		{
+		for( int i = 0; i < array.length; i++ ) {
 			results[i] = leftProducts[i] * rightProducts[i];
 		}
 
 		return results;
 	}
 
-	public int productSum( List<Object> array )
-	{
+	public int productSum( List<Object> array ) {
 		return productSum( array, 1 );
 	}
 
-	private int productSum( List<Object> array, int level )
-	{
+	private int productSum( List<Object> array, int level ) {
 		int sum = 0;
-		for( Object obj : array )
-		{
+		for( Object obj : array ) {
 			sum += ( obj instanceof List ) ? productSum( (List) obj, level + 1 ) : (int) obj;
 		}
 		return sum * level;
 	}
 
-	public static int[] findThreeLargestNumbers( int[] array )
-	{
+	public static int[] findThreeLargestNumbers( int[] array ) {
 
 		int largestNumber = Integer.MIN_VALUE;
 		int secondLargest = Integer.MIN_VALUE;
 		int thirdLargest = Integer.MIN_VALUE;
 
-		for( int element : array )
-		{
+		for( int element : array ) {
 
-			if( element > largestNumber )
-			{
+			if( element > largestNumber ) {
 				thirdLargest = secondLargest;
 				secondLargest = largestNumber;
 				largestNumber = element;
 			}
-			else if( element > secondLargest )
-			{
+			else if( element > secondLargest ) {
 				thirdLargest = secondLargest;
 				secondLargest = element;
 			}
-			else if( element > thirdLargest )
-			{
+			else if( element > thirdLargest ) {
 				thirdLargest = element;
 			}
-
-			System.out.println( "i > " + element + ", largest > " + largestNumber + ", second > " + secondLargest
-					+ ". third > " + thirdLargest );
 		}
 
 		return new int[]
-		{ thirdLargest, secondLargest, largestNumber };
+			{ thirdLargest, secondLargest, largestNumber };
 	}
 
-	public static int squareRoot( int number )
-	{
-		for( int trial = 1; trial * trial <= number; trial++ )
-		{
-			if( trial * trial == number )
-			{
+	public static int squareRoot( int number ) {
+		for( int trial = 1; trial * trial <= number; trial++ ) {
+			if( trial * trial == number ) {
 				return trial;
 			}
 		}
 		return -1;
 	}
 
-	public static int squareRootByBinaryGuessing( int number )
-	{
-		if( number == 1 )
-		{
+	public static int squareRootByBinaryGuessing( int number ) {
+		if( number == 1 ) {
 			return 1;
 		}
 
 		int trial = number / 2;
-		while( true )
-		{
-			if( trial < 1 )
-			{
+		while( true ) {
+			if( trial < 1 ) {
 				return -1;
 			}
-			if( trial * trial == number )
-			{
+			if( trial * trial == number ) {
 				return trial;
 			}
-			if( trial * trial > number )
-			{
+			if( trial * trial > number ) {
 				trial = trial / 2;
 			}
-			else if( trial * trial < number )
-			{
+			else if( trial * trial < number ) {
 				trial = trial + 1;
 			}
 		}
 	}
 
-	public static long sumOfDigits( long number )
-	{
+	public static long sumOfDigits( long number ) {
 		long sum = 0;
-		while( number > 0 )
-		{
+		while( number > 0 ) {
 			sum += number % 10;
 			number = number / 10;
 		}
 		return sum;
 	}
 
-	public static void printPrimeNumber( int start, int end )
-	{
+	public static void printPrimeNumber( int start, int end ) {
 		int i = 1;
-		for( ; start <= end; start++ )
-		{
-			if( isPrimeNumber( start ) )
-			{
+		for( ; start <= end; start++ ) {
+			if( isPrimeNumber( start ) ) {
 				System.out.println( i + ") " + start );
 				i++;
 			}
 		}
 	}
 
-	public static boolean isPrimeNumber( int number )
-	{
-		for( int i = 2; i * i <= number; i++ )
-		{
-			if( number % i == 0 )
-			{
+	public static boolean isPrimeNumber( int number ) {
+		for( int i = 2; i * i <= number; i++ ) {
+			if( number % i == 0 ) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public static int calculateFactorial( int number )
-	{
-		if( number == 0 )
-		{
+	public static int calculateFactorial( int number ) {
+		if( number == 0 ) {
 			return 1;
 		}
 		return number * calculateFactorial( number - 1 );
 	}
 
-	public static void printAllFibnocci( int startIndex, int endIndex )
-	{
-		for( ; startIndex <= endIndex; startIndex++ )
-		{
+	public static void printAllFibnocci( int startIndex, int endIndex ) {
+		for( ; startIndex <= endIndex; startIndex++ ) {
 			System.out.println( "number[" + startIndex + "] fibnocci[" + fibnocciNumberAtIndex( startIndex ) + "]" );
 		}
 	}
 
-	public static int fibnocciNumberAtIndex( int number )
-	{
-		if( number <= 0 )
-		{
+	public static int fibnocciNumberAtIndex( int number ) {
+		if( number <= 0 ) {
 			return 0;
 		}
-		else if( number == 1 )
-		{
+		else if( number == 1 ) {
 			return 1;
 		}
 		return fibnocciNumberAtIndex( number - 1 ) + fibnocciNumberAtIndex( number - 2 );
 	}
 
-	public static void printAllFibnocciMemoization( int startIndex, int endIndex )
-	{
+	public static void printAllFibnocciMemoization( int startIndex, int endIndex ) {
 		int[] memo = new int[( endIndex - startIndex ) + 1];
 
-		for( ; startIndex <= endIndex; startIndex++ )
-		{
+		for( ; startIndex <= endIndex; startIndex++ ) {
 			System.out.println(
 					"number[" + startIndex + "] fibnocci[" + printAllFibnocciMemoization( startIndex, memo ) + "]" );
 		}
 	}
 
-	public static int printAllFibnocciMemoization( int number, int[] memo )
-	{
-		if( number <= 0 )
-		{
+	public static int printAllFibnocciMemoization( int number, int[] memo ) {
+		if( number <= 0 ) {
 			return 0;
 		}
-		else if( number == 1 )
-		{
+		else if( number == 1 ) {
 			return 1;
 		}
-		else if( memo[number] > 0 )
-		{
+		else if( memo[number] > 0 ) {
 			return memo[number];
 		}
 
@@ -610,33 +581,31 @@ public class NumberAlgorithms extends TestCase
 	 * Function to return the first integer who has a duplicate value and the duplicate value has smallest index in
 	 * array
 	 * 
+	 * As each value is between 1 to n
+	 * We can use value of each element as indicator of duplicate
+	 * 
+	 * While reading each element, use its value as index and update the value of corresponding element as -ve
+	 * When iterator reached to any element which has negative value, this indicates that element is duplicate
+	 * Return this element
+	 * 
 	 * @param array of Integer from 1 to n
 	 * @return the index of element, who has duplicate value in array, and the index of duplicate element is the
 	 *         smallest out of all other duplicate values of all elements
 	 *         -1 if array is of zero size, or if there is no duplicate
 	 */
-	public static int firstDuplicateValue( int[] array )
-	{
+	public static int firstDuplicateValue( int[] array ) {
 		assertThat( array ).isNotNull();
 
-		/*
-		 * As each value is between 1 to n
-		 * We can use value of each element as indicator of duplicate
-		 * 
-		 * While reading each element, use its value as index and update the value of corresponding element as -ve
-		 * When iterator reached to any element which has negative value, this indicates that element is duplicate
-		 * Return this element
-		 */
-
-		if( array.length == 0 )
+		if( array.length == 0 ) {
 			return -1;
+		}
 
-		for( int index = 0; index < array.length; index++ )
-		{
+		for( int index = 0; index < array.length; index++ ) {
+
 			// absolute value as there could be negative value stored in earlier passes
 			int valueIndex = Math.abs( array[index] ) - 1;
-			if( array[valueIndex] < 0 )
-			{
+
+			if( array[valueIndex] < 0 ) {
 				// increasing value before returning, because we decreased above to deduce the index
 				return valueIndex + 1;
 			}
@@ -644,8 +613,7 @@ public class NumberAlgorithms extends TestCase
 			array[valueIndex] = array[valueIndex] * -1;
 		}
 
-		// no duplicate
-		return -1;
+		return -1; // no duplicate
 	}
 
 	/**
@@ -656,28 +624,30 @@ public class NumberAlgorithms extends TestCase
 	 * @return true if any sub-array has sum equal to zero
 	 *         false otherwise
 	 */
-	public static boolean zeroSumSubarray( int[] nums )
-	{
+	public static boolean zeroSumSubarray( int[] nums ) {
+		assertThat( nums ).isNotNull();
+		assertThat( nums.length > 0 );
+
 		/*
 		 * keep calculating sum of all previous elements + current and store in hashset
 		 * if this sum is already present in hashset, it means we already seen this and intermediate sequence of
 		 * elements were amount to zero
+		 * If any number is zero, or current some itself is zero > that also means we have a zero sum sub array
 		 */
 
 		HashSet<Integer> sums = new HashSet<>();
-		int previousSum = 0;
+		int currentSum = 0;
 
-		for( int number : nums )
-		{
-			previousSum += number;
-			if( !sums.add( previousSum ) )
+		for( int number : nums ) {
+			currentSum += number;
+			if( number == 0 || currentSum == 0 || !sums.add( currentSum ) ) {
 				return true;
+			}
 		}
 		return false;
 	}
 
-	public static void main( String[] args )
-	{
+	public static void main( String[] args ) {
 		NumberAlgorithms na = new NumberAlgorithms();
 		// ma.printPrimeNumber( 0, 1000 );
 
