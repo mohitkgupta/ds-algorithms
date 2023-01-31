@@ -656,7 +656,7 @@ public class XLinkedList<E> {
 			return null;
 		}
 
-		// TODO: Simplify it 
+		// TODO: Simplify it
 		XLinkedListNode<E> shorterListNode = result1.length < result2.length ? this.headNode : anotherList.headNode;
 		XLinkedListNode<E> longerListNode = result1.length < result2.length ? anotherList.headNode : this.headNode;
 

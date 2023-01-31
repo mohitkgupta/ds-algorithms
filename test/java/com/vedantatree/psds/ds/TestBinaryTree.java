@@ -138,7 +138,7 @@ public class TestBinaryTree extends TestCase
 		{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
-		bst.populateBinaryTreeFromArray( sortedArray );
+		bst.populateBSTFromSortedArray( sortedArray );
 
 		bst.printLevelWise();
 		bst.printTree();
@@ -159,7 +159,7 @@ public class TestBinaryTree extends TestCase
 		{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
-		bst.populateBinaryTreeFromArray( sortedArray );
+		bst.populateBSTFromSortedArray( sortedArray );
 
 		bst.printLevelWise();
 		bst.printTree();
@@ -416,7 +416,7 @@ public class TestBinaryTree extends TestCase
 		}
 		else
 		{
-			binaryTree.populateBinaryTreeFromArray( nodeDataArray );
+			binaryTree.populateBSTFromSortedArray( nodeDataArray );
 		}
 		binaryTree.printTreeInMatrix();
 

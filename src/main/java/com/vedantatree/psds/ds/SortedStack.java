@@ -10,64 +10,59 @@ import junit.framework.TestCase;
  * 
  * Algorithm:
  * Have two stack, S1 for push and S2 for Pop
- * Keep pushing elements to S1
- * On pop, prepare S2 in sort order
- * Return from S2
+ * Keep pushing elements to S1, push stack
+ * On pop, prepare S2, pop stack - in sort order
+ * Return from S2, the pop stack
+ * 
+ * Not an optimized way for storing sorted elements or for getting sorted list
+ * But for practice only
  * 
  * 
  * @author Mohit Gupta <mohit.gupta@vedantatree.com>
  */
-public class SortedStack
-{
+public class SortedStack {
 
 	private Stack<Integer>	pushStack;
 	private Stack<Integer>	popStack;
 
-	public SortedStack()
-	{
+	public SortedStack() {
 		pushStack = new Stack<>();
 		popStack = new Stack<>();
 	}
 
-	public void push( Integer element )
-	{
+	public void push( Integer element ) {
 		pushStack.push( element );
 	}
 
-	public Integer pop()
-	{
-		sortStack();
+	public Integer pop() {
+		sortStack(); // ensure the smallest element is at the top of popStack
 		return popStack.pop();
 	}
 
-	private void sortStack()
-	{
+	private void sortStack() {
 
-		while( !pushStack.isEmpty() )
-		{
+		while( !pushStack.isEmpty() ) {
 			Integer elementToSort = pushStack.pop();
-			while( !popStack.isEmpty() )
-			{
+
+			while( !popStack.isEmpty() ) {
 				Integer topElement = popStack.peek();
-				if( elementToSort <= topElement )
-				{
+
+				if( elementToSort <= topElement ) {
 					popStack.push( elementToSort );
 					break;
 				}
-				else
-				{
+				else {
 					pushStack.push( popStack.pop() );
 				}
 			}
-			if( popStack.isEmpty() )
-			{
+
+			if( popStack.isEmpty() ) {
 				popStack.push( elementToSort );
 			}
 		}
 	}
 
-	public static void main( String[] args )
-	{
+	public static void main( String[] args ) {
 		SortedStack sortedStack = new SortedStack();
 		sortedStack.push( 5 );
 		sortedStack.push( 1 );

@@ -11,21 +11,18 @@ import java.util.Queue;
  * 
  * @author Mohit Gupta <mohit.gupta@vedantatree.com>
  */
-public class XTreeNode<E>
-{
+public class XTreeNode<E> {
 
 	private E				data;
 	private XTreeNode<E>	parent;
 	private XTreeNode<E>	leftChild;
 	private XTreeNode<E>	rightChild;
 
-	public XTreeNode( XTreeNode<E> parent, E data )
-	{
+	public XTreeNode( XTreeNode<E> parent, E data ) {
 		this( parent, data, null, null );
 	}
 
-	public XTreeNode( XTreeNode<E> parent, E data, XTreeNode<E> leftChild, XTreeNode<E> rightChild )
-	{
+	public XTreeNode( XTreeNode<E> parent, E data, XTreeNode<E> leftChild, XTreeNode<E> rightChild ) {
 		setData( data );
 		setParent( parent );
 		setLeftChild( leftChild );
@@ -34,59 +31,48 @@ public class XTreeNode<E>
 
 	// making methods public so these can be accessed from TreeAlgo and TestCase etc.
 	// earlier these were package private.
-	public void setData( E data )
-	{
+	public void setData( E data ) {
 		this.data = data;
 	}
 
-	public XTreeNode<E> getParent()
-	{
+	public XTreeNode<E> getParent() {
 		return parent;
 	}
 
-	public void setParent( XTreeNode<E> parent )
-	{
+	public void setParent( XTreeNode<E> parent ) {
 		this.parent = parent;
 	}
 
-	public XTreeNode<E> setLeftChild( XTreeNode<E> leftChild )
-	{
+	public XTreeNode<E> setLeftChild( XTreeNode<E> leftChild ) {
 		this.leftChild = leftChild;
-		if( this.leftChild != null )
-		{
+		if( this.leftChild != null ) {
 			this.leftChild.setParent( this );
 		}
 		return leftChild;
 	}
 
-	public XTreeNode<E> setRightChild( XTreeNode<E> rightChild )
-	{
+	public XTreeNode<E> setRightChild( XTreeNode<E> rightChild ) {
 		this.rightChild = rightChild;
-		if( this.rightChild != null )
-		{
+		if( this.rightChild != null ) {
 			this.rightChild.setParent( this );
 		}
 		return rightChild;
 	}
 
-	public E getData()
-	{
+	public E getData() {
 		return data;
 	}
 
-	public XTreeNode<E> getLeftChild()
-	{
+	public XTreeNode<E> getLeftChild() {
 		return leftChild;
 	}
 
-	public XTreeNode<E> getRightChild()
-	{
+	public XTreeNode<E> getRightChild() {
 		return rightChild;
 	}
 
 	// TODO fix it later
-	public List<List<XTreeNode>> traverseLevels( boolean zigzag )
-	{
+	public List<List<XTreeNode>> traverseLevels( boolean zigzag ) {
 		// list of all traversed nodes
 		List<List<XTreeNode>> traversedLevels = new LinkedList();
 
@@ -100,16 +86,13 @@ public class XTreeNode<E>
 		boolean leftToRight = true;
 		boolean hasNextLevel = !childrenCollected.isEmpty();
 
-		while( hasNextLevel )
-		{
+		while( hasNextLevel ) {
 
-			if( zigzag )
-			{
+			if( zigzag ) {
 				leftToRight = !leftToRight;
 			}
 
-			if( !leftToRight )
-			{
+			if( !leftToRight ) {
 				Collections.reverse( childrenCollected );
 			}
 
@@ -118,17 +101,14 @@ public class XTreeNode<E>
 			individualLevel.addAll( childrenCollected );
 			childrenCollected.clear();
 
-			for( Object element : individualLevel )
-			{
+			for( Object element : individualLevel ) {
 				XTreeNode currentNode = (XTreeNode) element;
 
 				// collect children for next level traversal
-				if( currentNode.getLeftChild() != null )
-				{
+				if( currentNode.getLeftChild() != null ) {
 					childrenCollected.add( currentNode.getLeftChild() );
 				}
-				if( currentNode.getRightChild() != null )
-				{
+				if( currentNode.getRightChild() != null ) {
 					childrenCollected.add( currentNode.getRightChild() );
 				}
 			}
@@ -147,15 +127,13 @@ public class XTreeNode<E>
 	 * 
 	 * @return Maximum value
 	 */
-	public int findMaxValue()
-	{
+	public int findMaxValue() {
 		return findMaxValue( this );
 	}
 
-	private int findMaxValue( XTreeNode<E> rootNode )
-	{
-		if( rootNode == null )
-		{
+	// TODO: can use compareTo implementation, instead of assuming integer
+	private int findMaxValue( XTreeNode<E> rootNode ) {
+		if( rootNode == null ) {
 			return Integer.MIN_VALUE;
 		}
 
@@ -166,12 +144,10 @@ public class XTreeNode<E>
 		int rightValue = findMaxValue( rootNode.getRightChild() );
 
 		// not using if else if, as need to compare three values - root, left, right
-		if( leftValue > rootValue )
-		{
+		if( leftValue > rootValue ) {
 			maxValue = leftValue;
 		}
-		if( rightValue > maxValue )
-		{
+		if( rightValue > maxValue ) {
 			maxValue = rightValue;
 		}
 		return maxValue;
@@ -181,25 +157,23 @@ public class XTreeNode<E>
 	 * Find maximum value from whole children hierarchy of give tree node
 	 * without using recursion
 	 * 
+	 * This is using BFS
+	 * 
 	 * @return Maximum value
 	 */
-	public int findMaxValueWithoutRecursion()
-	{
+	public int findMaxValueWithoutRecursion() {
 		Queue<XTreeNode<Integer>> collectedNodes = new LinkedList<>();
 		collectedNodes.add( (XTreeNode<Integer>) this );
 
 		int maxValue = Integer.MIN_VALUE;
-		while( !collectedNodes.isEmpty() )
-		{
+		while( !collectedNodes.isEmpty() ) {
 			XTreeNode<Integer> node = collectedNodes.poll();
 			maxValue = node.getData() > maxValue ? node.getData() : maxValue;
 
-			if( node.getLeftChild() != null )
-			{
+			if( node.getLeftChild() != null ) {
 				collectedNodes.add( node.getLeftChild() );
 			}
-			if( node.getRightChild() != null )
-			{
+			if( node.getRightChild() != null ) {
 				collectedNodes.add( node.getRightChild() );
 			}
 		}
@@ -207,8 +181,7 @@ public class XTreeNode<E>
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "this[" + data + "] left[" + leftChild + "] right[" + rightChild + "]";
 		// return "TreeNode[" + data + "] hashcode[" + hashCode() + "]";
 	}

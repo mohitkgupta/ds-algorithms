@@ -18,7 +18,7 @@ public class TestTreeAlgo extends TestCase {
 			{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
-		bst.populateBinaryTreeFromArray( sortedArray );
+		bst.populateBSTFromSortedArray( sortedArray );
 
 		bst.printTreeInMatrix();
 
@@ -42,7 +42,7 @@ public class TestTreeAlgo extends TestCase {
 			{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51, 55, 65, 71, 74, 81, 89, 100 };
 
 		bst = new XBinaryTree<>();
-		bst.populateBinaryTreeFromArray( sortedArray );
+		bst.populateBSTFromSortedArray( sortedArray );
 
 		diameter = TreeAlgo.getDiameterOfBinaryTree( bst );
 		assertEquals( 8, diameter );
@@ -53,7 +53,7 @@ public class TestTreeAlgo extends TestCase {
 			{ 2, 5, 8, 9, 10, 11, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
-		bst.populateBinaryTreeFromArray( sortedArray );
+		bst.populateBSTFromSortedArray( sortedArray );
 
 		bst.printTreeInMatrix();
 
@@ -98,7 +98,7 @@ public class TestTreeAlgo extends TestCase {
 
 		// first tree
 		XBinaryTree<Integer> bst1 = new XBinaryTree<>();
-		bst1.populateBinaryTreeFromArray( sortedArray );
+		bst1.populateBSTFromSortedArray( sortedArray );
 
 		bst1.printTreeInMatrix();
 
@@ -107,7 +107,7 @@ public class TestTreeAlgo extends TestCase {
 
 		// second tree
 		XBinaryTree<Integer> bst2 = new XBinaryTree<>();
-		bst2.populateBinaryTreeFromArray( sortedArray );
+		bst2.populateBSTFromSortedArray( sortedArray );
 
 		bst2.printTreeInMatrix();
 
@@ -127,7 +127,7 @@ public class TestTreeAlgo extends TestCase {
 			{ 2, 5, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 5, 2 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
-		bst.populateBinaryTreeFromArray( sortedArray );
+		bst.populateBSTFromSortedArray( sortedArray );
 
 		bst.printTreeInMatrix();
 
@@ -137,7 +137,7 @@ public class TestTreeAlgo extends TestCase {
 			{ 2, 5, 8, 9, 10, 11, 12, 13, 2, 5, 8, 9, 10, 11, 12 };
 
 		bst = new XBinaryTree<>();
-		bst.populateBinaryTreeFromArray( sortedArray );
+		bst.populateBSTFromSortedArray( sortedArray );
 
 		bst.printTreeInMatrix();
 

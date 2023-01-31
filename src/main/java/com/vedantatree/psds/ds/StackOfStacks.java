@@ -19,8 +19,7 @@ import junit.framework.TestCase;
  * 
  * @author Mohit Gupta <mohit.gupta@vedantatree.com>
  */
-public class StackOfStacks<E>
-{
+public class StackOfStacks<E> {
 
 	private int				perStackCapacity;
 	private int				size;
@@ -30,15 +29,12 @@ public class StackOfStacks<E>
 	// just for test validation
 	private int				numberOfStacks;
 
-	public StackOfStacks( int perStackCapacity )
-	{
+	public StackOfStacks( int perStackCapacity ) {
 		this.perStackCapacity = perStackCapacity;
 	}
 
-	public void push( E value )
-	{
-		if( ( currentStack == null ) || ( currentStack.size() == perStackCapacity ) )
-		{
+	public void push( E value ) {
+		if( ( currentStack == null ) || ( currentStack.size() == perStackCapacity ) ) {
 			currentStack = new Stack<>();
 			multiStack.push( currentStack );
 			numberOfStacks++;
@@ -47,26 +43,21 @@ public class StackOfStacks<E>
 		size++;
 	}
 
-	public E pop()
-	{
-		// no element
+	public E pop() {
 		// TODO can add some assertions too for sanity
-		if( currentStack == null || currentStack.size() == 0 )
-		{
+		if( currentStack == null || currentStack.size() == 0 ) {
 			throw new EmptyStackException();
 		}
 
 		E value = currentStack.pop();
 		size--;
 
-		if( currentStack.size() == 0 )
-		{
+		if( currentStack.size() == 0 ) {
 			multiStack.pop();
 			numberOfStacks--;
 
 			// if overall stack is not empty, set the next stack as current
-			if( size != 0 )
-			{
+			if( size != 0 ) {
 				currentStack = multiStack.peek();
 			}
 		}
@@ -74,20 +65,17 @@ public class StackOfStacks<E>
 		return value;
 	}
 
-	public int getSize()
-	{
+	public int getSize() {
 		assertFalse( "size must not be less than zero", size < 0 );
 
 		return size;
 	}
 
-	public int getPerStackCapacity()
-	{
+	public int getPerStackCapacity() {
 		return perStackCapacity;
 	}
 
-	public int getNumberOfStacks()
-	{
+	public int getNumberOfStacks() {
 		TestCase.assertEquals( "Number of stacks", numberOfStacks, getSize() / perStackCapacity );
 
 		return numberOfStacks;
