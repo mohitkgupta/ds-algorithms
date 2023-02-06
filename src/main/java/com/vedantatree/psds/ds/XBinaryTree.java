@@ -160,7 +160,9 @@ public class XBinaryTree<E extends Comparable<E>> {
 		return searchNodeInBinaryTree( getRootNode(), dataToSearch );
 	}
 
+	// not in BST, but simple binary tree
 	private XTreeNode<E> searchNodeInBinaryTree( XTreeNode<E> rootNode, E dataToSearch ) {
+
 		if( rootNode == null || compareData( rootNode.getData(), dataToSearch ) == 0 ) {
 			return rootNode;
 		}
@@ -245,8 +247,6 @@ public class XBinaryTree<E extends Comparable<E>> {
 
 		XTreeNode<E> node1 = searchNodeInBinaryTree( node1Data );
 
-		// if both data are same, it means both are referring to same node. Return first
-		// node found as intersection
 		if( node1Data.compareTo( node2Data ) == 0 ) {
 			return node1;
 		}
@@ -280,8 +280,6 @@ public class XBinaryTree<E extends Comparable<E>> {
 
 		XTreeNode<E> node1 = searchNodeInBinaryTree( node1Data );
 
-		// if both data are same, it means both are referring to same node. Return first
-		// node found as intersection
 		if( node1Data.compareTo( node2Data ) == 0 ) {
 			return node1;
 		}
@@ -291,9 +289,12 @@ public class XBinaryTree<E extends Comparable<E>> {
 		assertFalse( "No node is found either for node1data or for node2data", ( node1 == null || node2 == null ) );
 
 		/*
-		 * get depth of both the nodes get delta For deeper node, go up by delta, so we
-		 * have both node at same depth Now start iterating towards parent node and keep
-		 * comparing the nodes Return wherever we find match
+		 * Get depth of both the nodes
+		 * Get delta For deeper node,
+		 * Go up by delta,
+		 * So we have both node at same depth
+		 * Now start iterating towards parent node
+		 * and keep comparing the nodes Return wherever we find match
 		 */
 		int node1Depth = getDepth( node1 );
 		int node2Depth = getDepth( node2 );
@@ -309,15 +310,12 @@ public class XBinaryTree<E extends Comparable<E>> {
 			deeperNode = deeperNode.getParent();
 		}
 
-		// if any of the node become node, which means these are not related to same
-		// tree - return null, which means no
-		// intersection
 		return shallowerNode == null || deeperNode == null ? null : shallowerNode;
 	}
 
 	/*
-	 * Go up by delta specified Return value can be null too if specified delta is
-	 * more than node's own depth
+	 * Go up by delta specified
+	 * Return value can be null too if specified delta is more than node's depth
 	 */
 	private XTreeNode<E> goUpBy( XTreeNode<E> node, int delta ) {
 		if( node == null || delta <= 0 ) {
@@ -339,84 +337,96 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	public XTreeTraversalResult<E> inorderTraversalAndValidate( boolean recursion, boolean checkBST ) {
+
 		XTreeTraversalResult<E> traversalResult = new XTreeTraversalResult<>( XTreeTraversalResult.IN_ORDER, checkBST );
+
 		inorderTraversal( getRootNode(), traversalResult, true, checkBST );
 		return traversalResult;
 	}
 
+	// TODO: Too many conditions are making it complex to read. Can we simplify?
+	// TODO: validateBST is not in use
 	private void inorderTraversal( XTreeNode<E> rootNode, XTreeTraversalResult<E> traversalResult, boolean recursion,
 			boolean validateBST ) {
-		if( rootNode != null ) {
-			if( recursion ) {
-				inorderTraversal( rootNode.getLeftChild(), traversalResult, recursion, validateBST );
-				traversalResult.addTraversedNodeData( rootNode.getData() );
-				inorderTraversal( rootNode.getRightChild(), traversalResult, recursion, validateBST );
 
-			}
-			else {
-				XTreeNode<E> currentNode = rootNode;
-				Stack<XTreeNode<E>> nodeStack = new Stack<>();
-
-				while( currentNode != null || !nodeStack.isEmpty() ) {
-
-					// collecting all left node in stack and reaching to left most in current path
-					while( currentNode != null ) {
-						nodeStack.push( currentNode );
-						currentNode = currentNode.getLeftChild();
-					}
-
-					// get top node, add its data, try checking right node. If present, will add its
-					// data or will get next left node from stack in next loop
-					currentNode = nodeStack.pop();
-
-					traversalResult.addTraversedNodeData( currentNode.getData() );
-
-					currentNode = currentNode.getRightChild();
-				}
-			}
+		if( rootNode == null ) {
+			return;
 		}
 
+		if( recursion ) {
+			inorderTraversal( rootNode.getLeftChild(), traversalResult, recursion, validateBST );
+
+			traversalResult.addTraversedNodeData( rootNode.getData() );
+
+			inorderTraversal( rootNode.getRightChild(), traversalResult, recursion, validateBST );
+		}
+		else {
+
+			XTreeNode<E> currentNode = rootNode;
+			Stack<XTreeNode<E>> nodeStack = new Stack<>();
+
+			while( currentNode != null || !nodeStack.isEmpty() ) {
+
+				// collecting all left node in stack and reaching to left most in current path
+				while( currentNode != null ) {
+					nodeStack.push( currentNode );
+					currentNode = currentNode.getLeftChild();
+				}
+
+				// get top node, add its data,
+				// try checking right node.
+				// If present, next loop will add its data or will get next left node from stack
+				
+				currentNode = nodeStack.pop();
+				traversalResult.addTraversedNodeData( currentNode.getData() );
+
+				currentNode = currentNode.getRightChild();
+			}
+		}
 	}
 
 	/**
 	 * @return list of tree nodes collected in preorder traversal
 	 */
 	public List<E> preorderTraversal( boolean recursion ) {
+
 		List<E> traversedNodes = new ArrayList<>();
+
 		preorderTraversal( getRootNode(), traversedNodes, recursion );
 		return traversedNodes;
 	}
 
 	private List<E> preorderTraversal( XTreeNode<E> rootNode, List<E> traversedNodes, boolean recursion ) {
-		if( rootNode != null ) {
-			if( recursion ) {
-				traversedNodes.add( rootNode.getData() );
-				preorderTraversal( rootNode.getLeftChild(), traversedNodes, recursion );
-				preorderTraversal( rootNode.getRightChild(), traversedNodes, recursion );
-			}
-			else {
-				XTreeNode<E> currentNode = rootNode;
-				Stack<XTreeNode> nodeStack = new Stack<>();
 
-				while( currentNode != null ) {
-					// add parent/current node data to traversed
-					traversedNodes.add( currentNode.getData() );
+		if( rootNode == null ) {
+			return traversedNodes;
+		}
 
-					// push current node to stack
-					nodeStack.push( currentNode );
+		if( recursion ) {
 
-					// go to left node for further traversal
-					currentNode = currentNode.getLeftChild();
+			traversedNodes.add( rootNode.getData() );
+			preorderTraversal( rootNode.getLeftChild(), traversedNodes, recursion );
+			preorderTraversal( rootNode.getRightChild(), traversedNodes, recursion );
+		}
+		else {
+			XTreeNode<E> currentNode = rootNode;
+			Stack<XTreeNode<E>> nodeStack = new Stack<>();
 
-					// will come in action once no more left node left
-					// then pop collected left nodes from stack and start traversing their right child tree
-					while( currentNode == null && !nodeStack.empty() ) {
-						currentNode = nodeStack.pop().getRightChild();
-					}
+			while( currentNode != null ) {
+
+				traversedNodes.add( currentNode.getData() );
+				nodeStack.push( currentNode );
+
+				currentNode = currentNode.getLeftChild();
+
+				// will come in action once no more left node left
+				// then get already collected left nodes from stack
+				// and start traversing their right child tree
+				while( currentNode == null && !nodeStack.empty() ) {
+					currentNode = nodeStack.pop().getRightChild();
 				}
 			}
 		}
-
 		return traversedNodes;
 	}
 
@@ -500,41 +510,46 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	private List<E> postorderTraversal( XTreeNode<E> rootNode, List<E> traversedNodes, boolean recursion ) {
-		if( rootNode != null ) {
-			if( recursion ) {
-				postorderTraversal( rootNode.getLeftChild(), traversedNodes, recursion );
-				postorderTraversal( rootNode.getRightChild(), traversedNodes, recursion );
-				traversedNodes.add( rootNode.getData() );
-			}
-			else {
-				XTreeNode<E> currentNode = rootNode;
+		if( rootNode == null ) {
+			return traversedNodes;
+		}
 
-				Stack<XTreeNode<E>> nodeStack = new Stack<>();
-				nodeStack.push( currentNode );
+		if( recursion ) {
 
-				while( currentNode != null ) {
-					// fill all left child to stack
-					while( true ) {
-						currentNode = currentNode.getLeftChild();
-						if( currentNode == null ) {
-							break;
-						}
-						nodeStack.push( currentNode );
+			postorderTraversal( rootNode.getLeftChild(), traversedNodes, recursion );
+			postorderTraversal( rootNode.getRightChild(), traversedNodes, recursion );
+			traversedNodes.add( rootNode.getData() );
+		}
+		else {
+			XTreeNode<E> currentNode = rootNode;
+
+			Stack<XTreeNode<E>> nodeStack = new Stack<>();
+			nodeStack.push( currentNode );
+
+			while( currentNode != null ) {
+
+				// fill all left child to stack
+				while( true ) {
+					currentNode = currentNode.getLeftChild();
+					if( currentNode == null ) {
+						break;
 					}
+					nodeStack.push( currentNode );
+				}
 
-					// get left most node
-					currentNode = nodeStack.pop();
+				// get left most node
+				currentNode = nodeStack.pop();
 
-					// if current node has right child, make that current node
-					// push it to stack and continue loop with this
-					if( currentNode.getRightChild() != null ) {
-						nodeStack.push( currentNode );
-						currentNode = currentNode.getRightChild();
-					}
-					else // otherwise traverse the current node
-					{
-						traversedNodes.add( currentNode.getData() );
-					}
+				// if current node has right child, make that current node
+				// push it to stack and continue loop with this
+				if( currentNode.getRightChild() != null ) {
+
+					nodeStack.push( currentNode );
+					currentNode = currentNode.getRightChild();
+				}
+				else // otherwise traverse the current node
+				{
+					traversedNodes.add( currentNode.getData() );
 				}
 			}
 		}
@@ -547,6 +562,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 	 * @return list of nodes structured by each level
 	 */
 	public List<List<XTreeNode>> traverseLevels( boolean zigzag ) {
+
 		if( getRootNode() == null ) {
 			return Collections.emptyList();
 		}
@@ -564,9 +580,11 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	/*
-	 * Algo: In BST, whole tree on the left should be smaller than root node, and
-	 * should be larger than root node on the right This concept applies to each
-	 * node in tree While traversing, we can pass root node value down to compare
+	 * Algo:
+	 * In BST, whole tree on the left should be smaller than root node,
+	 * and should be larger than root node on the right
+	 * This concept applies to each node in tree
+	 * While traversing, we can pass root node value down to compare
 	 * whether child node is smaller if it is left, or larger if it is right
 	 */
 	private boolean isBST( XTreeNode<E> rootNode, E minValue, E maxValue ) {
@@ -600,7 +618,9 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	private boolean isEqualNode( XTreeNode<E> treeNode1, XTreeNode<E> treeNode2 ) {
+
 		if( treeNode1 != null && treeNode2 != null ) {
+
 			if( !isEqualNode( treeNode1.getLeftChild(), treeNode2.getLeftChild() ) ) {
 				return false;
 			}
@@ -676,6 +696,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 		}
 
 		int rightHeight = checkHeightAndBalanced( root.getRightChild() );
+
 		// TODO why is this MAX_VALUE. It is not set anywhere Should be min_value
 		if( rightHeight == Integer.MAX_VALUE ) {
 			return rightHeight;
@@ -712,6 +733,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	private Integer findNearest( XTreeNode<Integer> currentNode, Integer targetValue, Integer closest ) {
+
 		if( currentNode == null ) {
 			return closest;
 		}
@@ -719,7 +741,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 			return currentNode.getData();
 		}
 
-		if( Math.abs( closest - targetValue ) > Math.abs( currentNode.getData() - targetValue ) ) {
+		if( Math.abs( currentNode.getData() - targetValue ) < Math.abs( closest - targetValue ) ) {
 			closest = currentNode.getData();
 		}
 

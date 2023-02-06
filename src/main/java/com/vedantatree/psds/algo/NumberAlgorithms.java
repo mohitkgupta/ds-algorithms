@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,6 +24,36 @@ import junit.framework.TestCase;
  * @author Mohit Gupta <mohit.gupta@vedantatree.com>
  */
 public class NumberAlgorithms extends TestCase {
+
+	// TODO : Fix this function
+	public static List<List<Integer>> getPermutations( List<Integer> array ) {
+
+		List<List<Integer>> permutations = new ArrayList<>();
+		permutation( new ArrayList<>(), array, permutations );
+
+		System.out.println( "unique permutations > " + permutations );
+		return permutations;
+	}
+
+	private static void permutation( List<Integer> prefixList, List<Integer> seedList,
+			List<List<Integer>> permutations ) {
+
+		if( seedList == null || seedList.size() == 0 ) {
+			permutations.add( prefixList );
+		}
+		else {
+			List<Integer> alteredSeedList = new ArrayList<>( seedList );
+			List<Integer> alteredPrefixList = new ArrayList<>( prefixList );
+
+			for( int i = 0; i < alteredSeedList.size(); i++ ) {
+
+				prefixList.add( alteredSeedList.get( i ) );
+				alteredSeedList.remove( i );
+
+				permutation( prefixList, alteredSeedList, permutations );
+			}
+		}
+	}
 
 	/**
 	 * Function which takes in non-empty array of distinct integers and an integer
@@ -100,7 +131,7 @@ public class NumberAlgorithms extends TestCase {
 	}
 
 	/**
-	 * TODO: Not a correct solution. Should find better and easy reading solution
+	 * TODO: Not a good solution. Should find better and easy reading solution
 	 * 
 	 * Function to find all quadruplets from given array, which can sum up to give target sum
 	 * 
@@ -129,7 +160,7 @@ public class NumberAlgorithms extends TestCase {
 		sumToPairsMap.forEach( ( pairSum, pair ) -> {
 			int[] otherPair = sumToPairsMap.get( targetSum - pairSum );
 
-			if( otherPair != null && !doesArrayContainAnySameElement( pair, otherPair )
+			if( otherPair != null && !doesArraysContainAnySameElement( pair, otherPair )
 					&& !addedPairSum.contains( pairSum ) && !addedPairSum.contains( targetSum - pairSum ) ) {
 
 				System.out.println( "targetSum[" + targetSum + "] pairSum[" + pairSum + "]" );
@@ -150,7 +181,7 @@ public class NumberAlgorithms extends TestCase {
 		return fourNumbers;
 	}
 
-	private static boolean doesArrayContainAnySameElement( int[] array1, int[] array2 ) {
+	private static boolean doesArraysContainAnySameElement( int[] array1, int[] array2 ) {
 
 		for( int array1Ele : array1 ) {
 			for( int array2Ele : array2 ) {
@@ -219,28 +250,28 @@ public class NumberAlgorithms extends TestCase {
 		assertTrue( array.length > 0 );
 
 		int[] squaredArray = new int[array.length];
-		int squaredArrayPointer = array.length - 1; // will be filled from back, from largest square
+		int sqPointer = array.length - 1; // will be filled from back, from largest square
 
-		int smallestPointer = 0;
-		int largestPointer = array.length - 1;
+		int left = 0;
+		int right = array.length - 1;
 		int largestNumberToSquare;
 
-		while( smallestPointer <= largestPointer ) {
+		while( left <= right ) {
 
-			int smallestNumber = Math.abs( array[smallestPointer] );
-			int largestNumber = Math.abs( array[largestPointer] );
+			int leftNumber = Math.abs( array[left] );
+			int rightNumber = Math.abs( array[right] );
 
-			if( smallestNumber > largestNumber ) {
-				largestNumberToSquare = smallestNumber;
-				smallestPointer++;
+			if( leftNumber > rightNumber ) {
+				largestNumberToSquare = leftNumber;
+				left++;
 			}
 			else {
-				largestNumberToSquare = largestNumber;
-				largestPointer--;
+				largestNumberToSquare = rightNumber;
+				right--;
 			}
 
-			squaredArray[squaredArrayPointer] = largestNumberToSquare * largestNumberToSquare;
-			squaredArrayPointer--;
+			squaredArray[sqPointer] = largestNumberToSquare * largestNumberToSquare;
+			sqPointer--;
 		}
 
 		return squaredArray;
@@ -351,6 +382,7 @@ public class NumberAlgorithms extends TestCase {
 			if( difference < smallestDiff ) {
 				smallestPair = new int[]
 					{ valueOne, valueTwo };
+
 				smallestDiff = difference;
 			}
 
@@ -387,8 +419,9 @@ public class NumberAlgorithms extends TestCase {
 				}
 			}
 
+			// TODO if more than one zero elements, can break as products will always be zero then
 			results[index1] = product;
-			product = 1;
+			product = 1; // reset
 		}
 
 		return results;
@@ -471,7 +504,10 @@ public class NumberAlgorithms extends TestCase {
 	}
 
 	public static int squareRoot( int number ) {
+
+		// TODO: can we avoid double multiplication
 		for( int trial = 1; trial * trial <= number; trial++ ) {
+
 			if( trial * trial == number ) {
 				return trial;
 			}
@@ -485,6 +521,7 @@ public class NumberAlgorithms extends TestCase {
 		}
 
 		int trial = number / 2;
+
 		while( true ) {
 			if( trial < 1 ) {
 				return -1;
@@ -513,6 +550,7 @@ public class NumberAlgorithms extends TestCase {
 	public static void printPrimeNumber( int start, int end ) {
 		int i = 1;
 		for( ; start <= end; start++ ) {
+
 			if( isPrimeNumber( start ) ) {
 				System.out.println( i + ") " + start );
 				i++;
@@ -521,7 +559,9 @@ public class NumberAlgorithms extends TestCase {
 	}
 
 	public static boolean isPrimeNumber( int number ) {
+
 		for( int i = 2; i * i <= number; i++ ) {
+
 			if( number % i == 0 ) {
 				return false;
 			}

@@ -54,9 +54,11 @@ public class XGraph {
 				int neighbour = currentNodeEdges.get( i );
 
 				if( !visited[neighbour] ) {
+
 					visited[neighbour] = true;
 					distances[neighbour] = distances[currentNode] + 1;
-					predecessors[neighbour] = currentNode;
+					predecessors[neighbour] = currentNode; // TODO: can't predecessor be more than one, multiple
+															// incoming
 					traversalQueue.add( neighbour );
 
 					if( neighbour == dest ) {
@@ -78,14 +80,11 @@ public class XGraph {
 	 */
 	public static ArrayList<Integer> bfsGraphTraversal( int[][] adjacencyList, int vertices ) {
 
-		// list to collect the traversed nodes
 		ArrayList<Integer> traversedNodes = new ArrayList<>( vertices );
-
-		// list to collect nodes to traverse
 		LinkedList<Integer> nodesToTraverse = new LinkedList<Integer>();
 
-		// to track the visited nodes. This is faster way, alternative is to search in traversed nodes list < which will
-		// be slower
+		// to track the visited nodes.
+		// This is faster way, alternative is to search in traversed nodes list < which will be slower
 		boolean visited[] = new boolean[vertices];
 
 		nodesToTraverse.add( 0 );
@@ -96,7 +95,7 @@ public class XGraph {
 			int currentNode = nodesToTraverse.remove();
 			traversedNodes.add( currentNode );
 
-			// no further edges for this node
+			// no edges for this node
 			if( currentNode > adjacencyList.length - 1 ) {
 				continue;
 			}
@@ -114,7 +113,6 @@ public class XGraph {
 			}
 		}
 
-		System.out.println( traversedNodes );
 		return traversedNodes;
 	}
 
@@ -184,6 +182,7 @@ public class XGraph {
 
 		int graphVertexCount = graphAdjacencyList.length;
 
+		// TODO do we need visited nodes and vertices in traversal both, or can one do??
 		boolean[] visitedNodes = new boolean[graphVertexCount];
 		boolean[] verticesInTraversal = new boolean[graphVertexCount];
 

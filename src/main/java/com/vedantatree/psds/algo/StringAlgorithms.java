@@ -23,6 +23,7 @@ import junit.framework.TestCase;
  */
 public class StringAlgorithms extends TestCase {
 
+	// TODO not working. Review and fix please
 	public String caesarCypherEncryptor( String str, int key ) {
 
 		StringBuilder encryptedString = new StringBuilder();
@@ -41,6 +42,7 @@ public class StringAlgorithms extends TestCase {
 
 			System.out.println( "-26 > " + ( (char) encryptedInt ) );
 
+			// TODO: Why is this commented. Check it
 			// encryptedString.append(Character.to);
 		}
 
@@ -561,25 +563,21 @@ public class StringAlgorithms extends TestCase {
 	public Collection<String> permutation( String seedString ) {
 
 		HashSet<String> uniquePermutations = new HashSet<>();
-		int numberOfPermutation = permutation( "", seedString, uniquePermutations );
+		permutation( "", seedString, uniquePermutations );
 
 		System.out.println( "unique permutations > " + uniquePermutations );
-		System.out.println( "number of permutations. iterations[" + numberOfPermutation + "] unique["
-				+ uniquePermutations.size() + "]" );
 
 		return uniquePermutations;
 	}
 
 	int recursion = 1;
 
-	private int permutation( String prefix, String seedString, HashSet<String> uniquePermutations ) {
+	private void permutation( String prefix, String seedString, HashSet<String> uniquePermutations ) {
 		recursion += 1;
 		System.out.println( "recursion[" + recursion + "] prefix[" + prefix + "] seed[" + seedString + "]" );
 
-		int numberOfPermutation = 0;
 		if( seedString.length() == 0 ) {
 			uniquePermutations.add( prefix );
-			numberOfPermutation++;
 
 			System.out.println( prefix );
 		}
@@ -591,10 +589,9 @@ public class StringAlgorithms extends TestCase {
 						+ "] charAtI[" + seedString.charAt( i ) + "] sub1[" + seedString.substring( 0, i ) + "] sub2["
 						+ seedString.substring( i + 1 ) + "] alteredSeed[" + alteredSeed + "]" );
 
-				numberOfPermutation += permutation( prefix + seedString.charAt( i ), alteredSeed, uniquePermutations );
+				permutation( prefix + seedString.charAt( i ), alteredSeed, uniquePermutations );
 			}
 		}
-		return numberOfPermutation;
 	}
 
 	/**

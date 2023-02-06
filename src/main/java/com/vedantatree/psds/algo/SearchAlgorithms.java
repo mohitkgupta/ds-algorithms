@@ -105,14 +105,15 @@ public class SearchAlgorithms {
 				return new int[]
 					{ rowIndex, startColumn };
 			}
-
-			// if row first value is greater than target value or last value is lesser than target value
-			// that means current row does not have desired target value. Skip it.
-			if( matrix[rowIndex][startColumn] > target || matrix[rowIndex][endColumn] < target ) {
+			else if( matrix[rowIndex][endColumn] == target ) {
+				return new int[]
+					{ rowIndex, endColumn };
+			}
+			else if( matrix[rowIndex][startColumn] > target || matrix[rowIndex][endColumn] < target ) {
 				continue;
 			}
 
-			while( startColumn < endColumn ) {
+			while( startColumn <= endColumn ) {
 
 				int midColumn = startColumn + ( endColumn - startColumn ) / 2;
 				currentValue = matrix[rowIndex][midColumn];

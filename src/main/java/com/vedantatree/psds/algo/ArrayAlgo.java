@@ -12,7 +12,7 @@ public class ArrayAlgo {
 
 	/**
 	 * Remove all the islands from given matrix
-	 * Island = And cell which has value 1, but it is not reachable from the edge.
+	 * Island = cell which has value 1, but it is not reachable from the edge.
 	 * How to Reach = Traversal can be only through cells which are marked as 1.
 	 * 
 	 * @param matrix the input
@@ -32,7 +32,7 @@ public class ArrayAlgo {
 			markIslands( row, col, matrix, result );
 		}
 
-		col--;
+		col--; // reduce extra increment in last for loop - TODO: can find better way
 		for( ; row < matrix.length; row++ ) {
 			markIslands( row, col, matrix, result );
 		}
@@ -61,7 +61,7 @@ public class ArrayAlgo {
 		}
 
 		if( result[row][col] == 1 ) {
-			return; // marked already
+			return; // marked already // This logic may end up in this condition multiple times. TODO: can improve..?
 		}
 
 		result[row][col] = 1;
@@ -82,22 +82,23 @@ public class ArrayAlgo {
 
 		while( startingColumn <= endingColumn && startingRow <= endingRow ) {
 
-			for( int i = startingColumn; i <= endingColumn; i++ ) {
-				sprialElements.add( array[startingRow][i] );
+			for( int col = startingColumn; col <= endingColumn; col++ ) {
+				sprialElements.add( array[startingRow][col] );
 			}
-			for( int i = startingRow + 1; i <= endingRow; i++ ) {
-				sprialElements.add( array[i][endingColumn] );
+			for( int row = startingRow + 1; row <= endingRow; row++ ) {
+				sprialElements.add( array[row][endingColumn] );
 			}
-			for( int i = endingColumn - 1; i >= startingColumn; i-- ) {
+			for( int col = endingColumn - 1; col >= startingColumn; col-- ) {
 				if( startingRow == endingRow ) // condition to manage when row are more, but columns are not
 					break;
-				sprialElements.add( array[endingRow][i] );
+				sprialElements.add( array[endingRow][col] );
 			}
-			for( int i = endingRow - 1; i > startingRow; i-- ) {
+			for( int row = endingRow - 1; row > startingRow; row-- ) {
 				if( startingColumn == endingColumn )
 					break;
-				sprialElements.add( array[i][startingColumn] );
+				sprialElements.add( array[row][startingColumn] );
 			}
+
 			startingColumn += 1;
 			endingColumn -= 1;
 			startingRow += 1;

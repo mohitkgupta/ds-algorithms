@@ -3,8 +3,7 @@ package com.vedantatree.psds.algo.sort;
 public class SortAlgo {
 
 	/**
-	 * This approach is > keep comparing elements and swapping as long these are not
-	 * in right order
+	 * Keep moving Largest element to the end
 	 * 
 	 * "keep creating bubbles of iteration and swap"
 	 *
