@@ -191,7 +191,7 @@ public class NumbersToWordAlgorithm {
 		nwa.convertNumberToWords( 134123 );
 		nwa.convertNumberToWords( 1587123 );
 		nwa.convertNumberToWords( 91587123 );
-		nwa.convertNumberToWords( 491587123 );
+		nwa.convertNumberToWords( 491587123 ); // TODO fix for double digit crore value
 	}
 
 }

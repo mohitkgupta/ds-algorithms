@@ -16,10 +16,7 @@ import com.vedantatree.psds.ds.XBinaryTree.XTreeTraversalResult;
 /**
  * TODO: Need refactoring, cleaning
  * TODO: Review, if it makes sense to move algo methods to TreeAlgo
- * TODO: Few methods are very long. Modularize these more.
- * 
- * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * TODO: Few methods are very long. Refactor.
  */
 public class XBinaryTree<E extends Comparable<E>> {
 
@@ -294,7 +291,8 @@ public class XBinaryTree<E extends Comparable<E>> {
 		 * Go up by delta,
 		 * So we have both node at same depth
 		 * Now start iterating towards parent node
-		 * and keep comparing the nodes Return wherever we find match
+		 * and keep comparing the nodes
+		 * Return wherever we find match
 		 */
 		int node1Depth = getDepth( node1 );
 		int node2Depth = getDepth( node2 );
@@ -376,7 +374,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 				// get top node, add its data,
 				// try checking right node.
 				// If present, next loop will add its data or will get next left node from stack
-				
+
 				currentNode = nodeStack.pop();
 				traversalResult.addTraversedNodeData( currentNode.getData() );
 

@@ -186,10 +186,11 @@ public class DPAlgorithms {
 
 		int[] ways = new int[targetAmount + 1];
 		Arrays.fill( ways, 0 );
-		ways[0] = 1;
+		ways[0] = 1; // there can be only 1 way to make 0, which is not using any denom
 
 		for( int denom : denoms ) {
 			for( int amount = 1; amount <= targetAmount; amount++ ) {
+				
 				if( denom <= amount ) {
 					ways[amount] += ways[amount - denom];
 				}

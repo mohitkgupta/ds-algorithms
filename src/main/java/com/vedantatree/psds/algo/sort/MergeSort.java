@@ -9,7 +9,7 @@ public class MergeSort {
 
 	/**
 	 * Time Complexity - n(log(n))
-	 * - log n > for dividing the smaller subset,
+	 * - log n > for dividing in the smaller subset
 	 * - n for conquering i.e. merging the sorted array. Most work happens here
 	 * 
 	 * Space Complexity - o(n) > as we are dividing the main array in sub-arrays

@@ -25,13 +25,14 @@ public class SortAlgo {
 			swapped = false;
 
 			// each loop will move the largest element to the end, hence next iteration can leave the last element
+			for( int current = 0; current < array.length - 1 - sortedElements; current++ ) {
+				int next = current + 1;
 
-			for( int currentIndex = 0; currentIndex < array.length - 1 - sortedElements; currentIndex++ ) {
+				if( array[current] > array[next] ) {
 
-				if( array[currentIndex] > array[currentIndex + 1] ) {
-					int temp = array[currentIndex];
-					array[currentIndex] = array[currentIndex + 1];
-					array[currentIndex + 1] = temp;
+					int temp = array[current];
+					array[current] = array[next];
+					array[next] = temp;
 
 					swapped = true;
 				}
@@ -155,6 +156,47 @@ public class SortAlgo {
 				array[sortCounter - 1] = temp;
 			}
 		}
+		return array;
+	}
+
+	/**
+	 * Function to sort array based on order given in order array
+	 * Order given in Order array can be in any sequence, not necessarily sorted
+	 * Sorting should be in place.
+	 * 
+	 * Algorithm:
+	 * Iterate over orders from Order Array
+	 * Iterate in array to sort
+	 * if element is equal to sort order, swap this element to front of the array
+	 * use sort index to track the element from front
+	 * 
+	 * Time Complexity - O(m*n), m = number of elements in order array, n = number of elements to sort
+	 * Space Complexity - O(1)
+	 * 
+	 * TODO: Add tests
+	 * 
+	 * @param array
+	 * @param order
+	 * @return
+	 */
+	public int[] threeNumberSort( int[] array, int[] order ) {
+
+		int sortIdx = 0;
+
+		for( int orderIdx = 0; orderIdx < order.length; orderIdx++ ) {
+
+			for( int arrayIdx = 0; arrayIdx < array.length; arrayIdx++ ) {
+				
+				if( array[arrayIdx] == order[orderIdx] ) {
+					int temp = array[sortIdx];
+					array[sortIdx] = array[arrayIdx];
+					array[arrayIdx] = temp;
+
+					sortIdx++;
+				}
+			}
+		}
+
 		return array;
 	}
 

@@ -197,6 +197,76 @@ public class LinkedListAlgorithms {
 		return sumListHead;
 	}
 
+	/**
+	 * Algorithm:
+	 * Get mid pointer of the list using slow, and fast pointer
+	 * reverse the list from mid point
+	 * compare reversed half and later half of the list
+	 * if both are same - it is palindrome
+	 * 
+	 * Time Complexity - O(n) >> 3*n/2 (finding mid point, reversing, comparing)
+	 * Space Complexity = O(1) >> nothing was stored
+	 * 
+	 * @param head of linkedlist
+	 * @return True if given linkedlist represents a palindrome, false otherwise
+	 */
+	public boolean linkedListPalindrome( LinkedList head ) {
+
+		LinkedList slowPointer = head;
+		LinkedList fastPointer = head;
+
+		while( fastPointer != null && fastPointer.next != null ) {
+
+			slowPointer = slowPointer.next;
+			fastPointer = fastPointer.next.next;
+		}
+
+		LinkedList reversedHalf = reverseLinkedList( slowPointer );
+
+		while( reversedHalf != null ) {
+			if( reversedHalf.value != head.value ) {
+				return false;
+			}
+			reversedHalf = reversedHalf.next;
+			head = head.next;
+		}
+
+		return true;
+	}
+
+	// TODO fix it
+	public static LinkedList rearrangeLinkedList( LinkedList head, int k ) {
+
+		LinkedList sortPointer = head;
+		LinkedList currPointer = head;
+		LinkedList prevCurrPointer = null;
+		LinkedList headPointer = null;
+
+		while( currPointer != null ) {
+
+			if( currPointer.value > k ) {
+
+			}
+			else {
+				if( prevCurrPointer != null ) {
+					prevCurrPointer.next = currPointer.next;
+				}
+
+				LinkedList tempSortPointerNext = sortPointer.next;
+				sortPointer = currPointer;
+				sortPointer.next = tempSortPointerNext;
+
+				if( headPointer == null )
+					headPointer = sortPointer;
+
+			}
+			prevCurrPointer = currPointer;
+			currPointer = currPointer.next;
+		}
+
+		return headPointer;
+	}
+
 	public static class LinkedList {
 
 		public int			value;

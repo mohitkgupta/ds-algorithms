@@ -80,6 +80,8 @@ public class TreeAlgo {
 		int leftCount = 0;
 		int rightCount = 0;
 
+		// TODO should we add +1 to both left and right side.
+		// Should it be added later to overall node diameter, as root node is one only
 		if( leftValues != null ) {
 			leftCount = leftValues[0] + 1;
 			maxDiameter = leftValues[1] > maxDiameter ? leftValues[1] : maxDiameter;
@@ -158,6 +160,9 @@ public class TreeAlgo {
 
 		depthSum = nodeDepths( root.left, level + 1, depthSum );
 		depthSum = nodeDepths( root.right, level + 1, depthSum );
+
+		// TODO write test case for above. We are passing depthSum of left to right, which will again increment it
+		// if we are counting max levels here - then above logic wont work
 
 		return depthSum;
 	}
@@ -316,7 +321,7 @@ public class TreeAlgo {
 			return true;
 		}
 
-		// false, if either of the node is null
+		// false, if either of the node is null. TODO: Simplify condition - if left or right == null
 		if( ( leftTreeNode == null && rightTreeNode != null ) || ( leftTreeNode != null && rightTreeNode == null ) ) {
 			return false;
 		}
@@ -381,6 +386,7 @@ public class TreeAlgo {
 
 	private static void markParentToChildDistances( BinaryTree root,
 			HashMap<Integer, Map<Integer, Integer>> nodeToDistancesMap ) {
+
 		nodeToDistancesMap.put( root.value, root.distances );
 
 		if( root.left != null )
@@ -389,8 +395,10 @@ public class TreeAlgo {
 			updateParentToChildrenDistances( root, root.right, nodeToDistancesMap );
 	}
 
+	// TODO we are not using nodeToDistanceMap here. Review.
 	private static void updateParentToChildrenDistances( BinaryTree parent, BinaryTree child,
 			HashMap<Integer, Map<Integer, Integer>> nodeToDistancesMap ) {
+
 		parent.distances.forEach( ( nodeValue, distance ) -> {
 			if( !child.distances.containsKey( nodeValue ) ) {
 				child.distances.put( nodeValue, distance + 1 );
@@ -538,10 +546,10 @@ public class TreeAlgo {
 	 * @return true if left and right branch height difference of every node is not more than 1
 	 */
 	public static boolean isHeightBalancedBinaryTree( XTreeNode<Integer> xTree ) {
-		
+
 		assertThat( xTree ).isNotNull();
 		BinaryTree tree = BinaryTree.convertToBinaryTree( xTree );
-		
+
 		int heightDifference = countHeightDifference( tree );
 		return heightDifference >= 0;
 	}

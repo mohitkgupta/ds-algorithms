@@ -73,12 +73,15 @@ public class ArrayAlgo {
 	}
 
 	public static List<Integer> spiralTraverse( int[][] array ) {
-		int startingRow = 0;
-		int endingRow = array.length - 1;
-		int startingColumn = 0;
-		int endingColumn = array[0].length - 1;
+		int rows = array.length;
+		int cols = array[0].length;
 
-		List<Integer> sprialElements = new ArrayList<Integer>( array.length * array[0].length );
+		int startingRow = 0;
+		int endingRow = rows - 1;
+		int startingColumn = 0;
+		int endingColumn = cols - 1;
+
+		List<Integer> sprialElements = new ArrayList<Integer>( rows * cols );
 
 		while( startingColumn <= endingColumn && startingRow <= endingRow ) {
 
@@ -89,11 +92,13 @@ public class ArrayAlgo {
 				sprialElements.add( array[row][endingColumn] );
 			}
 			for( int col = endingColumn - 1; col >= startingColumn; col-- ) {
+				// TODO move this out to wrap for loop
 				if( startingRow == endingRow ) // condition to manage when row are more, but columns are not
 					break;
 				sprialElements.add( array[endingRow][col] );
 			}
 			for( int row = endingRow - 1; row > startingRow; row-- ) {
+				// TODO move this out to wrap for loop
 				if( startingColumn == endingColumn )
 					break;
 				sprialElements.add( array[row][startingColumn] );
@@ -120,28 +125,32 @@ public class ArrayAlgo {
 
 		for( int i = 0; i < array.length - 1; i++ ) {
 
-			if( array[i] < array[i + 1] ) {
+			if( array[i + 1] > array[i] ) {
 				if( decreasing ) {
 					return false;
 				}
 				increasing = true;
 			}
-			else if( array[i] > array[i + 1] ) {
+			else if( array[i + 1] < array[i] ) {
 				if( increasing ) {
 					return false;
 				}
 				decreasing = true;
 			}
-			else {
+//			else {
 				// if elements are equal - no change in increasing or decreasing
-				// return true if array's length is more than 1 at the end
-			}
+//			}
 		}
+		
+		// return true if array's length is more than 1 at the end
+		// TODO: What is the need of array.length > 1. increasing or decreasing flag would always cover the cases
+		// TODO: Document if there is a special case
+		
 		return increasing || decreasing || array.length > 1;
 	}
 
-	// minimum waiting time for given queries in array. Array contains execution
-	// time for each query
+	// minimum waiting time for given queries in array. 
+	// Array contains execution time for each query
 	public static int minimumWaitingTime( int[] queries ) {
 
 		// sort the array, as minimum to maximum time will be optimum sequence to
@@ -168,14 +177,17 @@ public class ArrayAlgo {
 
 		Utils.printArray( queries );
 
+		// TODO change the name of this variable, so logic becomes understandable easily
 		int previousWaitingTime = 0;
 		int totalWait = 0;
 
-		// [1, 2, 2, 4, 6, 8, 11]
+		// example: [1, 2, 2, 4, 6, 8, 11]
 
-		// TODO: document the logic in loop, why adding twice
+		// Total waiting time = waiting time for each of the query
 		for( int j : queries ) {
+			
 			totalWait += previousWaitingTime;
+			
 			previousWaitingTime += j;
 		}
 

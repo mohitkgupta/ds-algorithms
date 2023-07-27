@@ -4,14 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
-
-import com.vedantatree.psds.Utils;
 
 import junit.framework.TestCase;
 
@@ -60,6 +56,7 @@ public class NumberAlgorithms extends TestCase {
 	 * representing the target sum.
 	 * 
 	 * Time Complexity - O(n^2)
+	 * Space Complexity - O(1)
 	 * 
 	 * @param array list of elements
 	 * @param targetSum
@@ -70,7 +67,6 @@ public class NumberAlgorithms extends TestCase {
 	public static int[] twoNumberSum( int[] array, int targetSum ) {
 		assertNotNull( array );
 
-		// iterate over array, on each element
 		for( int i = 0; i < array.length; i++ ) {
 
 			// iterate over rest of the elements to check if it adds up to the above current for target sum
@@ -89,11 +85,10 @@ public class NumberAlgorithms extends TestCase {
 	/**
 	 * Given array contains the list of numbers, which could be negative or positive
 	 * integers. Find the sets of three numbers, whose sum is equal to targetSum.
-	 * Return all such sets, triplets in an array or array
+	 * Return all such sets, triplets in an array of array
 	 * 
 	 * Time Complexity: O(n^2)
-	 * Space Complexity: O(n)..? because we are collecting results, which in worst case could be all the elements
-	 * 
+	 * Space Complexity: O(n) > because we are collecting results, which in worst case could be all the elements
 	 */
 	public static List<Integer[]> threeNumberSum( int[] array, int targetSum ) {
 
@@ -131,7 +126,7 @@ public class NumberAlgorithms extends TestCase {
 	}
 
 	/**
-	 * TODO: Not a good solution. Should find better and easy reading solution
+	 * TODO: Not a good solution. Should find better and easily readable solution
 	 * 
 	 * Function to find all quadruplets from given array, which can sum up to give target sum
 	 * 
@@ -139,7 +134,7 @@ public class NumberAlgorithms extends TestCase {
 	 * @param targetSum
 	 * @return All quadruplets summing up to target sum, an empty array otherwise
 	 */
-	public static List<int[]> fourNumberSum( int[] array, int targetSum ) {
+	public static List<Integer[]> fourNumberSum( int[] array, int targetSum ) {
 
 		HashMap<Integer, int[]> sumToPairsMap = new HashMap<>();
 
@@ -154,21 +149,22 @@ public class NumberAlgorithms extends TestCase {
 			}
 		}
 
-		ArrayList<int[]> fourNumbers = new ArrayList<>();
+		ArrayList<Integer[]> fourNumbers = new ArrayList<>();
 		HashSet<Integer> addedPairSum = new HashSet<>();
 
 		sumToPairsMap.forEach( ( pairSum, pair ) -> {
+
 			int[] otherPair = sumToPairsMap.get( targetSum - pairSum );
 
 			if( otherPair != null && !doesArraysContainAnySameElement( pair, otherPair )
 					&& !addedPairSum.contains( pairSum ) && !addedPairSum.contains( targetSum - pairSum ) ) {
 
-				System.out.println( "targetSum[" + targetSum + "] pairSum[" + pairSum + "]" );
-				Utils.printArray( pair );
-				Utils.printArray( otherPair );
+				// System.out.println( "targetSum[" + targetSum + "] pairSum[" + pairSum + "]" );
+				// Utils.printArray( pair );
+				// Utils.printArray( otherPair );
 
 				if( otherPair != null ) {
-					fourNumbers.add( new int[]
+					fourNumbers.add( new Integer[]
 						{ pair[0], pair[1], otherPair[0], otherPair[1] } );
 
 					addedPairSum.add( pairSum );
@@ -177,7 +173,6 @@ public class NumberAlgorithms extends TestCase {
 			}
 		} );
 
-		// Write your code here.
 		return fourNumbers;
 	}
 
@@ -185,6 +180,7 @@ public class NumberAlgorithms extends TestCase {
 
 		for( int array1Ele : array1 ) {
 			for( int array2Ele : array2 ) {
+
 				if( array1Ele == array2Ele ) {
 					return true;
 				}
@@ -215,12 +211,11 @@ public class NumberAlgorithms extends TestCase {
 			int sequenceNumber = sequenceIterator.next();
 
 			while( arrayIterator.hasNext() ) {
-
 				if( arrayIterator.next() == sequenceNumber ) {
+
 					if( !sequenceIterator.hasNext() ) { // return true if no more element left in sequence array
 						return true;
 					}
-
 					break; // break from main array loop and pick next element from sequence to check
 				}
 			}
@@ -230,36 +225,37 @@ public class NumberAlgorithms extends TestCase {
 	}
 
 	/**
-	 * Function to return the array of square values for given array
+	 * Function to return the array of square values for given sorted array
 	 * 
-	 * Complexity comes by negative values in array. Because square of negative integers will be positive
-	 * and then it can be larger than other elements in sequence. Sorting order will be changed after square.
+	 * Complexity comes by negative values in array. Because square of negative integers will be positive.
+	 * Then it can be larger than other elements in sequence. Sorting order will be changed after squaring.
 	 * 
 	 * One solution is to do square and then sort the array again. Which has higher time complexity.
+	 * 
 	 * Other solution is to pick the largest number
 	 * > keep comparing absolute of numbers from the starting and from the end of the array
 	 * > pick largest out of these
 	 * > Do square and fill it from tail end of the output array
 	 * 
-	 * @param array The input array. Sorted. Can contain negative values also.
+	 * @param sortedArray The input array. Sorted. Can contain negative values also.
 	 * @return array with square value for each element in input array, sorted
 	 */
-	public static int[] sortedSquaredArray( int[] array ) {
+	public static int[] sortedSquaredArray( int[] sortedArray ) {
 
-		assertNotNull( array );
-		assertTrue( array.length > 0 );
+		assertNotNull( sortedArray );
+		assertTrue( sortedArray.length > 0 );
 
-		int[] squaredArray = new int[array.length];
-		int sqPointer = array.length - 1; // will be filled from back, from largest square
+		int[] squaredArray = new int[sortedArray.length];
+		int sqPointer = sortedArray.length - 1; // will be filled from back, from largest squared number
 
 		int left = 0;
-		int right = array.length - 1;
+		int right = sortedArray.length - 1;
 		int largestNumberToSquare;
 
 		while( left <= right ) {
 
-			int leftNumber = Math.abs( array[left] );
-			int rightNumber = Math.abs( array[right] );
+			int leftNumber = Math.abs( sortedArray[left] );
+			int rightNumber = Math.abs( sortedArray[right] );
 
 			if( leftNumber > rightNumber ) {
 				largestNumberToSquare = leftNumber;
@@ -291,8 +287,8 @@ public class NumberAlgorithms extends TestCase {
 	 */
 	public static String tournamentWinner( ArrayList<ArrayList<String>> competitions, ArrayList<Integer> results ) {
 
-		assertNotNull( competitions );
-		assertNotNull( results );
+		assertThat( competitions ).isNotNull();
+		assertThat( results ).isNotNull();
 		assertTrue( "Compeitions and results size must be same", competitions.size() == results.size() );
 
 		HashMap<String, Integer> teamResults = new HashMap<String, Integer>();
@@ -319,13 +315,13 @@ public class NumberAlgorithms extends TestCase {
 		}
 
 		return highestScorer;
-		// return findTopScorerTeam( teamResults );
 	}
 
 	/**
-	 * Given two arrays of integers, find the pair (one from each array) whose
-	 * difference is the smallest. Consider that values can be negative also and
-	 * difference will be in absolute terms.
+	 * Given two arrays of integers, find the pair (one from each array)
+	 * whose difference is the smallest.
+	 * 
+	 * Consider that values can be negative also and difference will be in absolute terms.
 	 * 
 	 * Example:
 	 * { -1, 5, 10, 20, 28, 3 }
@@ -342,6 +338,7 @@ public class NumberAlgorithms extends TestCase {
 	 * 20, 17 = 3
 	 * 20, 26 = 6
 	 * 28, 26 = 2
+	 * 28, 134 = 106 - bigger than previous
 	 * Return 2
 	 */
 	public static int[] smallestDifference( int[] arrayOne, int[] arrayTwo ) {
@@ -357,6 +354,8 @@ public class NumberAlgorithms extends TestCase {
 
 		int[] smallestPair = new int[] {};
 		int smallestDiff = Integer.MAX_VALUE;
+
+		// TODO : Break the loop once difference starts increasing, better implementation
 
 		while( indexOne < arrayOne.length && indexTwo < arrayTwo.length ) {
 
@@ -540,6 +539,7 @@ public class NumberAlgorithms extends TestCase {
 
 	public static long sumOfDigits( long number ) {
 		long sum = 0;
+
 		while( number > 0 ) {
 			sum += number % 10;
 			number = number / 10;
@@ -627,6 +627,8 @@ public class NumberAlgorithms extends TestCase {
 	 * While reading each element, use its value as index and update the value of corresponding element as -ve
 	 * When iterator reached to any element which has negative value, this indicates that element is duplicate
 	 * Return this element
+	 * 
+	 * TODO: review this again, how will it work if values are greater than array size
 	 * 
 	 * @param array of Integer from 1 to n
 	 * @return the index of element, who has duplicate value in array, and the index of duplicate element is the

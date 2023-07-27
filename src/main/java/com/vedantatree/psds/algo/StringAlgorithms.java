@@ -1,5 +1,7 @@
 package com.vedantatree.psds.algo;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,7 +9,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import com.vedantatree.psds.Utils;
 
@@ -36,6 +41,7 @@ public class StringAlgorithms extends TestCase {
 
 			System.out.println( encryptedInt );
 
+			// TODO: review this. Should be something like doing mode with max expected value % 26
 			if( encryptedInt > Character.getNumericValue( 'z' ) ) {
 				encryptedInt = encryptedInt - Character.getNumericValue( 'z' );
 			}
@@ -104,6 +110,7 @@ public class StringAlgorithms extends TestCase {
 			return true;
 		}
 
+		// TODO can use character array too, store char as int and keep incrementing for occurences
 		HashMap<Character, Integer> characterStore = new HashMap<Character, Integer>( characters.length() );
 
 		// collect the occurences of each character in give string
@@ -145,8 +152,8 @@ public class StringAlgorithms extends TestCase {
 	}
 
 	/**
-	 * This method will compress the given string. Ex: hiieee will be changed to
-	 * h1i2e3
+	 * This method will compress the given string.
+	 * Ex: hiieee will be changed to h1i2e3
 	 * 
 	 * @param str String to compress
 	 * @return compressed string
@@ -203,6 +210,7 @@ public class StringAlgorithms extends TestCase {
 
 		for( char character : str.toCharArray() ) {
 			int charValue = getCharNumber( character );
+
 			if( charValue != -1 ) {
 				characterTable[charValue]++;
 				oddCount = characterTable[charValue] % 2 == 0 ? oddCount - 1 : oddCount + 1;
@@ -401,7 +409,7 @@ public class StringAlgorithms extends TestCase {
 
 		int stringLength = stringToEval.length();
 
-		// TODO why string length check for 128?
+		// TODO why string length check for 128? and response should be true on length == 0 also
 		if( stringLength == 0 || stringLength > 128 ) {
 			return false;
 		}
@@ -493,24 +501,15 @@ public class StringAlgorithms extends TestCase {
 		return true;
 	}
 
-	public void testOneEditAwayOrSame() {
-		assertEquals( true, oneEditAwayOrSame( "abc", "abc" ) );
-		assertEquals( true, oneEditAwayOrSame( "abc", "acc" ) );
-		assertEquals( true, oneEditAwayOrSame( "abc", "abd" ) );
-		assertEquals( true, oneEditAwayOrSame( "abcd", "acd" ) );
-		// assertEquals( true, oneEditAwayOrSame( "abc", "abcd"));
-		assertEquals( true, oneEditAwayOrSame( "abcd", "abc" ) );
-		assertEquals( false, oneEditAwayOrSame( "abc", "abcde" ) );
-	}
-
 	/**
 	 * @return true if both string are same, or both string can be same by
 	 *         replacing/adding one of the character in either
 	 */
-	public boolean oneEditAwayOrSame( String str1, String str2 ) {
+	public static boolean oneEditAwayOrSame( String str1, String str2 ) {
 		if( Math.abs( str1.length() - str2.length() ) > 1 ) {
 			return false;
 		}
+
 		if( str1.length() == str2.length() ) {
 			return oneReplaceAway( str1, str2 );
 		}
@@ -526,7 +525,7 @@ public class StringAlgorithms extends TestCase {
 		return false;
 	}
 
-	public boolean oneReplaceAway( String str1, String str2 ) {
+	public static boolean oneReplaceAway( String str1, String str2 ) {
 		boolean foundDifferrence = false;
 
 		for( int i = 0; i < str1.length(); i++ ) {
@@ -540,20 +539,23 @@ public class StringAlgorithms extends TestCase {
 		return true;
 	}
 
-	public boolean oneInsertAway( String str1, String str2 ) {
-		int index1 = 0;
-		int index2 = 0;
+	public static boolean oneInsertAway( String str1, String str2 ) {
+		int str1Index = 0;
+		int str2Index = 0;
 
-		while( index1 < str1.length() && index2 < str2.length() ) {
-			if( str1.charAt( index1 ) != str2.charAt( index2 ) ) {
-				if( index1 != index2 ) {
+		while( str1Index < str1.length() && str2Index < str2.length() ) {
+
+			if( str1.charAt( str1Index ) != str2.charAt( str2Index ) ) {
+
+				// means difference has been found already
+				if( str1Index != str2Index ) {
 					return false;
 				}
-				index1++;
+				str1Index++;
 			}
 			else {
-				index1++;
-				index2++;
+				str1Index++;
+				str2Index++;
 			}
 		}
 		return true;
@@ -791,6 +793,202 @@ public class StringAlgorithms extends TestCase {
 		}
 
 		return null;
+	}
+
+	/**
+	 * TODO: Add tests
+	 * 
+	 * @param words list of unique strings
+	 * @return list of pairs containing one string and its Semordnilap
+	 *         Semordnilap == reverse of any given string
+	 */
+	public ArrayList<ArrayList<String>> semordnilap( String[] words ) {
+
+		assertThat( words ).isNotNull();
+
+		ArrayList<ArrayList<String>> semordinlapPairs = new ArrayList<>();
+		HashSet<String> uniqueWords = new HashSet<>( words.length );
+
+		for( String word : words ) {
+
+			String reverseWord = new StringBuilder( word ).reverse().toString();
+
+			if( uniqueWords.contains( reverseWord ) ) {
+				ArrayList<String> semordinlaps = new ArrayList<>();
+				semordinlaps.add( word );
+				semordinlaps.add( reverseWord );
+				semordinlapPairs.add( semordinlaps );
+
+				uniqueWords.remove( word );
+			}
+			else {
+				uniqueWords.add( word );
+			}
+		}
+
+		return semordinlapPairs;
+	}
+
+	/**
+	 * Time Complexity - O(n^2)
+	 * Space Complexity - O(1)
+	 * 
+	 * Algorithm:
+	 * Pick a char. Start expanding on both sides and compare.
+	 * Expand from same char, and also from char + 1. Because palindrome could have both cases.
+	 * Store the longest palindrome out of above two scans.
+	 * Keep storing longest palindrome in each iteration.
+	 * 
+	 * @param str
+	 * @return the longest palindrome substring from given string.
+	 *         Assumption: There will be only one longest palindrome.
+	 */
+	public static String longestPalindromicSubstring( String str ) {
+
+		String longestPalindrome = "";
+
+		for( int index = 0; index < str.length(); index++ ) {
+
+			String oddPalindrome = getPalindromSubstring( str, index, index );
+			String evenPalindrome = getPalindromSubstring( str, index, index + 1 );
+
+			String longerPalindrome = oddPalindrome.length() > evenPalindrome.length() ? oddPalindrome : evenPalindrome;
+
+			if( longerPalindrome.length() > longestPalindrome.length() ) {
+				longestPalindrome = longerPalindrome;
+			}
+		}
+
+		return longestPalindrome;
+	}
+
+	private static String getPalindromSubstring( String str, int left, int right ) {
+
+		while( ( left >= 0 && right < str.length() ) && str.charAt( left ) == str.charAt( right ) ) {
+			left--;
+			right++;
+		}
+
+		// left +1 because left was already decreased in loop
+		return str.substring( left + 1, right );
+	}
+
+	/**
+	 * Function to find the pairs of anagrams from given list of string
+	 * Anagram == words which are made of same characters, irrespective of sequence
+	 * 
+	 * Algorithm:
+	 * For each word > create hash for each character, and store in char array > and then to string
+	 * Use above hash as key in hash map
+	 * Keep adding every string with same hash to this map, against same key
+	 * Return all collected pairs
+	 * 
+	 * Time Complexity - O(n*m), n = number of words, m = number of character in longest word
+	 * Space Complexity - O(n)
+	 * 
+	 * TODO: Write test cases
+	 * 
+	 * @param words
+	 * @return
+	 */
+	public static List<List<String>> groupAnagrams( List<String> words ) {
+
+		assertThat( words ).isNotNull();
+
+		Map<String, List<String>> anagramsMap = new HashMap<>();
+
+		for( String word : words ) {
+			char[] wordHash = new char[26];
+			for( Character c : word.toCharArray() ) {
+				wordHash[c - 'a']++;
+			}
+
+			String mapKey = new String( wordHash );
+			anagramsMap.computeIfAbsent( mapKey, key -> new ArrayList<String>() ).add( word );
+		}
+
+		return new ArrayList( anagramsMap.values() );
+	}
+
+	/**
+	 * Function to reverse the sequence of words in the given string.
+	 * Word == set of characters without space, or set of space without characters
+	 * 
+	 * Algorithms:
+	 * Parse the string based on space
+	 * keep collecting the words in reverse order
+	 * 
+	 * Time Complexity - O(n)
+	 * Space Complexity - O(n)
+	 * 
+	 * @param string
+	 * @return String with words in reverse sequence, while maintaining the spaces also
+	 */
+	public static String reverseWordsInString( String string ) {
+
+		assertThat( string ).isNotNull();
+
+		StringBuilder reverseString = new StringBuilder();
+		StringBuilder word = new StringBuilder();
+		Character prevChar = null;
+
+		for( Character currChar : string.toCharArray() ) {
+
+			if( prevChar != null ) {
+				boolean isSpaceToNonSpace = Character.isWhitespace( prevChar ) && !Character.isWhitespace( currChar );
+				boolean isNonSpaceToSpace = !Character.isWhitespace( prevChar ) && Character.isWhitespace( currChar );
+
+				if( isSpaceToNonSpace || isNonSpaceToSpace ) {
+					reverseString.insert( 0, word.toString() );
+					word = new StringBuilder();
+				}
+			}
+			word.append( currChar );
+			prevChar = currChar;
+		}
+
+		// inserting last word
+		reverseString.insert( 0, word.toString() );
+
+		return reverseString.toString();
+	}
+
+	/**
+	 * Algorithm:
+	 * keep collecting character in hash form, keep incrementing the occurence for a word
+	 * Keep collecting characters, based on max of (occurence in current word, and previous)
+	 * 
+	 * Time Complexity - O(n*m), n = number of words, m = number of characters in longest word
+	 * Space Complexity - O(n)
+	 * 
+	 * @param words list of words
+	 * @return array of minimum number of characters required to form all the words
+	 *         Consider, deed needs d twice, hence minimum number is 2
+	 *         Consider, do and deed >> do needs d once, and deed needs twice. So minimum number is 2
+	 */
+	public static char[] minimumCharactersForWords( String[] words ) {
+		assertThat( words ).isNotNull();
+
+		if( words.length == 0 )
+			return new char[] {};
+
+		StringBuffer sb = new StringBuffer();
+		char[] charMap = new char[255];
+
+		for( String word : words ) {
+
+			char[] tempCharMap = new char[255];
+			for( Character c : word.toCharArray() ) {
+				tempCharMap[c]++;
+				if( tempCharMap[c] > charMap[c] ) {
+					sb.append( c );
+					charMap[c] = tempCharMap[c];
+				}
+			}
+
+		}
+
+		return sb.toString().toCharArray();
 	}
 
 	public static void main( String[] args ) {

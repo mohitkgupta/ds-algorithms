@@ -75,16 +75,16 @@ public class TestNumberAlgorithms extends TestCase {
 			{ 7, 6, 4, -1, 1, 2 };
 		int targetSum = 16;
 
-		List<int[]> quadruplets = NumberAlgorithms.fourNumberSum( input, targetSum );
+		List<Integer[]> quadruplets = NumberAlgorithms.fourNumberSum( input, targetSum );
 
 		assertThat( quadruplets ).isNotNull();
 		assertThat( quadruplets.size() ).isEqualTo( 2 );
 		assertThat( quadruplets.get( 0 ).length ).isEqualTo( 4 );
 		assertThat( quadruplets.get( 1 ).length ).isEqualTo( 4 );
 
-		assertThat( Arrays.compare( quadruplets.get( 0 ), new int[]
+		assertThat( Arrays.compare( quadruplets.get( 0 ), new Integer[]
 			{ 7, 6, 4, -1 } ) ).isZero();
-		assertThat( Arrays.compare( quadruplets.get( 1 ), new int[]
+		assertThat( Arrays.compare( quadruplets.get( 1 ), new Integer[]
 			{ 7, 6, 1, 2 } ) ).isZero();
 	}
 
