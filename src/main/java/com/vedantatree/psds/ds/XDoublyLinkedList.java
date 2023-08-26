@@ -1,5 +1,8 @@
 package com.vedantatree.psds.ds;
 
+/**
+ * This class represents the doubly linkedlist.
+ */
 public class XDoublyLinkedList<E> extends XLinkedList<E> {
 
 	public XDoublyLinkedList() {
