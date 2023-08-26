@@ -28,7 +28,7 @@ import java.util.Set;
  * <p>
  * Scope of improvement is always there!!
  * 
- * @author Mohit Gupta [mohit.gupta@vedantatree.com]
+ * @author Mohit Gupta [mohitgupta.matrix@gmail.com]
  */
 public class TestNumberCombinations
 {

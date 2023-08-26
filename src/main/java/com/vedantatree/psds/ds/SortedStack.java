@@ -18,7 +18,7 @@ import junit.framework.TestCase;
  * But for practice only
  * 
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class SortedStack {
 

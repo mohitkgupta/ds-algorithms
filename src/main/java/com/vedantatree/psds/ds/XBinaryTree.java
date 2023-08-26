@@ -17,6 +17,8 @@ import com.vedantatree.psds.ds.XBinaryTree.XTreeTraversalResult;
  * TODO: Need refactoring, cleaning
  * TODO: Review, if it makes sense to move algo methods to TreeAlgo
  * TODO: Few methods are very long. Refactor.
+ * 
+ * Implementation of Tree Data Structure
  */
 public class XBinaryTree<E extends Comparable<E>> {
 
@@ -328,104 +330,107 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	/**
-	 * @return list of tree nodes collected in inorder traversal
+	 * @return list of tree nodes collected in in-order traversal
 	 */
 	public XTreeTraversalResult<E> inorderTraversal( boolean recursion ) {
-		return inorderTraversalAndValidate( recursion, false );
-	}
 
-	public XTreeTraversalResult<E> inorderTraversalAndValidate( boolean recursion, boolean checkBST ) {
+		XTreeTraversalResult<E> traversalResult = new XTreeTraversalResult<>( XTreeTraversalResult.IN_ORDER, true );
 
-		XTreeTraversalResult<E> traversalResult = new XTreeTraversalResult<>( XTreeTraversalResult.IN_ORDER, checkBST );
+		if( recursion ) {
+			inorderTraversalRecursion( getRootNode(), traversalResult );
+		}
+		else {
+			inorderTraversal( getRootNode(), traversalResult );
+		}
 
-		inorderTraversal( getRootNode(), traversalResult, true, checkBST );
 		return traversalResult;
 	}
 
-	// TODO: Too many conditions are making it complex to read. Can we simplify?
-	// TODO: validateBST is not in use
-	private void inorderTraversal( XTreeNode<E> rootNode, XTreeTraversalResult<E> traversalResult, boolean recursion,
-			boolean validateBST ) {
+	private void inorderTraversalRecursion( XTreeNode<E> rootNode, XTreeTraversalResult<E> traversalResult ) {
+		if( rootNode == null ) {
+			return;
+		}
+		inorderTraversalRecursion( rootNode.getLeftChild(), traversalResult );
+		traversalResult.addTraversedNodeData( rootNode.getData() );
+		inorderTraversalRecursion( rootNode.getRightChild(), traversalResult );
+	}
+
+	private void inorderTraversal( XTreeNode<E> rootNode, XTreeTraversalResult<E> traversalResult ) {
 
 		if( rootNode == null ) {
 			return;
 		}
 
-		if( recursion ) {
-			inorderTraversal( rootNode.getLeftChild(), traversalResult, recursion, validateBST );
+		XTreeNode<E> currentNode = rootNode;
+		Stack<XTreeNode<E>> nodeStack = new Stack<>();
 
-			traversalResult.addTraversedNodeData( rootNode.getData() );
+		while( currentNode != null || !nodeStack.isEmpty() ) {
 
-			inorderTraversal( rootNode.getRightChild(), traversalResult, recursion, validateBST );
-		}
-		else {
-
-			XTreeNode<E> currentNode = rootNode;
-			Stack<XTreeNode<E>> nodeStack = new Stack<>();
-
-			while( currentNode != null || !nodeStack.isEmpty() ) {
-
-				// collecting all left node in stack and reaching to left most in current path
-				while( currentNode != null ) {
-					nodeStack.push( currentNode );
-					currentNode = currentNode.getLeftChild();
-				}
-
-				// get top node, add its data,
-				// try checking right node.
-				// If present, next loop will add its data or will get next left node from stack
-
-				currentNode = nodeStack.pop();
-				traversalResult.addTraversedNodeData( currentNode.getData() );
-
-				currentNode = currentNode.getRightChild();
+			// collecting all left node in stack and reaching to left most in current path
+			while( currentNode != null ) {
+				nodeStack.push( currentNode );
+				currentNode = currentNode.getLeftChild();
 			}
+
+			// get top node, add its data,
+			// try checking right node.
+			// If present, next loop will add its data or will get next left node from stack
+
+			currentNode = nodeStack.pop();
+			traversalResult.addTraversedNodeData( currentNode.getData() );
+
+			currentNode = currentNode.getRightChild();
 		}
 	}
 
 	/**
-	 * @return list of tree nodes collected in preorder traversal
+	 * @return list of tree nodes collected in pre-order traversal
 	 */
 	public List<E> preorderTraversal( boolean recursion ) {
 
 		List<E> traversedNodes = new ArrayList<>();
 
-		preorderTraversal( getRootNode(), traversedNodes, recursion );
+		if( recursion ) {
+			preorderTraversalRecursion( rootNode, traversedNodes );
+		}
+		else {
+			preorderTraversal( getRootNode(), traversedNodes );
+		}
 		return traversedNodes;
 	}
 
-	private List<E> preorderTraversal( XTreeNode<E> rootNode, List<E> traversedNodes, boolean recursion ) {
+	private void preorderTraversalRecursion( XTreeNode<E> rootNode, List<E> traversedNodes ) {
+		if( rootNode == null ) {
+			return;
+		}
+		traversedNodes.add( rootNode.getData() );
+		preorderTraversalRecursion( rootNode.getLeftChild(), traversedNodes );
+		preorderTraversalRecursion( rootNode.getRightChild(), traversedNodes );
+	}
+
+	private void preorderTraversal( XTreeNode<E> rootNode, List<E> traversedNodes ) {
 
 		if( rootNode == null ) {
-			return traversedNodes;
+			return;
 		}
 
-		if( recursion ) {
+		XTreeNode<E> currentNode = rootNode;
+		Stack<XTreeNode<E>> nodeStack = new Stack<>();
 
-			traversedNodes.add( rootNode.getData() );
-			preorderTraversal( rootNode.getLeftChild(), traversedNodes, recursion );
-			preorderTraversal( rootNode.getRightChild(), traversedNodes, recursion );
-		}
-		else {
-			XTreeNode<E> currentNode = rootNode;
-			Stack<XTreeNode<E>> nodeStack = new Stack<>();
+		while( currentNode != null ) {
 
-			while( currentNode != null ) {
+			traversedNodes.add( currentNode.getData() );
+			nodeStack.push( currentNode );
 
-				traversedNodes.add( currentNode.getData() );
-				nodeStack.push( currentNode );
+			currentNode = currentNode.getLeftChild();
 
-				currentNode = currentNode.getLeftChild();
-
-				// will come in action once no more left node left
-				// then get already collected left nodes from stack
-				// and start traversing their right child tree
-				while( currentNode == null && !nodeStack.empty() ) {
-					currentNode = nodeStack.pop().getRightChild();
-				}
+			// will come in action once no more left node left
+			// then get already collected left nodes from stack
+			// and start traversing their right child tree
+			while( currentNode == null && !nodeStack.empty() ) {
+				currentNode = nodeStack.pop().getRightChild();
 			}
 		}
-		return traversedNodes;
 	}
 
 	/**
@@ -503,55 +508,60 @@ public class XBinaryTree<E extends Comparable<E>> {
 	 */
 	public List<E> postorderTraversal( boolean recursion ) {
 		List<E> traversedNodes = new ArrayList<>();
-		postorderTraversal( getRootNode(), traversedNodes, recursion );
+
+		if( recursion ) {
+			postorderTraversalRecursion( getRootNode(), traversedNodes );
+		}
+		else {
+			postorderTraversal( getRootNode(), traversedNodes );
+		}
 		return traversedNodes;
 	}
 
-	private List<E> postorderTraversal( XTreeNode<E> rootNode, List<E> traversedNodes, boolean recursion ) {
+	private void postorderTraversalRecursion( XTreeNode<E> rootNode, List<E> traversedNodes ) {
 		if( rootNode == null ) {
-			return traversedNodes;
+			return;
 		}
+		postorderTraversalRecursion( rootNode.getLeftChild(), traversedNodes );
+		postorderTraversalRecursion( rootNode.getRightChild(), traversedNodes );
+		traversedNodes.add( rootNode.getData() );
+	}
 
-		if( recursion ) {
-
-			postorderTraversal( rootNode.getLeftChild(), traversedNodes, recursion );
-			postorderTraversal( rootNode.getRightChild(), traversedNodes, recursion );
-			traversedNodes.add( rootNode.getData() );
+	private void postorderTraversal( XTreeNode<E> rootNode, List<E> traversedNodes ) {
+		if( rootNode == null ) {
+			return;
 		}
-		else {
-			XTreeNode<E> currentNode = rootNode;
+		XTreeNode<E> currentNode = rootNode;
 
-			Stack<XTreeNode<E>> nodeStack = new Stack<>();
-			nodeStack.push( currentNode );
+		Stack<XTreeNode<E>> nodeStack = new Stack<>();
+		nodeStack.push( currentNode );
 
-			while( currentNode != null ) {
+		while( currentNode != null ) {
 
-				// fill all left child to stack
-				while( true ) {
-					currentNode = currentNode.getLeftChild();
-					if( currentNode == null ) {
-						break;
-					}
-					nodeStack.push( currentNode );
+			// fill all left child to stack
+			while( true ) {
+				currentNode = currentNode.getLeftChild();
+				if( currentNode == null ) {
+					break;
 				}
+				nodeStack.push( currentNode );
+			}
 
-				// get left most node
-				currentNode = nodeStack.pop();
+			// get left most node
+			currentNode = nodeStack.pop();
 
-				// if current node has right child, make that current node
-				// push it to stack and continue loop with this
-				if( currentNode.getRightChild() != null ) {
+			// if current node has right child, make that current node
+			// push it to stack and continue loop with this
+			if( currentNode.getRightChild() != null ) {
 
-					nodeStack.push( currentNode );
-					currentNode = currentNode.getRightChild();
-				}
-				else // otherwise traverse the current node
-				{
-					traversedNodes.add( currentNode.getData() );
-				}
+				nodeStack.push( currentNode );
+				currentNode = currentNode.getRightChild();
+			}
+			else // otherwise traverse the current node
+			{
+				traversedNodes.add( currentNode.getData() );
 			}
 		}
-		return traversedNodes;
 	}
 
 	/**
@@ -678,6 +688,9 @@ public class XBinaryTree<E extends Comparable<E>> {
 	 * 
 	 * @return Integer.MIN_VALUE as error code if tree is not balance, tree height
 	 *         otherwise
+	 * 
+	 *         TODO Should throw exception if tree is not balanced. Better than returning -1.
+	 *         -1 can be ignored in caller logic
 	 */
 	public int checkHeightAndBalanced() {
 		return checkHeightAndBalanced( getRootNode() );

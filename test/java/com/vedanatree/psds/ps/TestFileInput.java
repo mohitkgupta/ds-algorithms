@@ -17,7 +17,7 @@ import java.util.List;
  * <li>All unique lines
  * <li>All lines exist in first, but not in second
  * 
- * @author Mohit Gupta [mohit.gupta@vedantatree.com]
+ * @author Mohit Gupta [mohitgupta.matrix@gmail.com]
  */
 
 /*

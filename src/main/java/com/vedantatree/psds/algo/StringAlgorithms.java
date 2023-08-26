@@ -5,14 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
 
 import com.vedantatree.psds.Utils;
 
@@ -24,36 +20,9 @@ import junit.framework.TestCase;
  * 
  * Rotate Matrix Replace row, column in matrix to zero
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class StringAlgorithms extends TestCase {
-
-	// TODO not working. Review and fix please
-	public String caesarCypherEncryptor( String str, int key ) {
-
-		StringBuilder encryptedString = new StringBuilder();
-
-		for( char character : str.toCharArray() ) {
-
-			System.out.println( "char > " + character + ". int > " + Character.getNumericValue( character ) );
-
-			int encryptedInt = Character.getNumericValue( character ) + key;
-
-			System.out.println( encryptedInt );
-
-			// TODO: review this. Should be something like doing mode with max expected value % 26
-			if( encryptedInt > Character.getNumericValue( 'z' ) ) {
-				encryptedInt = encryptedInt - Character.getNumericValue( 'z' );
-			}
-
-			System.out.println( "-26 > " + ( (char) encryptedInt ) );
-
-			// TODO: Why is this commented. Check it
-			// encryptedString.append(Character.to);
-		}
-
-		return encryptedString.toString();
-	}
 
 	public void testCaesarCypherEncryptor() {
 		assertTrue( caesarCypherEncryptor( "abcabc", 2 ).equals( "cdecde" ) );
@@ -85,14 +54,12 @@ public class StringAlgorithms extends TestCase {
 	}
 
 	public void testFirstNonRepeatingCharacter() {
-		assertFalse( generateDocument( "abcabc", "aabbccc" ) );
-		assertFalse( generateDocument( "abcabc", "aaaaaaaaaa" ) );
-		assertFalse( generateDocument( "bbbbbbbbbbbb", "aabbccc" ) );
-		assertFalse( generateDocument( "", "aabbccc" ) );
-		assertTrue( generateDocument( "abcabc", "" ) );
-		assertTrue( generateDocument( "", "" ) );
-		assertTrue( generateDocument( "adzqprn", "anrzd" ) );
-		assertTrue( generateDocument( "azzqpii", "izzq" ) );
+		assertEquals( 6, firstNonRepeatingCharacter( "abcabcd" ) );
+		assertEquals( -1, firstNonRepeatingCharacter( "bbbbbbbbbbbb" ) );
+		assertEquals( -1, firstNonRepeatingCharacter( "abcabc" ) );
+		assertEquals( -1, firstNonRepeatingCharacter( "" ) );
+		assertEquals( 0, firstNonRepeatingCharacter( "azzqpii" ) );
+		assertEquals( 2, firstNonRepeatingCharacter( "adzaqdprn" ) );
 	}
 
 	/**
@@ -104,6 +71,8 @@ public class StringAlgorithms extends TestCase {
 	 * @return
 	 */
 	public boolean generateDocument( String characters, String document ) {
+
+		// TODO: Alternatively can be implemented using char[] too. Could be a better solution
 
 		// nothing to do, if document is of zero length
 		if( document.length() == 0 ) {
@@ -205,6 +174,8 @@ public class StringAlgorithms extends TestCase {
 		if( !isWorkableString( str ) )
 			return false;
 
+		// TODO can't we do this using simple character array
+
 		int oddCount = 0;
 		int[] characterTable = new int[Character.getNumericValue( 'z' ) - Character.getNumericValue( 'a' ) + 1];
 
@@ -290,8 +261,11 @@ public class StringAlgorithms extends TestCase {
 	}
 
 	/**
-	 * Map each character to a number. Like a -> 0, b -> 1, c -> 2, etc. This is
-	 * case insensitive. Non-letter characters map to -1.
+	 * Map each character to a number.
+	 * Like a -> 0, b -> 1, c -> 2, etc.
+	 * By default, a starts from 97. A starts from 65. and in-between numbers are for special characters.
+	 * This is case insensitive.
+	 * Non-letter characters map to -1.
 	 */
 	public int getCharNumber( Character c ) {
 		int a = Character.getNumericValue( 'a' );
@@ -304,13 +278,10 @@ public class StringAlgorithms extends TestCase {
 	}
 
 	/**
-	 * Return urlify string for given string Urlify means - replacing every space
-	 * with %20
+	 * Return urlify string for given string Urlify means - replacing every space with %20
 	 * 
-	 * @param str String to urlify, assumed that it contains extra space for
-	 *        %20 at the end
-	 * @param trueLength actual length of string which contains the content, leaving
-	 *        trailing spaces for %20
+	 * @param str String to urlify, assumed that it contains extra space for %20 at the end
+	 * @param trueLength actual length of string which contains the content, excluding trailing spaces for %20
 	 * @return Urlify String
 	 */
 	public String urlifyString( String str, int trueLength ) {
@@ -438,6 +409,8 @@ public class StringAlgorithms extends TestCase {
 		assertFalse( isPermutation( "watermelon", "llaeotrnwem" ) );
 	}
 
+	// time complexity - O(n log n)
+	// Arrays.sort use TimSort O(n long n) which is mix of merge and insertion sort
 	public boolean isPermutation( String string1, String string2 ) {
 		if( string1.length() != string2.length() ) {
 			return false;
@@ -466,6 +439,8 @@ public class StringAlgorithms extends TestCase {
 	}
 
 	/**
+	 * Time Complexity - O(n) - it is like two iterations over string
+	 * 
 	 * @return true if both strings are permutation of each other
 	 */
 	public boolean isPermutationOptimized( String string1, String string2 ) {
@@ -561,7 +536,7 @@ public class StringAlgorithms extends TestCase {
 		return true;
 	}
 
-	// TODO explore more
+	// TODO explore more : Complex logic like DP
 	public Collection<String> permutation( String seedString ) {
 
 		HashSet<String> uniquePermutations = new HashSet<>();
@@ -878,12 +853,17 @@ public class StringAlgorithms extends TestCase {
 	 * Anagram == words which are made of same characters, irrespective of sequence
 	 * 
 	 * Algorithm:
-	 * For each word > create hash for each character, and store in char array > and then to string
+	 * For each word >
+	 * create hash for each character,
+	 * and store in char array >
+	 * and then to string
 	 * Use above hash as key in hash map
 	 * Keep adding every string with same hash to this map, against same key
 	 * Return all collected pairs
 	 * 
-	 * Time Complexity - O(n*m), n = number of words, m = number of character in longest word
+	 * Time Complexity - O(n*m),
+	 * n = number of words,
+	 * m = number of character in longest word
 	 * Space Complexity - O(n)
 	 * 
 	 * TODO: Write test cases
@@ -954,6 +934,8 @@ public class StringAlgorithms extends TestCase {
 	}
 
 	/**
+	 * TODO: Write test case
+	 * 
 	 * Algorithm:
 	 * keep collecting character in hash form, keep incrementing the occurence for a word
 	 * Keep collecting characters, based on max of (occurence in current word, and previous)
@@ -989,6 +971,33 @@ public class StringAlgorithms extends TestCase {
 		}
 
 		return sb.toString().toCharArray();
+	}
+
+	// TODO not working. Review and fix please
+	public String caesarCypherEncryptor( String str, int key ) {
+
+		StringBuilder encryptedString = new StringBuilder();
+
+		for( char character : str.toCharArray() ) {
+
+			System.out.println( "char > " + character + ". int > " + Character.getNumericValue( character ) );
+
+			int encryptedInt = Character.getNumericValue( character ) + key;
+
+			System.out.println( encryptedInt );
+
+			// TODO: review this. Should be something like doing mode with max expected value % 26
+			if( encryptedInt > Character.getNumericValue( 'z' ) ) {
+				encryptedInt = encryptedInt - Character.getNumericValue( 'z' );
+			}
+
+			System.out.println( "-26 > " + ( (char) encryptedInt ) );
+
+			// TODO: Why is this commented. Check it
+			// encryptedString.append(Character.to);
+		}
+
+		return encryptedString.toString();
 	}
 
 	public static void main( String[] args ) {

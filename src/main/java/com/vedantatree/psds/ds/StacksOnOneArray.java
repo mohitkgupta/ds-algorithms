@@ -10,7 +10,7 @@ import java.util.EmptyStackException;
  * For implementation, based on each stack capacity, define the array length and then mark start and end based on each
  * stack capacity.
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class StacksOnOneArray
 {

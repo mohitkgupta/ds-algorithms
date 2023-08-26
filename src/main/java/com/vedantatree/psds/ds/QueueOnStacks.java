@@ -12,7 +12,7 @@ import java.util.Stack;
  * >> if this stack is empty
  * >>>> move all elements from queue stack
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class QueueOnStacks<E>
 {

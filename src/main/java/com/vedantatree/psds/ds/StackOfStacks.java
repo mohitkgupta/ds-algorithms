@@ -17,7 +17,7 @@ import junit.framework.TestCase;
  * once it hit the capacity, create new stack and push to stack and start using this
  * On pop, pop element from top stack, Remove this stack if size become zero after pop
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class StackOfStacks<E> {
 

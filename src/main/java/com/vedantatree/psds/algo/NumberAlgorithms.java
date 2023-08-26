@@ -17,39 +17,9 @@ import junit.framework.TestCase;
  * 
  * Test Class: TestNumberAlgorithms
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class NumberAlgorithms extends TestCase {
-
-	// TODO : Fix this function
-	public static List<List<Integer>> getPermutations( List<Integer> array ) {
-
-		List<List<Integer>> permutations = new ArrayList<>();
-		permutation( new ArrayList<>(), array, permutations );
-
-		System.out.println( "unique permutations > " + permutations );
-		return permutations;
-	}
-
-	private static void permutation( List<Integer> prefixList, List<Integer> seedList,
-			List<List<Integer>> permutations ) {
-
-		if( seedList == null || seedList.size() == 0 ) {
-			permutations.add( prefixList );
-		}
-		else {
-			List<Integer> alteredSeedList = new ArrayList<>( seedList );
-			List<Integer> alteredPrefixList = new ArrayList<>( prefixList );
-
-			for( int i = 0; i < alteredSeedList.size(); i++ ) {
-
-				prefixList.add( alteredSeedList.get( i ) );
-				alteredSeedList.remove( i );
-
-				permutation( prefixList, alteredSeedList, permutations );
-			}
-		}
-	}
 
 	/**
 	 * Function which takes in non-empty array of distinct integers and an integer
@@ -687,6 +657,36 @@ public class NumberAlgorithms extends TestCase {
 			}
 		}
 		return false;
+	}
+
+	// TODO : Not a correct implementation. Fix this function
+	public static List<List<Integer>> getPermutations( List<Integer> array ) {
+
+		List<List<Integer>> permutations = new ArrayList<>();
+		permutation( new ArrayList<>(), array, permutations );
+
+		System.out.println( "unique permutations > " + permutations );
+		return permutations;
+	}
+
+	private static void permutation( List<Integer> prefixList, List<Integer> seedList,
+			List<List<Integer>> permutations ) {
+
+		if( seedList == null || seedList.size() == 0 ) {
+			permutations.add( prefixList );
+		}
+		else {
+			List<Integer> alteredSeedList = new ArrayList<>( seedList );
+			List<Integer> alteredPrefixList = new ArrayList<>( prefixList );
+
+			for( int i = 0; i < alteredSeedList.size(); i++ ) {
+
+				prefixList.add( alteredSeedList.get( i ) );
+				alteredSeedList.remove( i );
+
+				permutation( prefixList, alteredSeedList, permutations );
+			}
+		}
 	}
 
 	public static void main( String[] args ) {

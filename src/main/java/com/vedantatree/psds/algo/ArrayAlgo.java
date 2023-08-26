@@ -177,7 +177,7 @@ public class ArrayAlgo {
 
 		Utils.printArray( queries );
 
-		// TODO change the name of this variable, so logic becomes understandable easily
+		// TODO think a better name for this variable, so logic becomes understandable easily
 		int previousWaitingTime = 0;
 		int totalWait = 0;
 

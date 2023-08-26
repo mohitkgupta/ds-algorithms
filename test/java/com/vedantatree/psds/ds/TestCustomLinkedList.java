@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 /**
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class TestCustomLinkedList extends TestCase
 {
@@ -293,7 +293,7 @@ public class TestCustomLinkedList extends TestCase
 		XLinkedList<Integer> anotherList = new XLinkedList<Integer>();
 		anotherList.addElement( 9 ).addElement( 9 ).addElement( 5 );
 
-		XLinkedListNode<Integer> resultNode = list.addAnotherList( anotherList );
+		XLinkedListNode<Integer> resultNode = list.addAnotherListNumerically( anotherList );
 
 		System.out.print( "Result: " );
 		list.printAllElements( resultNode, false );

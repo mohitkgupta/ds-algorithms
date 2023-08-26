@@ -12,21 +12,18 @@ import junit.framework.TestCase;
 
 /**
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
-public class TestBinaryTree extends TestCase
-{
+public class TestBinaryTree extends TestCase {
 
 	private int treeNodesSize = 11;
 
-	public void testCreateBST()
-	{
+	public void testCreateBST() {
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 
 		int[] data =
-		{ 21, 1, 12, 20, 42, 3, 26, 18, 21, 37, 32, 0, 5, 71, 2, 4 };
-		for( int element : data )
-		{
+			{ 21, 1, 12, 20, 42, 3, 26, 18, 21, 37, 32, 0, 5, 71, 2, 4 };
+		for( int element : data ) {
 			bst.insertBSTNode( element );
 		}
 
@@ -45,35 +42,29 @@ public class TestBinaryTree extends TestCase
 		assertNull( "Node is found, but it does not exist in tree", node );
 	}
 
-	private XBinaryTree<Integer> createBinaryTree()
-	{
+	private XBinaryTree<Integer> createBinaryTree() {
 		return createBinaryTree( treeNodesSize );
 	}
 
-	private XBinaryTree<Integer> createBinaryTree( int nodesSize )
-	{
+	private XBinaryTree<Integer> createBinaryTree( int nodesSize ) {
 		Stack<Integer> dataSet = new Stack<>();
-		for( int i = 0; i < nodesSize; i++ )
-		{
+		for( int i = 0; i < nodesSize; i++ ) {
 			dataSet.push( i );
 		}
 
 		return createBinaryTree( dataSet );
 	}
 
-	private XBinaryTree<Integer> createBinaryTree( int[] dataArray )
-	{
+	private XBinaryTree<Integer> createBinaryTree( int[] dataArray ) {
 		Stack<Integer> dataSet = new Stack<>();
-		for( int element : dataArray )
-		{
+		for( int element : dataArray ) {
 			dataSet.push( element );
 		}
 
 		return createBinaryTree( dataSet );
 	}
 
-	private XBinaryTree<Integer> createBinaryTree( Stack<Integer> dataSet )
-	{
+	private XBinaryTree<Integer> createBinaryTree( Stack<Integer> dataSet ) {
 		XTreeNode<Integer> rootNode = createChildNodes( dataSet, new XTreeNode<>( null, dataSet.pop() ) );
 		return new XBinaryTree<>( rootNode );
 	}
@@ -81,10 +72,8 @@ public class TestBinaryTree extends TestCase
 	// take one list.. add root, add left, add right, then pass half of the list to
 	// left and half to right to create their children
 
-	private XTreeNode<Integer> createChildNodes( Stack<Integer> dataSet, XTreeNode<Integer> root )
-	{
-		if( dataSet.isEmpty() || root == null )
-		{
+	private XTreeNode<Integer> createChildNodes( Stack<Integer> dataSet, XTreeNode<Integer> root ) {
+		if( dataSet.isEmpty() || root == null ) {
 			return root;
 		}
 
@@ -99,8 +88,7 @@ public class TestBinaryTree extends TestCase
 		// no element for second half if data list size is 1 only, that should have been picked in left node creation in
 		// previous step
 
-		if( dataList.size() >= 2 )
-		{
+		if( dataList.size() >= 2 ) {
 			subDataList = dataList.subList( ( dataList.size() / 2 ), dataList.size() );
 			createTreeNode( listToStack( subDataList ), root, false );
 		}
@@ -108,23 +96,19 @@ public class TestBinaryTree extends TestCase
 		return root;
 	}
 
-	private XTreeNode<Integer> createTreeNode( Stack<Integer> dataSet, XTreeNode<Integer> root, boolean left )
-	{
+	private XTreeNode<Integer> createTreeNode( Stack<Integer> dataSet, XTreeNode<Integer> root, boolean left ) {
 
-		if( dataSet.isEmpty() || root == null )
-		{
+		if( dataSet.isEmpty() || root == null ) {
 			return root;
 		}
 
 		Integer data = dataSet.pop();
 		XTreeNode<Integer> childNode = new XTreeNode<>( root, data );
 
-		if( left )
-		{
+		if( left ) {
 			root.setLeftChild( childNode );
 		}
-		else
-		{
+		else {
 			root.setRightChild( childNode );
 		}
 		createChildNodes( dataSet, childNode );
@@ -132,10 +116,9 @@ public class TestBinaryTree extends TestCase
 		return childNode;
 	}
 
-	public void testCreateBSTFromSortedArray()
-	{
+	public void testCreateBSTFromSortedArray() {
 		Integer[] sortedArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
+			{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 		bst.populateBSTFromSortedArray( sortedArray );
@@ -153,10 +136,9 @@ public class TestBinaryTree extends TestCase
 		Utils.assertListEquals( preOrderValidation, preOrderCollected );
 	}
 
-	public void testPreOrderTraversal()
-	{
+	public void testPreOrderTraversal() {
 		Integer[] sortedArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
+			{ 2, 5, 8, 12, 13, 15, 19, 33, 45, 46, 50, 51 };
 
 		XBinaryTree<Integer> bst = new XBinaryTree<>();
 		bst.populateBSTFromSortedArray( sortedArray );
@@ -167,7 +149,7 @@ public class TestBinaryTree extends TestCase
 
 		List<Integer> preOrderValidation = Arrays.asList( 15, 8, 2, 5, 12, 13, 45, 19, 33, 50, 46, 51 );
 		List<Integer> preOrderCollected = bst.preorderTraversalWithoutRecursioin();
-		
+
 		System.out.println( "\npre-order collected >> " + preOrderCollected );
 
 		assertEquals( "node size is different", preOrderValidation.size(), preOrderCollected.size() );
@@ -175,8 +157,7 @@ public class TestBinaryTree extends TestCase
 		Utils.assertListEquals( preOrderValidation, preOrderCollected );
 	}
 
-	public void testCheckHeight()
-	{
+	public void testCheckHeight() {
 		int numberOfNodes = 21;
 		XBinaryTree<Integer> bst = createBinaryTree( numberOfNodes );
 
@@ -190,10 +171,9 @@ public class TestBinaryTree extends TestCase
 		assertEquals( "Height of balanced tree is not as expected", 4, treeHeight );
 	}
 
-	public void testMaxValue()
-	{
+	public void testMaxValue() {
 		int[] data =
-		{ 1, 2, 88, 92, 3, 9999, 4, 51, 21, 5, 65 };
+			{ 1, 2, 88, 92, 3, 9999, 4, 51, 21, 5, 65 };
 		XBinaryTree<Integer> tree = createBinaryTree( data );
 		tree.printTreeInMatrix();
 
@@ -203,8 +183,7 @@ public class TestBinaryTree extends TestCase
 				tree.findMaximumValue( true ) == 9999 );
 	}
 
-	public void testEqualTree()
-	{
+	public void testEqualTree() {
 		XBinaryTree<Integer> tree1 = createBinaryTree( 5 );
 		XBinaryTree<Integer> tree2 = createBinaryTree( 6 );
 		XBinaryTree<Integer> tree3 = createBinaryTree( 5 );
@@ -213,39 +192,37 @@ public class TestBinaryTree extends TestCase
 		assertFalse( "Tree must be unequal, but found equal", tree1.isEqualTree( tree2 ) );
 	}
 
-	public void testInorderTraversalAndBSTValidation()
-	{
+	public void testInorderTraversalAndBSTValidation() {
 		// test with BST tree
 		Integer[] nodeDataArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 19, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
+			{ 2, 5, 8, 12, 13, 15, 19, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
 
 		XBinaryTree<Integer> bst = createBinaryTreeFromArray( nodeDataArray, false );
 
-		XTreeTraversalResult<Integer> traversalResult = bst.inorderTraversalAndValidate( true, true );
+		XTreeTraversalResult<Integer> traversalResult = bst.inorderTraversal( true );
 		assertEquals( "Tree is BST, but result shows it otherwise", true, traversalResult.isBST() );
 
-		traversalResult = bst.inorderTraversalAndValidate( false, true );
+		traversalResult = bst.inorderTraversal( false );
 		assertEquals( "Tree is BST, but result shows it otherwise", true, traversalResult.isBST() );
 
 		// test with non-BST tree
 		nodeDataArray = new Integer[]
-		{ 2, 5, 12, 768, 5, 98, 1023, 13, 15, 19, 33, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897,
-				908, 1011 };
+			{ 2, 5, 12, 768, 5, 98, 1023, 13, 15, 19, 33, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789,
+					897, 908, 1011 };
 
 		bst = createBinaryTreeFromArray( nodeDataArray, false );
 
-		traversalResult = bst.inorderTraversalAndValidate( true, true );
+		traversalResult = bst.inorderTraversal( true );
 		assertEquals( "Tree is not BST, but result shows it BST", false, traversalResult.isBST() );
 
-		traversalResult = bst.inorderTraversalAndValidate( false, true );
+		traversalResult = bst.inorderTraversal( false );
 		assertEquals( "Tree is not BST, but result shows it BST", false, traversalResult.isBST() );
 	}
 
-	public void testIsBST()
-	{
+	public void testIsBST() {
 		// test with BST tree
 		Integer[] nodeDataArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 19, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
+			{ 2, 5, 8, 12, 13, 15, 19, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
 
 		XBinaryTree<Integer> binaryTree = createBinaryTreeFromArray( nodeDataArray, false );
 
@@ -253,8 +230,8 @@ public class TestBinaryTree extends TestCase
 
 		// test with non-BST tree
 		nodeDataArray = new Integer[]
-		{ 2, 5, 12, 768, 5, 98, 1023, 13, 15, 19, 33, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897,
-				908, 1011 };
+			{ 2, 5, 12, 768, 5, 98, 1023, 13, 15, 19, 33, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789,
+					897, 908, 1011 };
 
 		binaryTree = createBinaryTreeFromArray( nodeDataArray, false );
 
@@ -262,10 +239,9 @@ public class TestBinaryTree extends TestCase
 
 	}
 
-	public void testSearchInTree()
-	{
+	public void testSearchInTree() {
 		Integer[] nodeDataArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 19, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
+			{ 2, 5, 8, 12, 13, 15, 19, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
 
 		XBinaryTree<Integer> binaryTree = createBinaryTreeFromArray( nodeDataArray, false );
 		XTreeNode<Integer> searchedNode = binaryTree.searchNodeInBST( 51 );
@@ -275,8 +251,8 @@ public class TestBinaryTree extends TestCase
 
 		// test with non-BST tree
 		nodeDataArray = new Integer[]
-		{ 2, 5, 12, 768, 5, 98, 1023, 13, 15, 19, 33, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897,
-				908, 1011 };
+			{ 2, 5, 12, 768, 5, 98, 1023, 13, 15, 19, 33, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789,
+					897, 908, 1011 };
 		binaryTree = createBinaryTreeFromArray( nodeDataArray, false );
 
 		// search wrongly placed node from BST perspective
@@ -289,10 +265,9 @@ public class TestBinaryTree extends TestCase
 
 	}
 
-	public void testGetInOrderSuccessor()
-	{
+	public void testGetInOrderSuccessor() {
 		Integer[] nodeDataArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 19, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
+			{ 2, 5, 8, 12, 13, 15, 19, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
 
 		XBinaryTree<Integer> binaryTree = createBinaryTreeFromArray( nodeDataArray, false );
 		XTreeNode<Integer> inOrderSuccessorNode = binaryTree.getInOrderSuccessor( 51 );
@@ -315,10 +290,10 @@ public class TestBinaryTree extends TestCase
 
 	}
 
-	public void testFindCommonAncestor()
-	{
+	public void testFindCommonAncestor() {
 		Integer[] nodeDataArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 191, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
+			{ 2, 5, 8, 12, 13, 15, 191, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908,
+					1011 };
 
 		XBinaryTree<Integer> binaryTree = createBinaryTreeFromArray( nodeDataArray, false );
 
@@ -338,13 +313,11 @@ public class TestBinaryTree extends TestCase
 		assertEquals( "Common ancestor is not matching", Integer.valueOf( 51 ), commonAncestor.getData() );
 
 		// no node for first data
-		try
-		{
+		try {
 			commonAncestor = binaryTree.findCommonAncestor( 34323, 51 );
 			assertNotNull( "This should have thrown assertion error", commonAncestor );
 		}
-		catch( AssertionError e )
-		{
+		catch( AssertionError e ) {
 		}
 
 		// nodes in left <> right subtree of root
@@ -354,10 +327,10 @@ public class TestBinaryTree extends TestCase
 
 	}
 
-	public void testFindCommonAncestorWithoutParentLink()
-	{
+	public void testFindCommonAncestorWithoutParentLink() {
 		Integer[] nodeDataArray = new Integer[]
-		{ 2, 5, 8, 12, 13, 15, 191, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908, 1011 };
+			{ 2, 5, 8, 12, 13, 15, 191, 21, 45, 46, 50, 51, 99, 101, 134, 232, 345, 456, 567, 678, 789, 897, 908,
+					1011 };
 
 		XBinaryTree<Integer> binaryTree = createBinaryTreeFromArray( nodeDataArray, false );
 
@@ -377,13 +350,11 @@ public class TestBinaryTree extends TestCase
 		assertEquals( "Common ancestor is not matching", Integer.valueOf( 51 ), commonAncestor.getData() );
 
 		// no node for first data
-		try
-		{
+		try {
 			commonAncestor = binaryTree.findCommonAncestorWithoutParentLink( 34323, 51 );
 			assertNotNull( "This should have thrown assertion error", commonAncestor );
 		}
-		catch( AssertionError e )
-		{
+		catch( AssertionError e ) {
 		}
 
 		// nodes in left <> right subtree of root
@@ -393,10 +364,9 @@ public class TestBinaryTree extends TestCase
 
 	}
 
-	public void testCreateFromArray()
-	{
+	public void testCreateFromArray() {
 		Integer[] nodeDataArray = new Integer[]
-		{ 1, 2, 3, 4, 5 };
+			{ 1, 2, 3, 4, 5 };
 
 		XBinaryTree<Integer> binaryTree = createBinaryTreeFromArray( nodeDataArray, true );
 
@@ -407,15 +377,12 @@ public class TestBinaryTree extends TestCase
 	 * It will create BST if given array is sorted
 	 */
 
-	private XBinaryTree<Integer> createBinaryTreeFromArray( Integer[] nodeDataArray, boolean bst )
-	{
+	private XBinaryTree<Integer> createBinaryTreeFromArray( Integer[] nodeDataArray, boolean bst ) {
 		XBinaryTree<Integer> binaryTree = new XBinaryTree<>();
-		if( bst )
-		{
+		if( bst ) {
 			binaryTree.populateBSTFromArray( nodeDataArray );
 		}
-		else
-		{
+		else {
 			binaryTree.populateBSTFromSortedArray( nodeDataArray );
 		}
 		binaryTree.printTreeInMatrix();
@@ -423,24 +390,20 @@ public class TestBinaryTree extends TestCase
 		return binaryTree;
 	}
 
-	private Stack<Integer> listToStack( List<Integer> dataList )
-	{
-		if( dataList == null )
-		{
+	private Stack<Integer> listToStack( List<Integer> dataList ) {
+		if( dataList == null ) {
 			return null;
 		}
 		Stack<Integer> dataSet = new Stack<>();
 
-		for( Integer integer : dataList )
-		{
+		for( Integer integer : dataList ) {
 			dataSet.push( integer );
 		}
 
 		return dataSet;
 	}
 
-	public static void main( String[] args )
-	{
+	public static void main( String[] args ) {
 		XBinaryTree<Integer> binaryTree = new TestBinaryTree().createBinaryTree();
 
 		System.out.println( "hight of the tree[" + binaryTree.getHeight() + "]" );

@@ -4,7 +4,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 
-
+/**
+ * 
+ * Dynamic programming is an algorithmic technique for solving problems by breaking them down 
+ * into smaller subproblems and using the solutions to those subproblems to solve the original problem. 
+ * Dynamic programming is a powerful technique that can be used to solve a wide variety of problems, 
+ * including optimization problems, scheduling problems, and game theory problems.
+ * 
+ * Dynamic programming algorithms typically work by storing the solutions to subproblems in a table. 
+ * This table is called a memoization table or lookup table. The table is initialized with the solutions 
+ * to the base cases, and then the solutions to the recursive calls are stored in the table as they are computed.
+ * 
+ * When a recursive call is made, the algorithm first checks the memoization table to see 
+ * if the solution to the subproblem has already been computed. If it has, the algorithm returns 
+ * the solution from the table. If the solution has not been computed, the algorithm computes 
+ * the solution and stores it in the table.
+ * 
+ * The use of memoization allows dynamic programming algorithms to avoid recomputing the same subproblems multiple times. 
+ * This can lead to significant speedups for problems with overlapping subproblems.
+ * 
+ * @author Mohit Gupta
+ */
 public class DPAlgorithms {
 
 	/**

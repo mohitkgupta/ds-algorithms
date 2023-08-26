@@ -13,6 +13,35 @@ import com.vedantatree.psds.Utils;
 /**
  * Class representing Graph and associated algorithms
  * 
+ * Adjacency List -
+ * An adjacency list is a simple way to represent a graph as a list of vertices,
+ * where each vertex has a list of its adjacent vertices.
+ * The index of list (first dimension of the array) will always give the vertex.
+ * The second dimension of the array will have the vertices which are connected with above vertex.
+ * 
+ * Here's an example of an adjacency list for an undirected graph with 4 vertices.
+ * 0: 1 3
+ * 1: 0 2
+ * 2: 1 3
+ * 3: 0 2
+ * 
+ * In this example, vertex 0 has 1 and 3 as adjacent vertices, vertex 1 has 0 and 2 as adjacent vertices, and so on.
+ * 
+ * Adjacency Matrix -
+ * An adjacency matrix is a two-dimensional array that represents the graph
+ * by storing a 1 at position (i,j), if there is an edge from vertex i to vertex j,
+ * and 0 otherwise.
+ * 
+ * Here's an example of an adjacency matrix for the same undirected graph:
+ * 0 1 2 3
+ * 0 0 1 0 1
+ * 1 1 0 1 0
+ * 2 0 1 0 1
+ * 3 1 0 1 0
+ * 
+ * In this example, there is an edge from vertex 0 to vertex 1 (represented by a 1 in position (0,1)),
+ * an edge from vertex 1 to vertex 0 (represented by a 1 in position (1,0)), and so on.
+ * 
  * @author Mohit Gupta
  *
  */
@@ -102,9 +131,7 @@ public class XGraph {
 
 			int[] currentNodeEdges = adjacencyList[currentNode];
 
-			for( int i = 0; i < currentNodeEdges.length; i++ ) {
-
-				int neighbour = currentNodeEdges[i];
+			for( int neighbour : currentNodeEdges ) {
 
 				if( !visited[neighbour] ) {
 					visited[neighbour] = true;
@@ -117,7 +144,7 @@ public class XGraph {
 	}
 
 	/**
-	 * Function to traverse and collect nodes of graph using BFS
+	 * Function to traverse and collect nodes of graph using DFS
 	 * 
 	 * @param adjacencyList The graph
 	 * @param vertices number of vertices in graph
@@ -129,17 +156,17 @@ public class XGraph {
 		ArrayList<Integer> traversedNodes = new ArrayList<>( vertices );
 
 		// list to collect nodes to traverse
-		LinkedList<Integer> traversalQueue = new LinkedList<Integer>();
+		LinkedList<Integer> nodesToTraverse = new LinkedList<Integer>();
 
-		// to track the visited nodes. This is faster way, alternative is to search in traversed nodes list < which will
-		// be slower
+		// to track the visited nodes.
+		// This is faster way, alternative is to search in traversed nodes list < which will be slower
 		boolean visited[] = new boolean[vertices];
 
-		traversalQueue.add( 0 );
+		nodesToTraverse.add( 0 );
 
-		while( !traversalQueue.isEmpty() ) {
+		while( !nodesToTraverse.isEmpty() ) {
 
-			int currentNode = traversalQueue.remove();
+			int currentNode = nodesToTraverse.remove();
 			traversedNodes.add( currentNode );
 
 			// no further edges for this node
@@ -155,7 +182,7 @@ public class XGraph {
 
 				if( !visited[neighbour] ) {
 					visited[neighbour] = true;
-					traversalQueue.addFirst( neighbour );
+					nodesToTraverse.addFirst( neighbour );
 				}
 			}
 
@@ -167,7 +194,7 @@ public class XGraph {
 	 * Example of graph
 	 * 0 > 1
 	 * 2 > 1
-	 * > 3
+	 *   > 3
 	 * 3 > 4
 	 * 4 > 2 //cycle
 	 * 
@@ -200,16 +227,16 @@ public class XGraph {
 	}
 
 	/**
-	 * @param graphAdjacentList The graph structure
+	 * @param adjacencyList The graph structure
 	 * @param vertexIndex the vertex index > for which this method will check if cycle exists
 	 * @param visitedVertices all nodes which are already visited
 	 * @param verticesInTraversal all branches which are currently being traversed
 	 * @return true if cycle exist, false otherwise
 	 */
-	private static boolean checkIfCyclicUsingDFS( int[][] graphAdjacentList, int vertexIndex, boolean[] visitedVertices,
+	private static boolean checkIfCyclicUsingDFS( int[][] adjacencyList, int vertexIndex, boolean[] visitedVertices,
 			boolean[] verticesInTraversal ) {
 
-		int[] connectedVertices = graphAdjacentList[vertexIndex];
+		int[] connectedVertices = adjacencyList[vertexIndex];
 
 		if( connectedVertices == null || connectedVertices.length == 0 ) {
 			return false;
@@ -221,7 +248,7 @@ public class XGraph {
 		for( int neighbour : connectedVertices ) {
 
 			if( !visitedVertices[neighbour] ) {
-				if( checkIfCyclicUsingDFS( graphAdjacentList, neighbour, visitedVertices, verticesInTraversal ) ) {
+				if( checkIfCyclicUsingDFS( adjacencyList, neighbour, visitedVertices, verticesInTraversal ) ) {
 					return true;
 				}
 			}

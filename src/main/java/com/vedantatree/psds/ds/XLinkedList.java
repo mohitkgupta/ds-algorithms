@@ -13,37 +13,66 @@ import java.util.Stack;
  * Custom implementation for LinkedList. It supports single, double or circular linked list.
  * Default > Single LinkedList
  * 
- * Good - This can act as single or double linkedlist.
- * Not so good - This generic implementation made it complex also, so just for practice.
+ * Not so good - This generic implementation made it complex, so refactor it to make specific implementation for double,
+ * circular lists.
+ * 
  * Not so good - Moved setting of next and previous node logic to Node class, to handle single/double linkedlist
  * in same class
+ * 
  * Not concurrent modification safe
  * 
  * TODO
  * - Compare function for given headnode
+ * - DONE - Move doubly linked list logic to separate class
+ * - Move circular linked list logic to separate class
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class XLinkedList<E> {
 
 	private XLinkedListNode<E>	headNode;
 	private XLinkedListNode<E>	lastNode;
 	private int					size;
-	private boolean				single	= true;
+	protected final boolean		SINGLE;
 
 	public XLinkedList() {
+		this( true );
 	}
 
-	public XLinkedList( boolean single ) {
-		this.single = single;
+	protected XLinkedList( boolean single ) {
+		this.SINGLE = single;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	protected void increaseSize() {
+		++size;
+	}
+
+	protected void reduceSize() {
+		--size;
+	}
+
+	protected XLinkedListNode<E> getHeadNode() {
+		return headNode;
+	}
+
+	protected void setHeadNode( XLinkedListNode<E> headNode ) {
+		this.headNode = headNode;
+	}
+
+	protected XLinkedListNode<E> getLastNode() {
+		return headNode;
+	}
+
+	protected void setLastNode( XLinkedListNode<E> lastNode ) {
+		this.lastNode = lastNode;
 	}
 
 	public boolean isSingle() {
-		return single;
-	}
-
-	public boolean isDouble() {
-		return !isSingle();
+		return SINGLE;
 	}
 
 	private void assertIndexInBound( int index ) {
@@ -75,23 +104,6 @@ public class XLinkedList<E> {
 					"Forward count is not matching. ForwardCount[" + forwardCount + "] size[" + size + "]" );
 		}
 
-		if( isDouble() ) {
-			node = lastNode;
-
-			int backwardCount = 0;
-			while( node != null ) {
-				backwardCount++;
-				node = node.getPrevioius();
-			} // backward count calculated
-
-			if( backwardCount != size ) {
-				printAllElements();
-				printAllElementsBackwards();
-				throw new IllegalStateException(
-						"Backward count is not matching. Backward Count[" + backwardCount + "] size[" + size + "]" );
-			}
-		}
-
 	}
 
 	public void assertSanityForCircular() {
@@ -110,10 +122,6 @@ public class XLinkedList<E> {
 				break;
 			}
 		}
-	}
-
-	public int getSize() {
-		return size;
 	}
 
 	private void refreshSize() {
@@ -196,28 +204,28 @@ public class XLinkedList<E> {
 	}
 
 	public XLinkedList<E> addLast( E newElement ) {
-		XLinkedListNode<E> newNode = new XLinkedListNode<E>( lastNode, newElement, null, single );
+		XLinkedListNode<E> newNode = new XLinkedListNode<E>( lastNode, newElement, null, isSingle() );
 		if( lastNode != null ) {
 			lastNode.setNext( newNode );
 		}
 		else {
-			headNode = newNode;
+			setHeadNode( newNode );
 		}
-		lastNode = newNode;
+		setLastNode( newNode );
 		size++;
 
 		return this;
 	}
 
 	public void addFirst( E newElement ) {
-		XLinkedListNode<E> newNode = new XLinkedListNode<E>( null, newElement, headNode, single );
+		XLinkedListNode<E> newNode = new XLinkedListNode<E>( null, newElement, headNode, isSingle() );
 		if( headNode != null ) {
 			newNode.setNext( headNode );
 		}
 		else {
-			lastNode = newNode;
+			setLastNode( newNode );
 		}
-		headNode = newNode;
+		setHeadNode( newNode );
 		size++;
 	}
 
@@ -232,93 +240,82 @@ public class XLinkedList<E> {
 		else {
 			XLinkedListNode<E> previousNode = getNode( index - 1 );
 			XLinkedListNode<E> newNode = new XLinkedListNode<E>( previousNode, newElement, previousNode.getNext(),
-					single );
+					isSingle() );
 			size++;
 		}
 		assertSanityOfSize();
 	}
 
 	public boolean removeElement( E elementToRemove ) {
+
+		XLinkedListNode<E> nodeToRemove = getNode( elementToRemove );
+		return removeNode( nodeToRemove );
+	}
+
+	protected boolean removeNode( XLinkedListNode<E> nodeToRemove ) {
 		try {
-			XLinkedListNode<E> nodeToRemove = getNode( elementToRemove );
+
 			if( nodeToRemove == null ) {
 				return false;
 			}
 
 			// removing first node
 			if( nodeToRemove == headNode ) {
-
-				// if there is only one node in list
-				if( lastNode == headNode ) {
-					lastNode = null;
-					headNode = null;
-				}
-				else {
-					headNode = headNode.getNext();
-				}
-				size--; // TODO: should have a method to work with size. Updating everywhere is risk
-				return true;
+				return removeHeadNode();
 			}
 
-			XLinkedListNode<E> nextNode = nodeToRemove.getNext();
+			return removeNodeInternal( nodeToRemove );
 
-			// TODO: should move to separate method - removeNodeForSingleList
-			if( isSingle() ) {
-
-				// if it is not last node
-				if( nextNode != null ) {
-
-					E nextNodeData = nextNode.getData();
-
-					// This is done because, being single list, we don't know the previous node
-					// we can find it using getLaggerNode method, but that will be like iterating the list
-					// hence saving iteration
-
-					nodeToRemove.setData( nextNodeData );
-					nodeToRemove.setNext( nextNode.getNext() );
-
-					// if next node was the last node, move the pointer
-					// TODO: updating last node should be centralized. Updating imp variables like this, is risk
-					if( nextNode.getNext() == null ) {
-						lastNode = nodeToRemove;
-					}
-				}
-				else {
-					XLinkedListNode<E> previousNode = getLaggerNode( nodeToRemove, 1 );
-					previousNode.setNext( null );
-
-					lastNode = previousNode;
-				}
-
-				size--;
-				return true;
-			}
-
-			// if double
-			// TODO: move to separate method - removeNodeForDoublyList()
-
-			XLinkedListNode<E> previousNode = nodeToRemove.getPrevioius();
-
-			if( previousNode != null ) {
-				previousNode.setNext( nextNode );
-			}
-			else {
-				headNode = nextNode;
-			}
-
-			if( nextNode != null ) {
-				nextNode.setPrevious( previousNode );
-			}
-			else {
-				lastNode = previousNode;
-			}
-
-			size--;
-			return true;
 		}
 		finally {
 			assertSanityOfSize();
 		}
+
+	}
+
+	protected boolean removeHeadNode() {
+		// if there is only one node in list
+		if( lastNode == headNode ) {
+			lastNode = null;
+			headNode = null;
+		}
+		else {
+			headNode = headNode.getNext();
+		}
+		reduceSize();
+		return true;
+	}
+
+	protected boolean removeNodeInternal( XLinkedListNode<E> nodeToRemove ) {
+
+		XLinkedListNode<E> nextNode = nodeToRemove.getNext();
+
+		// if it is not last node
+		if( nextNode != null ) {
+
+			E nextNodeData = nextNode.getData();
+
+			// This is done because, being single list, we don't know the previous node
+			// we can find it using getLaggerNode method, but that will be like iterating the list
+			// hence saving iteration
+
+			nodeToRemove.setData( nextNodeData );
+			nodeToRemove.setNext( nextNode.getNext() );
+
+			// if next node was the last node, move the pointer
+			// TODO: updating last node should be centralized. Updating imp variables like this, is risk
+			if( nextNode.getNext() == null ) {
+				setLastNode( nodeToRemove );
+			}
+		}
+		else {
+			XLinkedListNode<E> previousNode = getLaggerNode( nodeToRemove, 1 );
+			previousNode.setNext( null );
+			setLastNode( previousNode );
+		}
+
+		reduceSize();
+		return true;
 
 	}
 
@@ -328,6 +325,10 @@ public class XLinkedList<E> {
 
 	public boolean isCircular() {
 		return circular;
+	}
+
+	private void setCircular( boolean circular ) {
+		this.circular = circular;
 	}
 
 	/**
@@ -345,7 +346,7 @@ public class XLinkedList<E> {
 		XLinkedListNode<E> nodeAtIndex = getNode( index );
 		lastNode.setNext( nodeAtIndex );
 
-		circular = true;
+		setCircular( true );
 	}
 
 	/**
@@ -356,7 +357,7 @@ public class XLinkedList<E> {
 	 * @return size
 	 */
 	public int calculateSizeOfCircularList() {
-		if( !circular ) {
+		if( !isCircular() ) {
 			throw new IllegalStateException( "Not a circular list" );
 		}
 
@@ -401,20 +402,20 @@ public class XLinkedList<E> {
 	}
 
 	private XLinkedListNode<E> getLaggerNode( XLinkedListNode<E> nodeToSearch, int place ) {
-		if( headNode == null ) {
+		if( getHeadNode() == null ) {
 			return null;
 		}
 
-		XLinkedListNode<E> currentNode = headNode;
+		XLinkedListNode<E> currentNode = getHeadNode();
 		XLinkedListNode<E> laggerNode = null;
 
 		int laggingPointer = 0;
 
 		while( currentNode != null ) {
 
-			if( laggingPointer == place ) // first iteration
+			if( laggingPointer == place ) // initiation of laggernode for first time
 			{
-				laggerNode = headNode;
+				laggerNode = getHeadNode();
 			}
 			else if( laggingPointer > place ) { // once found, start updating with iteration
 				laggerNode = laggerNode.getNext();
@@ -497,7 +498,7 @@ public class XLinkedList<E> {
 		XLinkedListNode<E> afterStart = null;
 		XLinkedListNode<E> afterEnd = null;
 
-		XLinkedListNode<E> currentNode = headNode;
+		XLinkedListNode<E> currentNode = getHeadNode();
 
 		while( currentNode != null ) {
 			if( ( (Integer) currentNode.getData() ) < (Integer) data ) {
@@ -539,7 +540,7 @@ public class XLinkedList<E> {
 		return newListHeadNode;
 	}
 
-	public XLinkedListNode<Integer> addAnotherList( XLinkedList<Integer> anotherList ) {
+	public XLinkedListNode<Integer> addAnotherListNumerically( XLinkedList<Integer> anotherList ) {
 		XLinkedListNode<Integer> headNode1 = (XLinkedListNode<Integer>) headNode;
 		XLinkedListNode<Integer> headNode2 = anotherList == null ? null : anotherList.headNode;
 
@@ -556,13 +557,11 @@ public class XLinkedList<E> {
 		 * Works only for single digit values, which is logical also
 		 */
 
-		return addLists( headNode1, headNode2, 0 );
+		return addListsNumerically( headNode1, headNode2, 0 );
 	}
 
-	private XLinkedListNode<Integer> addLists( XLinkedListNode<Integer> node1, XLinkedListNode<Integer> node2,
-			int carry ) {
-		System.out.println( "adding: node1[" + ( node1 == null ? null : node1.getData() ) + "] node2["
-				+ ( node2 == null ? null : node2.getData() ) + "]" );
+	private XLinkedListNode<Integer> addListsNumerically( XLinkedListNode<Integer> node1,
+			XLinkedListNode<Integer> node2, int carry ) {
 
 		if( node1 == null && node2 == null && carry == 0 ) {
 			return null;
@@ -585,7 +584,7 @@ public class XLinkedList<E> {
 		System.out.println( "data[" + resultValue % 10 + "] carry[" + resultValue / 10 + "]" );
 
 		if( node1 != null || node2 != null ) {
-			XLinkedListNode<Integer> nextNode = addLists( node1 == null ? null : node1.getNext(),
+			XLinkedListNode<Integer> nextNode = addListsNumerically( node1 == null ? null : node1.getNext(),
 					node2 == null ? null : node2.getNext(), carry );
 			resultNode.setNext( nextNode );
 		}
@@ -611,7 +610,7 @@ public class XLinkedList<E> {
 		 * match the elements for result
 		 */
 
-		XLinkedListNode<Integer> fastPointer = (XLinkedListNode<Integer>) headNode;
+		XLinkedListNode<Integer> fastPointer = (XLinkedListNode<Integer>) getHeadNode();
 		XLinkedListNode<Integer> slowPointer = fastPointer;
 
 		Stack<XLinkedListNode<Integer>> firstHalfStack = new Stack<>();
@@ -624,7 +623,8 @@ public class XLinkedList<E> {
 			fastPointer = fastPointer.getNext().getNext();
 		}
 
-		// skip middle element, if list is odd. If fastpointer is still not null, it means it is odd size list
+		// skip middle element, if list is odd.
+		// If fastpointer is still not null, it means it is odd size list
 		if( fastPointer != null ) {
 			slowPointer = slowPointer.getNext();
 		}
@@ -674,7 +674,7 @@ public class XLinkedList<E> {
 	 * Return last node of the list, and the length of the list
 	 */
 	private LastNodeAndLength getLastNodeAndLength( XLinkedList<E> list ) {
-		XLinkedListNode<E> currentNode = list == null ? null : list.headNode;
+		XLinkedListNode<E> currentNode = list == null ? null : list.getHeadNode();
 		int length = 0;
 		while( currentNode != null ) {
 			length++;
@@ -741,7 +741,7 @@ public class XLinkedList<E> {
 				toPrint.append( node.getData() );
 				toPrint.append( ", " );
 
-				if( !single ) {
+				if( !isSingle() ) {
 					node = node.getPrevioius();
 				}
 				else {

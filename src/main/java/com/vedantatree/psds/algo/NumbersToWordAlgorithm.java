@@ -8,7 +8,7 @@ import java.util.Stack;
  * TODO: Has a bug beyond Lakhs
  * 
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class NumbersToWordAlgorithm {
 

@@ -9,7 +9,7 @@ import java.util.Queue;
 
 /**
  * 
- * @author Mohit Gupta <mohit.gupta@vedantatree.com>
+ * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
 public class XTreeNode<E> {
 

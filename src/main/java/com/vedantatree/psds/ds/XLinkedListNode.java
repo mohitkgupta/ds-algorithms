@@ -31,10 +31,6 @@ class XLinkedListNode<E> {
 		return !single;
 	}
 
-	boolean isSingle() {
-		return single;
-	}
-
 	void setSingle( boolean single ) {
 		this.single = single;
 	}
@@ -69,7 +65,7 @@ class XLinkedListNode<E> {
 	}
 
 	XLinkedListNode<E> setPrevious( XLinkedListNode<E> newPreviousNode ) {
-		if( isSingle() ) {
+		if( !isDouble() ) {
 			throw new IllegalStateException( "Previous can be not set on Single linked list" );
 		}
 
