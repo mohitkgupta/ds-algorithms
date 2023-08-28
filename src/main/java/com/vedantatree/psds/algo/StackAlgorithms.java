@@ -37,8 +37,9 @@ public class StackAlgorithms {
 			else if( strChar == ')' || strChar == '}' || strChar == ']' ) {
 
 				// found closing bracket before opening
-				if( brackets.isEmpty() )
+				if( brackets.isEmpty() ) {
 					return false;
+				}
 
 				Character popChar = brackets.pop();
 				switch( strChar )
@@ -81,8 +82,9 @@ public class StackAlgorithms {
 
 		assertThat( stack ).isNotNull();
 
-		if( stack.size() <= 1 )
+		if( stack.size() <= 1 ) {
 			return stack;
+		}
 
 		int top = stack.remove( stack.size() - 1 );
 		sortStack( stack );
@@ -98,7 +100,7 @@ public class StackAlgorithms {
 			return;
 		}
 
-		int top = stack.get( stack.size() - 1 );
+		int top = stack.get( stack.size() - 1 ); // peek?
 
 		// keeping largest element at the top, i.e. at the end of the array
 		if( top > elementToInsert ) {

@@ -59,6 +59,8 @@ public class NumberAlgorithms extends TestCase {
 	 * 
 	 * Time Complexity: O(n^2)
 	 * Space Complexity: O(n) > because we are collecting results, which in worst case could be all the elements
+	 * 
+	 * TODO assuming sorted array as input. Confirm with Test Case
 	 */
 	public static List<Integer[]> threeNumberSum( int[] array, int targetSum ) {
 
@@ -499,7 +501,7 @@ public class NumberAlgorithms extends TestCase {
 				return trial;
 			}
 			if( trial * trial > number ) {
-				trial = trial / 2;
+				trial = trial / 2; // TODO: why not -1. Confirm understanding with test case
 			}
 			else if( trial * trial < number ) {
 				trial = trial + 1;
@@ -644,7 +646,7 @@ public class NumberAlgorithms extends TestCase {
 		 * keep calculating sum of all previous elements + current and store in hashset
 		 * if this sum is already present in hashset, it means we already seen this and intermediate sequence of
 		 * elements were amount to zero
-		 * If any number is zero, or current some itself is zero > that also means we have a zero sum sub array
+		 * If any number is zero, or current sum itself is zero > that also means we have a zero sum sub array
 		 */
 
 		HashSet<Integer> sums = new HashSet<>();

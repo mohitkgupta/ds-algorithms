@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-import com.vedantatree.psds.ds.XBinaryTree.XTreeTraversalResult;
-
 
 /**
  * TODO: Need refactoring, cleaning
@@ -163,7 +161,6 @@ public class XBinaryTree<E extends Comparable<E>> {
 		return searchNodeInBinaryTree( getRootNode(), dataToSearch );
 	}
 
-	// not in BST, but simple binary tree
 	private XTreeNode<E> searchNodeInBinaryTree( XTreeNode<E> rootNode, E dataToSearch ) {
 
 		if( rootNode == null || compareData( rootNode.getData(), dataToSearch ) == 0 ) {
@@ -184,18 +181,14 @@ public class XBinaryTree<E extends Comparable<E>> {
 		}
 
 		XTreeNode<E> currentNode = searchNodeInBinaryTree( nodeData );
-		if( currentNode == null ) {
-			return null; // TODO: Ideally should assert
-		}
+		assertNotNull( "The node to search must not be null", currentNode );
 
-		// if right child exists, successor is the left most node in right sub-tree
-		if( currentNode.getRightChild() != null ) {
+		if( currentNode.getRightChild() != null ) { // if right exists, successor = left most node in right tree
 			return getLeftMostChild( currentNode.getRightChild() );
 		}
 
 		// else walk through parent hierarchy till current sub-tree become left sub-tree
 		// if current sub-tree is already left, then next parent node will be the successor
-		// otherwise, keep traversing
 		else {
 			XTreeNode<E> parentNode = currentNode.getParent();
 
@@ -260,8 +253,10 @@ public class XBinaryTree<E extends Comparable<E>> {
 		return findCommonAncestorWithoutParentLink( getRootNode(), node1, node2 );
 	}
 
+	// time complexity - n^2
 	private XTreeNode<E> findCommonAncestorWithoutParentLink( XTreeNode<E> rootNode, XTreeNode<E> node1,
 			XTreeNode<E> node2 ) {
+
 		if( rootNode == null || rootNode == node1 | rootNode == node2 ) {
 			return rootNode;
 		}
@@ -429,8 +424,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 			currentNode = currentNode.getLeftChild();
 
 			// will come in action once no more left node left
-			// then get already collected left nodes from stack
-			// and start traversing their right child tree
+			// then get already collected left nodes from stack, and start traversing their right child tree
 			while( currentNode == null && !nodeStack.empty() ) {
 				currentNode = nodeStack.pop().getRightChild();
 			}
@@ -439,6 +433,8 @@ public class XBinaryTree<E extends Comparable<E>> {
 
 	/**
 	 * Pre-order nodes traversal implementation without using recursion
+	 * 
+	 * Easier (to understand) implementation
 	 * 
 	 * @return list of this tree nodes in pre-order
 	 */
@@ -462,46 +458,6 @@ public class XBinaryTree<E extends Comparable<E>> {
 			if( currentNode.getLeftChild() != null ) {
 				nodeStack.push( currentNode.getLeftChild() );
 			}
-		}
-
-		return traversalResult.getTraversedNodesData();
-	}
-
-	/**
-	 * Post order nodes traversal implementation without using recursion
-	 * 
-	 * @return list of this tree nodes in post order
-	 */
-	public List<E> postorderTraversalWithoutRecursioin() {
-		// store of traversed nodes
-		XTreeTraversalResult traversalResult = new XTreeTraversalResult( XTreeTraversalResult.POST_ORDER, false );
-
-		XTreeNode<E> currentNode = getRootNode();
-
-		// stack to collect nodes in traversal order
-		Stack<XTreeNode<E>> nodesToTraverseStack = new Stack<>();
-		nodesToTraverseStack.push( currentNode );
-
-		// traversed nodes but in reverse order, i.e. collecting last order first
-		Stack<XTreeNode<E>> trarversedNodeStack = new Stack<>();
-
-		while( !nodesToTraverseStack.isEmpty() ) {
-			currentNode = nodesToTraverseStack.pop();
-
-			// push to traversed node stack
-			trarversedNodeStack.push( currentNode );
-
-			if( currentNode.getLeftChild() != null ) {
-				nodesToTraverseStack.push( currentNode.getLeftChild() );
-			}
-			if( currentNode.getRightChild() != null ) {
-				nodesToTraverseStack.push( currentNode.getRightChild() );
-			}
-		}
-
-		//
-		while( !trarversedNodeStack.isEmpty() ) {
-			traversalResult.addTraversedNodeData( trarversedNodeStack.pop().getData() );
 		}
 
 		return traversalResult.getTraversedNodesData();
@@ -569,6 +525,48 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	/**
+	 * Post order nodes traversal implementation without using recursion
+	 * 
+	 * Easier (to understand) implementation
+	 * 
+	 * @return list of this tree nodes in post order
+	 */
+	public List<E> postorderTraversalWithoutRecursioin() {
+		// store of traversed nodes
+		XTreeTraversalResult traversalResult = new XTreeTraversalResult( XTreeTraversalResult.POST_ORDER, false );
+
+		XTreeNode<E> currentNode = getRootNode();
+
+		// stack to collect nodes in traversal order
+		Stack<XTreeNode<E>> nodesToTraverseStack = new Stack<>();
+		nodesToTraverseStack.push( currentNode );
+
+		// traversed nodes but in reverse order, i.e. collecting last order first
+		Stack<XTreeNode<E>> trarversedNodeStack = new Stack<>();
+
+		while( !nodesToTraverseStack.isEmpty() ) {
+			currentNode = nodesToTraverseStack.pop();
+
+			// push to traversed node stack
+			trarversedNodeStack.push( currentNode );
+
+			if( currentNode.getLeftChild() != null ) {
+				nodesToTraverseStack.push( currentNode.getLeftChild() );
+			}
+			if( currentNode.getRightChild() != null ) {
+				nodesToTraverseStack.push( currentNode.getRightChild() );
+			}
+		}
+
+		//
+		while( !trarversedNodeStack.isEmpty() ) {
+			traversalResult.addTraversedNodeData( trarversedNodeStack.pop().getData() );
+		}
+
+		return traversalResult.getTraversedNodesData();
+	}
+
+	/**
 	 * Traverse tree level wise
 	 * 
 	 * @return list of nodes structured by each level
@@ -592,12 +590,10 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	/*
-	 * Algo:
-	 * In BST, whole tree on the left should be smaller than root node,
-	 * and should be larger than root node on the right
-	 * This concept applies to each node in tree
-	 * While traversing, we can pass root node value down to compare
-	 * whether child node is smaller if it is left, or larger if it is right
+	 * Algo: In BST,
+	 * tree on left < root node
+	 * tree on right > root node
+	 * This applies to each node in tree
 	 */
 	private boolean isBST( XTreeNode<E> rootNode, E minValue, E maxValue ) {
 		if( rootNode == null ) {
@@ -622,11 +618,11 @@ public class XBinaryTree<E extends Comparable<E>> {
 	 * @return true if specific true has similar data and structure as of this tree
 	 */
 	public boolean isEqualTree( XBinaryTree tree ) {
+
 		if( tree == null ) {
 			return false;
 		}
 		return isEqualNode( getRootNode(), tree.getRootNode() );
-
 	}
 
 	private boolean isEqualNode( XTreeNode<E> treeNode1, XTreeNode<E> treeNode2 ) {
@@ -887,9 +883,11 @@ public class XBinaryTree<E extends Comparable<E>> {
 	 * 
 	 * TODO: In use for InOrder traversal only as of now, we can expand to others
 	 * 
+	 * Class is package private so it can be accessed in test cases
+	 * 
 	 * @param <E>
 	 */
-	public static class XTreeTraversalResult<E extends Comparable> {
+	static class XTreeTraversalResult<E extends Comparable> {
 
 		public static final int	PRE_ORDER			= -1;
 		public static final int	IN_ORDER			= 0;

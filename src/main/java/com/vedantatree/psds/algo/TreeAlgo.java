@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,187 @@ import com.vedantatree.psds.ds.XBinaryTree;
 import com.vedantatree.psds.ds.XTreeNode;
 
 
+/**
+ * TODO:
+ * Add time, space complexity for each method
+ */
 public class TreeAlgo {
+
+	public static List<Integer> breadthFirstSearch( XBinaryTree tree ) {
+		assertNotNull( tree );
+		assertNotNull( tree.getRootNode() );
+
+		XTreeNode<Integer> node = tree.getRootNode();
+
+		ArrayList<XTreeNode> nodesToTraverse = new ArrayList<>();
+		nodesToTraverse.add( node );
+
+		ArrayList<Integer> traversedNodes = new ArrayList<Integer>();
+		traversedNodes.add( node.getData() );
+
+		for( int i = 0; i < nodesToTraverse.size(); i++ ) {
+			node = nodesToTraverse.get( i );
+
+			if( node.getLeftChild() != null ) {
+				traversedNodes.add( node.getLeftChild().getData() );
+				nodesToTraverse.add( node.getLeftChild() );
+			}
+			if( node.getRightChild() != null ) {
+				traversedNodes.add( node.getRightChild().getData() );
+				nodesToTraverse.add( node.getRightChild() );
+			}
+
+		}
+
+		return traversedNodes;
+	}
+
+	public List<Integer> depthFirstSearch( BinaryTree node ) {
+		return depthFirstSearch( new ArrayList<Integer>(), node );
+	}
+
+	private List<Integer> depthFirstSearch( List<Integer> array, BinaryTree node ) {
+		if( node != null ) {
+			array.add( node.value );
+			depthFirstSearch( array, node.left );
+			depthFirstSearch( array, node.right );
+		}
+
+		return array;
+	}
+
+	/**
+	 * @param currentNode the root node mostly
+	 * @param nodeToFindSuccessor the node for which this function will return the successor
+	 * @return successor for give node, considering in-order traversal
+	 */
+	public static XTreeNode findSuccessorInOrder( XTreeNode currentNode, Object nodeToFindSuccessor ) {
+		if( currentNode == null ) {
+			return null;
+		}
+
+		if( currentNode.getData() == nodeToFindSuccessor ) {
+			return findSuccessorInOrderInternal( currentNode );
+		}
+
+		XTreeNode successor = findSuccessorInOrder( currentNode.getLeftChild(), nodeToFindSuccessor );
+		if( successor != null ) {
+			return successor;
+		}
+
+		return findSuccessorInOrder( currentNode.getRightChild(), nodeToFindSuccessor );
+	}
+
+	private static XTreeNode findSuccessorInOrderInternal( XTreeNode currentNode ) {
+		if( currentNode == null ) {
+			return null;
+		}
+
+		// if current node is the root node
+		if( currentNode.getRightChild() != null ) {
+			return findLeftMostNode( currentNode.getRightChild() );
+		}
+
+		// else if return the parent, when current child is the left node of parent > null otherwise
+		else if( currentNode.getParent() != null ) {
+			XTreeNode parentNode = currentNode.getParent();
+
+			while( parentNode != null && currentNode == parentNode.getRightChild() ) {
+				currentNode = parentNode;
+				parentNode = parentNode.getParent();
+			}
+
+			return parentNode;
+		}
+		return null;
+
+	}
+
+	private static XTreeNode findLeftMostNode( XTreeNode node ) {
+		while( node != null && node.getLeftChild() != null ) {
+			node = node.getLeftChild();
+		}
+		return node;
+	}
+
+	// find sum of depths of all the nodes in tree
+	public static int nodeDepths( BinaryTree root ) {
+		return nodeDepths( root, 0, 0 );
+	}
+
+	public static int nodeDepths( BinaryTree root, int level, int depthSum ) {
+		if( root == null ) {
+			return depthSum;
+		}
+
+		depthSum += level;
+
+		depthSum = nodeDepths( root.left, level + 1, depthSum );
+		depthSum = nodeDepths( root.right, level + 1, depthSum );
+
+		// TODO write test case for above. We are passing depthSum of left to right, which will again increment it
+		// if we are counting max levels here - then above logic wont work
+
+		return depthSum;
+	}
+
+	// find sum of nodes in each branch, in order of left to right
+	public static List<Integer> branchSums( BinaryTree root ) {
+		// traverse tree in inorder
+		// once hit the last node in a branch, add the sum to the list
+		// return list
+
+		List<Integer> sums = new ArrayList<Integer>();
+		branchSumsInternal( root, 0, sums );
+		return sums;
+	}
+
+	private static void branchSumsInternal( BinaryTree root, int parentSum, List<Integer> sums ) {
+		parentSum += root.value;
+
+		if( root.left == null && root.right == null ) {
+			sums.add( parentSum );
+			return;
+		}
+
+		if( root.left != null )
+			branchSumsInternal( root.left, parentSum, sums );
+		if( root.right != null )
+			branchSumsInternal( root.right, parentSum, sums );
+	}
+
+	// TODO not correct logic. Revisit and fix it with fresh mind
+	// Simplify if required using a object to carry children unbalance state
+	public boolean heightBalancedBinaryTree( XBinaryTree tree ) {
+		assertNotNull( tree );
+		assertNotNull( tree.getRootNode() );
+
+		int height = countHeight( tree.getRootNode() );
+		return height > 0 && height <= 1;
+	}
+
+	private int countHeight( XTreeNode rootNode ) {
+		if( rootNode == null )
+			return 0;
+
+		int leftTreeHeight = rootNode.getLeftChild() == null ? 0 : countHeight( rootNode.getLeftChild() );
+		if( leftTreeHeight < 0 )
+			return leftTreeHeight;
+		else
+			leftTreeHeight++;
+
+		int rightTreeHeight = rootNode.getRightChild() == null ? 0 : countHeight( rootNode.getRightChild() );
+		if( rightTreeHeight < 0 )
+			return rightTreeHeight;
+		else
+			rightTreeHeight++;
+
+		if( Math.abs( leftTreeHeight - rightTreeHeight ) > 1 ) {
+			return -1;
+		}
+
+		return Math.max( leftTreeHeight, rightTreeHeight );
+	}
 
 	// TODO : Pending implementation
 	public static int findClosestValueInBST( XTreeNode<Integer> root, int target ) {
@@ -97,186 +276,6 @@ public class TreeAlgo {
 
 		return new int[]
 			{ Math.max( leftCount, rightCount ), maxDiameter };
-	}
-
-	// return nodes of the tree in breadth first search
-	public static List<Integer> breadthFirstSearch( XBinaryTree tree ) {
-		assertNotNull( tree );
-		assertNotNull( tree.getRootNode() );
-
-		XTreeNode<Integer> node = tree.getRootNode();
-
-		ArrayList<XTreeNode> nodesToTraverse = new ArrayList<>();
-		nodesToTraverse.add( node );
-
-		ArrayList<Integer> traversedNodes = new ArrayList<Integer>();
-		traversedNodes.add( node.getData() );
-
-		for( int i = 0; i < nodesToTraverse.size(); i++ ) {
-			node = nodesToTraverse.get( i );
-
-			if( node.getLeftChild() != null ) {
-				traversedNodes.add( node.getLeftChild().getData() );
-				nodesToTraverse.add( node.getLeftChild() );
-			}
-			if( node.getRightChild() != null ) {
-				traversedNodes.add( node.getRightChild().getData() );
-				nodesToTraverse.add( node.getRightChild() );
-			}
-
-		}
-
-		return traversedNodes;
-	}
-
-	// return nodes of the tree in depthFirstSearch (inorder)
-	public List<Integer> depthFirstSearch( BinaryTree node ) {
-		// Write your code here.
-		return depthFirstSearch( new ArrayList<Integer>(), node );
-	}
-
-	private List<Integer> depthFirstSearch( List<Integer> array, BinaryTree node ) {
-		if( node != null ) {
-			array.add( node.value );
-			depthFirstSearch( array, node.left );
-			depthFirstSearch( array, node.right );
-		}
-
-		return array;
-	}
-
-	// find sum of depths of all the nodes in tree
-	public static int nodeDepths( BinaryTree root ) {
-		// Write your code here.
-		return nodeDepths( root, 0, 0 );
-	}
-
-	public static int nodeDepths( BinaryTree root, int level, int depthSum ) {
-		if( root == null ) {
-			return depthSum;
-		}
-
-		depthSum += level;
-
-		depthSum = nodeDepths( root.left, level + 1, depthSum );
-		depthSum = nodeDepths( root.right, level + 1, depthSum );
-
-		// TODO write test case for above. We are passing depthSum of left to right, which will again increment it
-		// if we are counting max levels here - then above logic wont work
-
-		return depthSum;
-	}
-
-	// find sum of nodes in each branch, in order of left to right
-	public static List<Integer> branchSums( BinaryTree root ) {
-		// traverse tree in inorder
-		// once hit the last node in a branch, add the sum to the list
-		// return list
-
-		List<Integer> sums = new ArrayList<Integer>();
-		branchSumsInternal( root, 0, sums );
-		return sums;
-	}
-
-	private static void branchSumsInternal( BinaryTree root, int parentSum, List<Integer> sums ) {
-		parentSum += root.value;
-
-		if( root.left == null && root.right == null ) {
-			sums.add( parentSum );
-			return;
-		}
-
-		if( root.left != null )
-			branchSumsInternal( root.left, parentSum, sums );
-		if( root.right != null )
-			branchSumsInternal( root.right, parentSum, sums );
-	}
-
-	/**
-	 * @param currentNode the root node mostly
-	 * @param nodeToFindSuccessor the node for which this function will return the successor
-	 * @return successor for give node, considering in-order traversal
-	 */
-	public static XTreeNode findSuccessorInOrder( XTreeNode currentNode, Object nodeToFindSuccessor ) {
-		if( currentNode == null ) {
-			return null;
-		}
-
-		if( currentNode.getData() == nodeToFindSuccessor ) {
-			return findSuccessorInOrderInternal( currentNode );
-		}
-
-		XTreeNode successor = findSuccessorInOrder( currentNode.getLeftChild(), nodeToFindSuccessor );
-		if( successor != null ) {
-			return successor;
-		}
-
-		return findSuccessorInOrder( currentNode.getRightChild(), nodeToFindSuccessor );
-	}
-
-	private static XTreeNode findSuccessorInOrderInternal( XTreeNode currentNode ) {
-		if( currentNode == null ) {
-			return null;
-		}
-
-		// if current node is the root node
-		if( currentNode.getRightChild() != null ) {
-			return findLeftMostNode( currentNode.getRightChild() );
-		}
-
-		// else if return the parent, when current child is the left node of parent > null otherwise
-		else if( currentNode.getParent() != null ) {
-			XTreeNode parentNode = currentNode.getParent();
-
-			while( parentNode != null && currentNode == parentNode.getRightChild() ) {
-				currentNode = parentNode;
-				parentNode = parentNode.getParent();
-			}
-
-			return parentNode;
-		}
-		return null;
-
-	}
-
-	private static XTreeNode findLeftMostNode( XTreeNode node ) {
-		while( node != null && node.getLeftChild() != null ) {
-			node = node.getLeftChild();
-		}
-		return node;
-	}
-
-	// TODO not correct logic. Revisit and fix it with fresh mind
-	// Simplify if required using a object to carry children unbalance state
-	public boolean heightBalancedBinaryTree( XBinaryTree tree ) {
-		assertNotNull( tree );
-		assertNotNull( tree.getRootNode() );
-
-		int height = countHeight( tree.getRootNode() );
-		return height > 0 && height <= 1;
-	}
-
-	private int countHeight( XTreeNode rootNode ) {
-		if( rootNode == null )
-			return 0;
-
-		int leftTreeHeight = rootNode.getLeftChild() == null ? 0 : countHeight( rootNode.getLeftChild() );
-		if( leftTreeHeight < 0 )
-			return leftTreeHeight;
-		else
-			leftTreeHeight++;
-
-		int rightTreeHeight = rootNode.getRightChild() == null ? 0 : countHeight( rootNode.getRightChild() );
-		if( rightTreeHeight < 0 )
-			return rightTreeHeight;
-		else
-			rightTreeHeight++;
-
-		if( Math.abs( leftTreeHeight - rightTreeHeight ) > 1 ) {
-			return -1;
-		}
-
-		return Math.max( leftTreeHeight, rightTreeHeight );
 	}
 
 	/**
@@ -473,6 +472,7 @@ public class TreeAlgo {
 	 * @return true if leaf traversal from both tree are same, ie same leaf nodes in same sequence
 	 */
 	public static boolean compareLeafTraversalX( XBinaryTree<Integer> tree1, XBinaryTree<Integer> tree2 ) {
+
 		return compareLeafTraversal( BinaryTree.convertToBinaryTree( tree1.getRootNode() ),
 				BinaryTree.convertToBinaryTree( tree2.getRootNode() ) );
 	}

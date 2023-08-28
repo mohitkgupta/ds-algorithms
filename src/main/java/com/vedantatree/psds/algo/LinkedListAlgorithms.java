@@ -43,11 +43,11 @@ public class LinkedListAlgorithms {
 		LinkedList previousNode = null;
 
 		while( currentNode != null ) {
-			LinkedList tempCurrentNode = currentNode.next;
 
+			LinkedList tempCurrentNode = currentNode.next;
 			currentNode.next = previousNode;
 			previousNode = currentNode;
-			currentNode = tempCurrentNode;
+			currentNode = tempCurrentNode; // the next node
 		}
 
 		return previousNode;
@@ -122,6 +122,7 @@ public class LinkedListAlgorithms {
 
 		Stack<LinkedList> firstListStack = getNodeStackForList( linkedListOne );
 		Stack<LinkedList> secondListStack = getNodeStackForList( linkedListTwo );
+
 		LinkedList previousNode = null;
 
 		while( !firstListStack.isEmpty() && !secondListStack.isEmpty() ) {

@@ -137,7 +137,9 @@ public class StringAlgorithms extends TestCase {
 		StringBuilder compressedString = new StringBuilder(); // StringBuilder is good to save time
 
 		int stringLength = str.length();
+
 		for( int i = 0; i < stringLength; i++ ) {
+
 			consecutiveCount++;
 
 			if( i + 1 >= stringLength || str.charAt( i ) != str.charAt( i + 1 ) ) {
@@ -161,11 +163,14 @@ public class StringAlgorithms extends TestCase {
 	/**
 	 * Check if given string is a permutation of a palindrome string
 	 * 
-	 * concept is > check if we have all the characters in even number, if yes, that
-	 * means these characters can be repeated twice or in pair if there is any
-	 * character counting odd, it can not be more than once. I.e. in the center of
-	 * the palindrome. If these conditions are matching, we can assume that string
-	 * is permutation of palindrome
+	 * concept is >
+	 * check if we have all the characters in even number,
+	 * if yes, means these characters can be repeated twice or in pair
+	 * 
+	 * if there is any character counting odd, it can not be more than once.
+	 * I.e. in the center of the palindrome.
+	 * 
+	 * If these conditions are matching, we can assume that string is permutation of palindrome
 	 * 
 	 * @param str string to check
 	 * @return true if string is permutation of palindrome, false otherwise
@@ -201,9 +206,12 @@ public class StringAlgorithms extends TestCase {
 	}
 
 	/**
-	 * Retrun true if given string is a palindrome, false otherwise. A single
-	 * character string is also a palindrome "a" > is a palindrome "abcdcba" is a
-	 * palindrome "abccba" is a palindrome
+	 * Retrun true if given string is a palindrome, false otherwise.
+	 * 
+	 * A single character string is also a palindrome
+	 * "a" > is a palindrome
+	 * "abcdcba" is a palindrome
+	 * "abccba" is a palindrome
 	 * 
 	 * @param str string to check
 	 * @return
@@ -263,7 +271,10 @@ public class StringAlgorithms extends TestCase {
 	/**
 	 * Map each character to a number.
 	 * Like a -> 0, b -> 1, c -> 2, etc.
-	 * By default, a starts from 97. A starts from 65. and in-between numbers are for special characters.
+	 * 
+	 * By default, 'a' starts from 97.
+	 * A starts from 65.
+	 * Rest numbers are for special characters.
 	 * This is case insensitive.
 	 * Non-letter characters map to -1.
 	 */
@@ -278,9 +289,10 @@ public class StringAlgorithms extends TestCase {
 	}
 
 	/**
-	 * Return urlify string for given string Urlify means - replacing every space with %20
+	 * Return urlify string for given string
+	 * Urlify means - replacing every space with %20
 	 * 
-	 * @param str String to urlify, assumed that it contains extra space for %20 at the end
+	 * @param str String to urlify, with extra space for %20 at the end
 	 * @param trueLength actual length of string which contains the content, excluding trailing spaces for %20
 	 * @return Urlify String
 	 */
@@ -337,8 +349,9 @@ public class StringAlgorithms extends TestCase {
 	 * @return no of spaces in the given string
 	 */
 	public int countSpaces( String str, int trueStringLength ) {
-		if( !isWorkableString( str ) )
+		if( !isWorkableString( str ) ) {
 			return -1;
+		}
 
 		int spaces = 0;
 		trueStringLength = trueStringLength == -1 ? str.length() : trueStringLength;
@@ -534,211 +547,6 @@ public class StringAlgorithms extends TestCase {
 			}
 		}
 		return true;
-	}
-
-	// TODO explore more : Complex logic like DP
-	public Collection<String> permutation( String seedString ) {
-
-		HashSet<String> uniquePermutations = new HashSet<>();
-		permutation( "", seedString, uniquePermutations );
-
-		System.out.println( "unique permutations > " + uniquePermutations );
-
-		return uniquePermutations;
-	}
-
-	int recursion = 1;
-
-	private void permutation( String prefix, String seedString, HashSet<String> uniquePermutations ) {
-		recursion += 1;
-		System.out.println( "recursion[" + recursion + "] prefix[" + prefix + "] seed[" + seedString + "]" );
-
-		if( seedString.length() == 0 ) {
-			uniquePermutations.add( prefix );
-
-			System.out.println( prefix );
-		}
-		else {
-			for( int i = 0; i < seedString.length(); i++ ) {
-				String alteredSeed = seedString.substring( 0, i ) + seedString.substring( i + 1 );
-
-				System.out.println( "recursion[" + recursion + "]  prefix[" + prefix + "] seed[" + seedString
-						+ "] charAtI[" + seedString.charAt( i ) + "] sub1[" + seedString.substring( 0, i ) + "] sub2["
-						+ seedString.substring( i + 1 ) + "] alteredSeed[" + alteredSeed + "]" );
-
-				permutation( prefix + seedString.charAt( i ), alteredSeed, uniquePermutations );
-			}
-		}
-	}
-
-	/**
-	 * @param string1 String1 to compare the pattern
-	 * @param string2 String2 to compare the pattern
-	 * @return true if string one character are present in string 2 in same sequence OR vice versa
-	 */
-	public static boolean isPatternMatchDP( String string1, String string2 ) {
-		int stringOneLength = string1.length();
-		int stringTwoLength = string2.length();
-
-		// array matrix of length + 1
-		int dpMatrix[][] = new int[stringOneLength + 1][stringTwoLength + 1];
-
-		// iterating over string one
-		for( int row = 1; row < stringOneLength + 1; row++ ) {
-
-			// iterating over string 2
-			for( int col = 1; col < stringTwoLength + 1; col++ ) {
-
-				// compare character from both the strings for current respective index
-				if( string1.charAt( row - 1 ) == string2.charAt( col - 1 ) ) {
-					// if character in both string matched -
-					// fill in array matrix >> by increasing value from previous matching outcome
-					// which is stored in currentRow - 1 and currentColumn -1 position
-
-					dpMatrix[row][col] = 1 + dpMatrix[row - 1][col - 1];
-				}
-				else {
-					// if characters are not matching
-					// fill in current matrix position by finding max of previous column or row
-					// which simply means carry forward the last max match count
-					dpMatrix[row][col] = Math.max( dpMatrix[row][col - 1], dpMatrix[row - 1][col] );
-				}
-
-			}
-
-		}
-
-		// return true if the last matrix value matches with string one or string two lengths
-		// which means that either of these string's character are matched in other string
-
-		return dpMatrix[stringOneLength][stringTwoLength] == stringOneLength
-				|| dpMatrix[stringOneLength][stringTwoLength] == stringTwoLength;
-	}
-
-	/**
-	 * @param string1 String1 to compare the pattern
-	 * @param string2 String2 to compare the pattern
-	 * @return true if string one character are present in string 2 in same sequence OR vice versa
-	 */
-	public static boolean isPatternMatch2( String string1, String string2 ) {
-		int stringOneLength = string1.length();
-		int stringTwoLength = string2.length();
-
-		if( stringOneLength > stringTwoLength ) {
-			String tempString = string1;
-			string1 = string2;
-			string2 = tempString;
-
-			stringOneLength = string1.length();
-			stringTwoLength = string2.length();
-		}
-
-		int string2Index = 0;
-
-		// iterating over string one
-		for( int string1Index = 0; string1Index < stringOneLength; string1Index++ ) {
-
-			char string1Char = string1.charAt( string1Index );
-
-			// iterating over string 2
-			for( ; string2Index < stringTwoLength; string2Index++ ) {
-				// compare str character starting from 0 to length
-				if( string1Char == string2.charAt( string2Index ) ) {
-					if( string1Index == string1.length() - 1 ) {
-						return true;
-					}
-					break;
-				}
-				else if( string2Index == string2.length() - 1 ) {
-					return false;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	public static boolean isPatternMatchesPartially( String string1, String string2 ) {
-		int stringOneLength = string1.length();
-		int stringTwoLength = string2.length();
-
-		int string2Index = 0;
-		boolean string2Reset = false;
-		boolean charMatch = false;
-
-		for( int string1Index = 0; string1Index < stringOneLength; string1Index++ ) {
-			char string1Char = string1.charAt( string1Index );
-
-			for( ; string2Index < stringTwoLength; string2Index++ ) {
-				if( string1Char == string2.charAt( string2Index ) ) {
-					charMatch = true;
-					if( string2Reset ) {
-						return false;
-					}
-					if( string1Index == string1.length() - 1 ) {
-						return true;
-					}
-					break;
-				}
-				else if( !string2Reset && string2Index == string2.length() - 1 ) {
-					string2Index = 0;
-					string2Reset = true;
-				}
-			}
-		}
-		return charMatch == true;
-	}
-
-	/**
-	 * @param str1 String1 to compare the pattern
-	 * @param str2 String2 to compare the pattern
-	 * @return true if string one character are present in string 2 in same sequence OR vice versa
-	 */
-	public static String findLongestCommonSubsequenceDP( String str1, String str2 ) {
-		int stringOneLength = str1.length();
-		int stringTwoLength = str2.length();
-
-		// array matrix of length + 1
-		String dpMatrix[][] = new String[stringOneLength + 1][stringTwoLength + 1];
-
-		// fill in the dpMatrix with blank string, otherwise
-		for( String[] strArr : dpMatrix ) {
-			for( int i = 0; i < strArr.length; i++ ) {
-				strArr[i] = "";
-			}
-		}
-
-		// iterating over string one
-		for( int row = 1; row < stringOneLength + 1; row++ ) {
-
-			// iterating over string 2
-			for( int col = 1; col < stringTwoLength + 1; col++ ) {
-
-				// compare character from both the strings for current respective index
-				if( str1.charAt( row - 1 ) == str2.charAt( col - 1 ) ) {
-					// if character in both string matched -
-					// fill in array matrix >> by increasing value from previous matching outcome
-					// which is stored in currentRow - 1 and currentColumn -1 position
-
-					dpMatrix[row][col] = dpMatrix[row - 1][col - 1] + str1.charAt( row - 1 );
-				}
-				else {
-					// if characters are not matching
-					// fill in current matrix position by finding max of previous column or row
-					// which simply means carry forward the last max match count
-					dpMatrix[row][col] = dpMatrix[row][col - 1].length() > dpMatrix[row - 1][col].length()
-							? dpMatrix[row][col - 1]
-							: dpMatrix[row - 1][col];
-				}
-
-			}
-
-		}
-
-		// return true if the last matrix value matches with string one or string two lengths
-		// which means that either of these string's character are matched in other string
-
-		return dpMatrix[stringOneLength][stringTwoLength];
 	}
 
 	/**
@@ -961,7 +769,9 @@ public class StringAlgorithms extends TestCase {
 
 			char[] tempCharMap = new char[255];
 			for( Character c : word.toCharArray() ) {
+				
 				tempCharMap[c]++;
+				
 				if( tempCharMap[c] > charMap[c] ) {
 					sb.append( c );
 					charMap[c] = tempCharMap[c];
@@ -1000,9 +810,214 @@ public class StringAlgorithms extends TestCase {
 		return encryptedString.toString();
 	}
 
+	// TODO understand more : Complex logic like DP
+	public Collection<String> generatePermutations( String seedString ) {
+
+		HashSet<String> uniquePermutations = new HashSet<>();
+		generatePermutation( "", seedString, uniquePermutations );
+
+		System.out.println( "unique permutations > " + uniquePermutations );
+
+		return uniquePermutations;
+	}
+
+	int recursion = 1;
+
+	private void generatePermutation( String prefix, String seedString, HashSet<String> uniquePermutations ) {
+		recursion += 1;
+		System.out.println( "recursion[" + recursion + "] prefix[" + prefix + "] seed[" + seedString + "]" );
+
+		if( seedString.length() == 0 ) {
+			uniquePermutations.add( prefix );
+
+			System.out.println( prefix );
+		}
+		else {
+			for( int i = 0; i < seedString.length(); i++ ) {
+				String alteredSeed = seedString.substring( 0, i ) + seedString.substring( i + 1 );
+
+				System.out.println( "recursion[" + recursion + "]  prefix[" + prefix + "] seed[" + seedString
+						+ "] charAtI[" + seedString.charAt( i ) + "] sub1[" + seedString.substring( 0, i ) + "] sub2["
+						+ seedString.substring( i + 1 ) + "] alteredSeed[" + alteredSeed + "]" );
+
+				generatePermutation( prefix + seedString.charAt( i ), alteredSeed, uniquePermutations );
+			}
+		}
+	}
+
+	/**
+	 * @param string1 String1 to compare the pattern
+	 * @param string2 String2 to compare the pattern
+	 * @return true if string one character are present in string 2 in same sequence OR vice versa
+	 */
+	public static boolean isPatternMatchDP( String string1, String string2 ) {
+		int stringOneLength = string1.length();
+		int stringTwoLength = string2.length();
+
+		// array matrix of length + 1
+		int dpMatrix[][] = new int[stringOneLength + 1][stringTwoLength + 1];
+
+		// iterating over string one
+		for( int row = 1; row < stringOneLength + 1; row++ ) {
+
+			// iterating over string 2
+			for( int col = 1; col < stringTwoLength + 1; col++ ) {
+
+				// compare character from both the strings for current respective index
+				if( string1.charAt( row - 1 ) == string2.charAt( col - 1 ) ) {
+					// if character in both string matched -
+					// fill in array matrix >> by increasing value from previous matching outcome
+					// which is stored in currentRow - 1 and currentColumn -1 position
+
+					dpMatrix[row][col] = 1 + dpMatrix[row - 1][col - 1];
+				}
+				else {
+					// if characters are not matching
+					// fill in current matrix position by finding max of previous column or row
+					// which simply means carry forward the last max match count
+					dpMatrix[row][col] = Math.max( dpMatrix[row][col - 1], dpMatrix[row - 1][col] );
+				}
+
+			}
+
+		}
+
+		// return true if the last matrix value matches with string one or string two lengths
+		// which means that either of these string's character are matched in other string
+
+		return dpMatrix[stringOneLength][stringTwoLength] == stringOneLength
+				|| dpMatrix[stringOneLength][stringTwoLength] == stringTwoLength;
+	}
+
+	/**
+	 * @param string1 String1 to compare the pattern
+	 * @param string2 String2 to compare the pattern
+	 * @return true if string one character are present in string 2 in same sequence OR vice versa
+	 */
+	public static boolean isPatternMatch2( String string1, String string2 ) {
+		int stringOneLength = string1.length();
+		int stringTwoLength = string2.length();
+
+		if( stringOneLength > stringTwoLength ) {
+			String tempString = string1;
+			string1 = string2;
+			string2 = tempString;
+
+			stringOneLength = string1.length();
+			stringTwoLength = string2.length();
+		}
+
+		int string2Index = 0;
+
+		// iterating over string one
+		for( int string1Index = 0; string1Index < stringOneLength; string1Index++ ) {
+
+			char string1Char = string1.charAt( string1Index );
+
+			// iterating over string 2
+			for( ; string2Index < stringTwoLength; string2Index++ ) {
+				// compare str character starting from 0 to length
+				if( string1Char == string2.charAt( string2Index ) ) {
+					if( string1Index == string1.length() - 1 ) {
+						return true;
+					}
+					break;
+				}
+				else if( string2Index == string2.length() - 1 ) {
+					return false;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isPatternMatchesPartially( String string1, String string2 ) {
+		int stringOneLength = string1.length();
+		int stringTwoLength = string2.length();
+
+		int string2Index = 0;
+		boolean string2Reset = false;
+		boolean charMatch = false;
+
+		for( int string1Index = 0; string1Index < stringOneLength; string1Index++ ) {
+			char string1Char = string1.charAt( string1Index );
+
+			for( ; string2Index < stringTwoLength; string2Index++ ) {
+				if( string1Char == string2.charAt( string2Index ) ) {
+					charMatch = true;
+					if( string2Reset ) {
+						return false;
+					}
+					if( string1Index == string1.length() - 1 ) {
+						return true;
+					}
+					break;
+				}
+				else if( !string2Reset && string2Index == string2.length() - 1 ) {
+					string2Index = 0;
+					string2Reset = true;
+				}
+			}
+		}
+		return charMatch == true;
+	}
+
+	/**
+	 * @param str1 String1 to compare the pattern
+	 * @param str2 String2 to compare the pattern
+	 * @return true if string one character are present in string 2 in same sequence OR vice versa
+	 */
+	public static String findLongestCommonSubsequenceDP( String str1, String str2 ) {
+		int stringOneLength = str1.length();
+		int stringTwoLength = str2.length();
+
+		// array matrix of length + 1
+		String dpMatrix[][] = new String[stringOneLength + 1][stringTwoLength + 1];
+
+		// fill in the dpMatrix with blank string, otherwise
+		for( String[] strArr : dpMatrix ) {
+			for( int i = 0; i < strArr.length; i++ ) {
+				strArr[i] = "";
+			}
+		}
+
+		// iterating over string one
+		for( int row = 1; row < stringOneLength + 1; row++ ) {
+
+			// iterating over string 2
+			for( int col = 1; col < stringTwoLength + 1; col++ ) {
+
+				// compare character from both the strings for current respective index
+				if( str1.charAt( row - 1 ) == str2.charAt( col - 1 ) ) {
+					// if character in both string matched -
+					// fill in array matrix >> by increasing value from previous matching outcome
+					// which is stored in currentRow - 1 and currentColumn -1 position
+
+					dpMatrix[row][col] = dpMatrix[row - 1][col - 1] + str1.charAt( row - 1 );
+				}
+				else {
+					// if characters are not matching
+					// fill in current matrix position by finding max of previous column or row
+					// which simply means carry forward the last max match count
+					dpMatrix[row][col] = dpMatrix[row][col - 1].length() > dpMatrix[row - 1][col].length()
+							? dpMatrix[row][col - 1]
+							: dpMatrix[row - 1][col];
+				}
+
+			}
+
+		}
+
+		// return true if the last matrix value matches with string one or string two lengths
+		// which means that either of these string's character are matched in other string
+
+		return dpMatrix[stringOneLength][stringTwoLength];
+	}
+
 	public static void main( String[] args ) {
 		StringAlgorithms sa = new StringAlgorithms();
-		sa.permutation( "sow" );
+		sa.generatePermutations( "sow" );
 	}
 
 }

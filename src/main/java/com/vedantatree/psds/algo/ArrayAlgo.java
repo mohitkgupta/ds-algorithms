@@ -144,7 +144,7 @@ public class ArrayAlgo {
 		
 		// return true if array's length is more than 1 at the end
 		// TODO: What is the need of array.length > 1. increasing or decreasing flag would always cover the cases
-		// TODO: Document if there is a special case
+		// TODO: Test and Document if there is a special case
 		
 		return increasing || decreasing || array.length > 1;
 	}

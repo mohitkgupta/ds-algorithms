@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.vedantatree.psds.Utils;
-
 
 /**
  * Class representing Graph and associated algorithms
@@ -33,7 +31,7 @@ import com.vedantatree.psds.Utils;
  * and 0 otherwise.
  * 
  * Here's an example of an adjacency matrix for the same undirected graph:
- * 0 1 2 3
+ * - 0 1 2 3
  * 0 0 1 0 1
  * 1 1 0 1 0
  * 2 0 1 0 1
@@ -42,63 +40,14 @@ import com.vedantatree.psds.Utils;
  * In this example, there is an edge from vertex 0 to vertex 1 (represented by a 1 in position (0,1)),
  * an edge from vertex 1 to vertex 0 (represented by a 1 in position (1,0)), and so on.
  * 
+ * TODO: Implement shortest path algorithms. A*, Dijkstra, Bellman ford, Floyd Warshall
+ * TODO: There is one more approach to have graph in memory. Add that too.
+ * TODO: Add algos for adjacency matrix. Currently, all are using adjacency list.
+ * 
  * @author Mohit Gupta
  *
  */
 public class XGraph {
-
-	private Node rootNode;
-
-	public static class Node {
-
-		String		name;
-		List<Node>	children	= new ArrayList<Node>();
-
-		public Node( String name ) {
-			this.name = name;
-		}
-	}
-
-	public static boolean isSrcToDestReachableUsingBFS( ArrayList<ArrayList<Integer>> adjacencyList, int source,
-			int dest, int vertices, int predecessors[], int distances[] ) {
-
-		LinkedList<Integer> traversalQueue = new LinkedList<Integer>();
-		boolean visited[] = new boolean[vertices];
-
-		for( int i = 0; i < vertices; i++ ) {
-			visited[i] = false;
-			predecessors[i] = -1;
-			distances[i] = Integer.MAX_VALUE;
-		}
-
-		traversalQueue.add( source );
-		visited[source] = true;
-		distances[source] = 0;
-
-		while( !traversalQueue.isEmpty() ) {
-			int currentNode = traversalQueue.remove();
-			ArrayList<Integer> currentNodeEdges = adjacencyList.get( currentNode );
-
-			for( int i = 0; i < currentNodeEdges.size(); i++ ) {
-				int neighbour = currentNodeEdges.get( i );
-
-				if( !visited[neighbour] ) {
-
-					visited[neighbour] = true;
-					distances[neighbour] = distances[currentNode] + 1;
-					predecessors[neighbour] = currentNode; // TODO: can't predecessor be more than one, multiple
-															// incoming
-					traversalQueue.add( neighbour );
-
-					if( neighbour == dest ) {
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
-	}
 
 	/**
 	 * Function to traverse and collect nodes of graph using BFS
@@ -112,10 +61,10 @@ public class XGraph {
 		ArrayList<Integer> traversedNodes = new ArrayList<>( vertices );
 		LinkedList<Integer> nodesToTraverse = new LinkedList<Integer>();
 
-		// to track the visited nodes.
-		// This is faster way, alternative is to search in traversed nodes list < which will be slower
+		// faster way to track visited nodes, alternative = search in traversed list < which will be slower
 		boolean visited[] = new boolean[vertices];
 
+		// TODO why assume that first vertex is 0
 		nodesToTraverse.add( 0 );
 		visited[0] = true;
 
@@ -194,32 +143,32 @@ public class XGraph {
 	 * Example of graph
 	 * 0 > 1
 	 * 2 > 1
-	 *   > 3
+	 * > 3
 	 * 3 > 4
 	 * 4 > 2 //cycle
 	 * 
-	 * @param graphAdjacencyList The graph structure,
+	 * @param adjacencyList The graph structure,
 	 *        main array elements are the nodes/vertices
 	 *        sub-array are the neighbors/connections vertex/vertices
 	 * @return true if a cycle is found in graph, false otherwise
 	 */
-	public static boolean checkIfCyclic( int[][] graphAdjacencyList ) {
-		assertNotNull( graphAdjacencyList );
-		assertTrue( graphAdjacencyList.length > 0 );
+	public static boolean checkIfCyclic( int[][] adjacencyList ) {
+		assertNotNull( adjacencyList );
+		assertTrue( adjacencyList.length > 0 );
 
-		int graphVertexCount = graphAdjacencyList.length;
+		int vertexCount = adjacencyList.length;
 
 		// TODO do we need visited nodes and vertices in traversal both, or can one do??
-		boolean[] visitedNodes = new boolean[graphVertexCount];
-		boolean[] verticesInTraversal = new boolean[graphVertexCount];
+		boolean[] visitedVertices = new boolean[vertexCount];
+		boolean[] verticesInTraversal = new boolean[vertexCount];
 
-		for( int vertexIndex = 0; vertexIndex < graphVertexCount; vertexIndex++ ) {
+		for( int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++ ) {
 
-			if( visitedNodes[vertexIndex] ) {
+			if( visitedVertices[vertexIndex] ) {
 				continue;
 			}
 
-			if( checkIfCyclicUsingDFS( graphAdjacencyList, vertexIndex, visitedNodes, verticesInTraversal ) ) {
+			if( checkIfCyclicUsingDFS( adjacencyList, vertexIndex, visitedVertices, verticesInTraversal ) ) {
 				return true;
 			}
 		}
@@ -252,7 +201,7 @@ public class XGraph {
 					return true;
 				}
 			}
-			// if already visited, and in traversal >> means cycle
+			// if already in traversal >> means it is being traversed again
 			else if( verticesInTraversal[neighbour] ) {
 				return true;
 			}
@@ -260,6 +209,51 @@ public class XGraph {
 
 		// setting back once traversal is done
 		verticesInTraversal[vertexIndex] = false;
+
+		return false;
+	}
+
+	// TODO: No use of predecessors and distances in current logic. Remove these
+
+	public static boolean isSrcToDestReachableUsingBFS( ArrayList<ArrayList<Integer>> adjacencyList, int source,
+			int dest, int vertices, int predecessors[], int distances[] ) {
+
+		LinkedList<Integer> traversalQueue = new LinkedList<Integer>();
+		boolean visited[] = new boolean[vertices];
+
+		for( int i = 0; i < vertices; i++ ) {
+			visited[i] = false;
+			predecessors[i] = -1;
+			distances[i] = Integer.MAX_VALUE;
+		}
+
+		traversalQueue.add( source );
+		visited[source] = true;
+		distances[source] = 0;
+
+		while( !traversalQueue.isEmpty() ) {
+
+			int currentNode = traversalQueue.remove();
+			ArrayList<Integer> currentNodeEdges = adjacencyList.get( currentNode );
+
+			for( int i = 0; i < currentNodeEdges.size(); i++ ) {
+
+				int neighbour = currentNodeEdges.get( i );
+
+				if( !visited[neighbour] ) {
+
+					visited[neighbour] = true;
+					distances[neighbour] = distances[currentNode] + 1;
+					predecessors[neighbour] = currentNode; // TODO: can't predecessor be more than one, multiple
+															// incoming
+					traversalQueue.add( neighbour );
+
+					if( neighbour == dest ) {
+						return true;
+					}
+				}
+			}
+		}
 
 		return false;
 	}
@@ -301,3 +295,15 @@ public class XGraph {
 	}
 
 }
+
+// private Node rootNode;
+//
+// private static class Node {
+//
+// private String name;
+// private List<Node> children = new ArrayList<Node>();
+//
+// public Node( String name ) {
+// this.name = name;
+// }
+// }
