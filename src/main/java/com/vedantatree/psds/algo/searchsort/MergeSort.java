@@ -1,4 +1,4 @@
-package com.vedantatree.psds.algo.sort;
+package com.vedantatree.psds.algo.searchsort;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -13,7 +13,7 @@ public class MergeSort {
 	 * - n for conquering i.e. merging the sorted array. Most work happens here
 	 * 
 	 * Space Complexity - o(n) > as we are dividing the main array in sub-arrays
-	 * - Hence not memory efficient
+	 * Hence not memory efficient
 	 * 
 	 * @param array to sort
 	 */
@@ -46,8 +46,6 @@ public class MergeSort {
 
 	private static void mergeSortedHalves( int[] array, int[] helperArray, int low, int middle, int high ) {
 
-		// copy array data in helper array
-		// System.arraycopy( array, low, helper, low, high );
 		for( int i = low; i <= high; i++ ) {
 			helperArray[i] = array[i];
 		}

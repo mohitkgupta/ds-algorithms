@@ -8,6 +8,7 @@ import java.util.Queue;
 
 
 /**
+ * This class represents the Node for XTree
  * 
  * @author Mohit Gupta <mohitgupta.matrix@gmail.com>
  */
@@ -144,7 +145,7 @@ public class XTreeNode<E> {
 		int rightValue = findMaxValue( rootNode.getRightChild() );
 
 		// not using if else if, as need to compare three values - root, left, right
-		if( leftValue > rootValue ) {
+		if( leftValue > maxValue ) {
 			maxValue = leftValue;
 		}
 		if( rightValue > maxValue ) {

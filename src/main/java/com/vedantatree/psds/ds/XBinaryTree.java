@@ -35,8 +35,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 		return rootNode;
 	}
 
-	// TODO: Do we need it public
-	public void setRootNode( XTreeNode<E> rootNode ) {
+	private void setRootNode( XTreeNode<E> rootNode ) {
 		this.rootNode = rootNode;
 	}
 
@@ -65,6 +64,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 		if( end < start ) {
 			return null;
 		}
+
 		int mid = ( start + end ) / 2;
 		XTreeNode<E> rootNode = new XTreeNode( parentNode, sortedArray[mid] );
 
@@ -98,6 +98,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 	 */
 	public void insertBSTNode( E data ) {
 		XTreeNode<E> node = insertBSTNode( getRootNode(), data );
+
 		if( getRootNode() == null ) {
 			setRootNode( node );
 		}
@@ -119,6 +120,9 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	private int compareData( E data1, E data2 ) {
+
+		assertNotNull( data1 );
+
 		return data1.compareTo( data2 );
 	}
 
@@ -141,7 +145,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 		if( comparisonResult == 0 ) {
 			return rootNode;
 		}
-		else if( comparisonResult < 0 ) {
+		else if( comparisonResult < 0 ) { // data is greater than root node data
 			return searchNodeInBST( rootNode.getRightChild(), data );
 		}
 		else {
@@ -150,7 +154,7 @@ public class XBinaryTree<E extends Comparable<E>> {
 	}
 
 	/**
-	 * Search node in this binary tree (not a ST)
+	 * Search node in this binary tree (not a Binary Search Tree)
 	 * 
 	 * @param dataToSearch data to search
 	 * @return matching node if found

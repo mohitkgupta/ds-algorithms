@@ -2,7 +2,7 @@ package com.vedanatree.psds.algo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.vedantatree.psds.algo.SearchAlgorithms;
+import com.vedantatree.psds.algo.searchsort.SearchAlgorithms;
 
 import junit.framework.TestCase;
 

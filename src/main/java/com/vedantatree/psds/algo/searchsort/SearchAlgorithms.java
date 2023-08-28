@@ -1,4 +1,4 @@
-package com.vedantatree.psds.algo;
+package com.vedantatree.psds.algo.searchsort;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

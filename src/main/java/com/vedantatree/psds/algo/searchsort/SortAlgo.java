@@ -1,4 +1,4 @@
-package com.vedantatree.psds.algo.sort;
+package com.vedantatree.psds.algo.searchsort;
 
 public class SortAlgo {
 
@@ -10,7 +10,7 @@ public class SortAlgo {
 	 * Keep iterating over array if current element is larger than next element,
 	 * Swap these keep going in loops until none of the element is swapping
 	 * 
-	 * Time - O(n square), Best - O(n)
+	 * Time - O(n^2), Best - O(n)
 	 * Space - O(1)
 	 * 
 	 * @param array
@@ -42,8 +42,8 @@ public class SortAlgo {
 		return array;
 	}
 
-	// for practice, stored array elements in local variables to avoid repeated
-	// access. CPU over memory. Would JRE be doing this optimization automatically??
+	// for practice, stored array elements in local variables to avoid repeated access.
+	// CPU over memory. Would JRE be doing this optimization automatically??
 	public static int[] bubbleSort2( int[] array ) {
 
 		boolean swapped = true;
@@ -74,7 +74,8 @@ public class SortAlgo {
 	 * Compare it with rest of the elements and
 	 * bring the smallest at current element's place
 	 * 
-	 * Time: O(n^2) Space: O(1)
+	 * Time: O(n^2) 
+	 * Space: O(1)
 	 * 
 	 * @param array
 	 * @return sorted array < Not required. Sorting is in-place, in input array
@@ -186,7 +187,7 @@ public class SortAlgo {
 		for( int orderIdx = 0; orderIdx < order.length; orderIdx++ ) {
 
 			for( int arrayIdx = 0; arrayIdx < array.length; arrayIdx++ ) {
-				
+
 				if( array[arrayIdx] == order[orderIdx] ) {
 					int temp = array[sortIdx];
 					array[sortIdx] = array[arrayIdx];

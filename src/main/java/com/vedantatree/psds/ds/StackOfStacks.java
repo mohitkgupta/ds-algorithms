@@ -44,7 +44,7 @@ public class StackOfStacks<E> {
 	}
 
 	public E pop() {
-		// TODO can add some assertions too for sanity
+		// TODO can add some assertions for sanity
 		if( currentStack == null || currentStack.size() == 0 ) {
 			throw new EmptyStackException();
 		}

@@ -1,9 +1,9 @@
 package com.vedanatree.psds.algo.sort;
 
 import com.vedantatree.psds.Utils;
-import com.vedantatree.psds.algo.sort.MergeSort;
-import com.vedantatree.psds.algo.sort.QuickSort;
-import com.vedantatree.psds.algo.sort.SortAlgo;
+import com.vedantatree.psds.algo.searchsort.MergeSort;
+import com.vedantatree.psds.algo.searchsort.QuickSort;
+import com.vedantatree.psds.algo.searchsort.SortAlgo;
 
 import junit.framework.TestCase;
 

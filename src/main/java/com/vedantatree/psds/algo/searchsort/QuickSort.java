@@ -1,4 +1,4 @@
-package com.vedantatree.psds.algo.sort;
+package com.vedantatree.psds.algo.searchsort;
 
 public class QuickSort {
 
