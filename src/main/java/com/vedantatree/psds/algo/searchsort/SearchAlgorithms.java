@@ -49,7 +49,8 @@ public class SearchAlgorithms {
 	}
 
 	/**
-	 * Time complexity O(n*m), Space Complexity - O(1)
+	 * Time complexity O(n*m)
+	 * Space Complexity - O(1)
 	 * 
 	 * @param matrix with sorted values in each row and column
 	 * @param target element to search
@@ -62,6 +63,7 @@ public class SearchAlgorithms {
 		int column = 0;
 
 		while( row >= 0 && column < matrix[row].length ) {
+
 			int currentValue = matrix[row][column];
 
 			if( currentValue == target ) {
@@ -81,8 +83,9 @@ public class SearchAlgorithms {
 	}
 
 	/**
-	 * Time Complexity - O(n) for linear search in rows, O(logm) for binary search in column
-	 * O(n + log(m))
+	 * Time Complexity - O(n) for linear search in rows,
+	 * O(log(m)) for binary search in column
+	 * Total: O(n + log(m))
 	 * 
 	 * Space Complexity - O(1)
 	 * 
@@ -95,32 +98,34 @@ public class SearchAlgorithms {
 
 		int rows = matrix.length;
 
-		for( int rowIndex = 0; rowIndex < rows; rowIndex++ ) {
+		for( int row = 0; row < rows; row++ ) {
 
 			int startColumn = 0;
-			int endColumn = matrix[rowIndex].length - 1;
-			int currentValue = matrix[rowIndex][startColumn];
+			int endColumn = matrix[row].length - 1;
+
+			int currentValue = matrix[row][startColumn];
 
 			if( currentValue == target ) {
 				return new int[]
-					{ rowIndex, startColumn };
+					{ row, startColumn };
 			}
-			else if( matrix[rowIndex][endColumn] == target ) {
+			else if( matrix[row][endColumn] == target ) {
 				return new int[]
-					{ rowIndex, endColumn };
+					{ row, endColumn };
 			}
-			else if( matrix[rowIndex][startColumn] > target || matrix[rowIndex][endColumn] < target ) {
-				continue;
+			else if( matrix[row][startColumn] > target || matrix[row][endColumn] < target ) {
+				continue; // move to next row
 			}
 
 			while( startColumn <= endColumn ) {
 
 				int midColumn = startColumn + ( endColumn - startColumn ) / 2;
-				currentValue = matrix[rowIndex][midColumn];
+
+				currentValue = matrix[row][midColumn];
 
 				if( currentValue == target ) {
 					return new int[]
-						{ rowIndex, midColumn };
+						{ row, midColumn };
 				}
 				else if( currentValue > target ) {
 					endColumn = midColumn;
